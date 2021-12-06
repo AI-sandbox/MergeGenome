@@ -1,8 +1,8 @@
 # Preprocessing .vcf files
 
-The small number of samples present in some datasets may be insufficient for analysis. This is especially the case of deep neural networks, which in general require large amounts of data for training. There are some ways to deal with the paucity of data without the need to obtain more real-world data. An example of this is generating synthetic data. However, if we have access to multiple datasets that share some SNPs, the simplest approach is to merge them by the common SNPs. In the case of having a dataset with much shorter genomic sequences in length, prior to merging, we can impute the missing values to have the same SNPs as in the larger reference dataset.
+The small number of samples present in some datasets may be insufficient for analysis. This is especially the case of deep neural networks, which in general require large amounts of data for training. There are some ways to deal with the paucity of data without the need to obtain more real-world data. An example of this is generating synthetic data. However, if we have access to multiple datasets that share some SNPs, the simplest approach is to merge them by the common SNPs. The main drawback of merging datasets is that, if a dataset contains much shorter DNA sequences in length, a big amount of SNPs are lost. A way of avoiding this is to apply imputation, for example, of the shorter dataset to have the same SNPs as the larger dataset, the latter called **reference**.
 
-However, the merging process can be hard in some cases due to limitations in the imputation algorithms and a lack of consensus in the way DNA sequences are read, among others. 
+The limitations in the imputation algorithms and a lack of consensus in the way DNA sequences are read, among others, make the merging process hard in some cases.
 
 In this repository, we explain a possible pipeline of (in process...)
 
