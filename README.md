@@ -10,9 +10,9 @@ This repository contains some crucial steps for the task of merging a "shorter d
 
 First of all, it is important to keep in mind that the computational time of preprocessing big .vcf files can be substantial. In terms of computational efficiency, working with one .vcf file for each chromosome is in general better than treating the whole dataset at once. Moreover, a further benefit of splitting the dataset into separate files is that it allows processing them in parallel.
 
-In order to split the dataset in new .vcf files, so that each contains the data of a particular chromosome, you can use the script:
+In order to split the dataset in new .vcf files, so that each contains the data of a particular chromosome, you can use the script 
 
 ### 2. Rename chromosome nomenclature (from "1" to "chr1")
 
 
-In process...
+TODO
