@@ -34,8 +34,7 @@ dataset2_name = 'array'
 track_name = 'preprocessing_{}_{}.txt'.format(dataset1_name, dataset2_name)
 
 ## Define samples or substrings of samples to be removed (in uppercase or lowercase)
-substrings = ['wolf', 'fox', 'coyote', 'dhole', 'GDJK_GDJK_24316', 'GDJK_GDJK_24589', 'GoldenJackal01', 'WO001_895', 
-              'WO002_732', 'WO003_636']
+substrings = ['wolf', 'fox', 'coyote', 'dhole', 'GDJK_GDJK_24316', 'GDJK_GDJK_24589', 'GoldenJackal01', 'WO001_895', 'WO002_732', 'WO003_636']
 
 ## Remove content of .txt with name track_name if it already exists
 if os.path.exists('../output/{}'.format(track_name)):
