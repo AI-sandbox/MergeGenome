@@ -10,7 +10,7 @@ This repository underlies the importance of cleaning genomic sequences prior to 
 
 ### 1. Partition data into separate .vcf files (one for each chromosome)
 
-First of all, it is important to keep in mind that the computational time of preprocessing big .vcf files can be substantial. In terms of computational efficiency, working with one .vcf file for each chromosome is in general better than treating the whole dataset at once. Moreover, a further benefit of splitting the dataset into separate files is that it allows processing them in parallel.
+The computational time of preprocessing big .vcf files can be substantial. That is why, working with one .vcf file for each chromosome is in general better than treating the whole dataset at once. Moreover, a further benefit of splitting the dataset into separate files is that it allows processing them in parallel.
 
 In order to split the dataset in new .vcf files, so that each contains the data of a particular chromosome, you can use the script in  **utils/partition_and_rename_chr.py**. 
 
