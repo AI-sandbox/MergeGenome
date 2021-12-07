@@ -4,7 +4,7 @@ The small number of samples present in some datasets may be insufficient for ana
 
 The limitations in the imputation algorithms and a lack of consensus in the way DNA sequences are read (among others), make the merging process hard in some cases.
 
-This repository underlies the importance of cleaning genomic sequences prior to analysis, and contains the crucial steps for the task of merging a "shorter dataset" with a "larger dataset".
+This repository underlies the importance of cleaning genomic sequences prior to analysis, and contains the crucial steps for the task of merging a shorter dataset with a larger dataset.
 
 ### 1. Partition data into separate .vcf files (one for each chromosome)
 
