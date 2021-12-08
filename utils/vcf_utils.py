@@ -133,6 +133,8 @@ def rename_chromosome(vcf_data, before, after):
     ## Rename variants/CHROM
     vcf_data['variants/CHROM'] = np.where(vcf_data['variants/CHROM'] == before, after, vcf_data['variants/CHROM']) 
 
+    # data['variants/CHROM'] = np.array(list(map(lambda x : 'chr' + x, data['variants/CHROM’])))
+    
     return vcf_data
 
 def search_percentage_SNPs_with_missings(vcf_data):
