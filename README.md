@@ -18,7 +18,7 @@ The standard chromosome nomenclature in CHROM field can be in two forms, **chr{c
 
 In order to change the chromosome nomenclature from {chromosome_number} to "chr{chromosome_number}" of all files per chromosome, you can use the script in `utils/partition_and_rename_chr.py`.
 
-```
+```{python}
 def rename_chromosome(vcf_data, before, after):
     '''
     Objective: rename variants/CHROM in vcf_data.
