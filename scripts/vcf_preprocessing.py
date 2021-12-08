@@ -110,4 +110,3 @@ for i in range(1, 39):
     write_vcf_file(data2, output_path_2)
     
     track('Finished writing preprocessed data'.format(len(data1['variants/ID']), len(data1['samples']), dataset1_name), track_name)
-    
