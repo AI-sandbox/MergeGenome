@@ -15,11 +15,11 @@ from utils.vcf_utils import read_vcf_file, filter_by_chromosome, rename_chromoso
 ## USER INPUTS
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-## Define base path to .vcf file with data for all chromosomes
+## Define path to single .vcf file with all chromosomes data
 PATH = '/scratch/users/miriambt/data/dogs/formatted_data/4th_dataset/array/All_Pure_150k.vcf'
 
-## Define base path to output .vcf file with data for a single chromosome
-OUTPUT_PATH = '/scratch/users/miriambt/data/dogs/formatted_data/4th_dataset/array/All_Pure_150k_chr*.vcf'
+## Define path to output .vcf file with data for a single chromosome {}
+OUTPUT_PATH = '/scratch/users/miriambt/data/dogs/formatted_data/4th_dataset/array/All_Pure_150k_chr{}.vcf'
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -28,13 +28,13 @@ data = read_vcf_file(PATH)
 
 for i in range (1, 39):
     ## Define path to output .vcf file with data for chromosome i
-    output_path = OUTPUT_PATH.replace('*', str(i))
+    output_path = OUTPUT_PATH.format(i)
     
     ## Filter the data to include the SNPs for chromosome i
     data_chr_i = filter_by_chromosome(data.copy(), str(i))
     
-    ## Rename variants/CHROM from '{number of chromosome}' to 'chr{number of chromosome}'
-    data_chr_i = rename_chromosome(data_chr_i, str(i), 'chr'+str(i))
+    ## Rename variants/CHROM from {i} to chr{i} 
+    data_chr_i = rename_chromosome(data_chr_i, str(i), 'chr{}'.format(i))
     
     ## Write data in output .vcf file
     write_vcf_file(data_chr_i, output_path)
