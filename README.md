@@ -8,4 +8,4 @@ The limitations in the imputation algorithms and a lack of consensus in the way 
 
 1. **[Partition data into separate .vcf files (one for each chromosome)](readmes/README_1_partition_into_separate_files.md)**
 
-2. **[Standardize chromosome notation](readmes/README_2_change_chrom_notation.md)**
+2. **[Change chromosome notation](readmes/README_2_change_chrom_notation.md)**
