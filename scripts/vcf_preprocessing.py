@@ -1,22 +1,22 @@
-####################################################
-# Processes .vcf files
-# Subsets samples, removes ambiguous SNPs
-# corrects SNP flips, removes SNP mismatches, and
-# renames missings (from "-1" to ".")
-####################################################
+################################################################################
+# Removes undesired samples by sample ID (breed name) 
+# Removes ambiguous SNPs
+# Corrects SNP flips
+# Removes SNP mismatches
+# Renames missings (from "-1" to ".")
+################################################################################
 
 import sys
 import os
-
 sys.path.append('/home/users/miriambt/my_work/dog-gen-to-phen/preprocessing')
-
 from utils.vcf_utils import read_vcf_file, filter_samples, rename_missings, write_vcf_file
 from utils.vcf_preprocessing import search_and_remove_ambiguous_snps, search_and_correct_flips_by_pos, search_and_remove_mismatches_by_pos
 from utils.track import track
 
-####################################################
-### INPUT
-####################################################
+################################################################################
+
+## USER INPUTS
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ## Define base path to input .vcf files for each chromosome to be preprocessed
 PATH1 = '/scratch/users/miriambt/data/dogs/formatted_data/4th_dataset/whole_genome/chr{}_unfiltered_phased.vcf'
@@ -35,6 +35,8 @@ track_name = 'preprocessing_{}_{}.txt'.format(dataset1_name, dataset2_name)
 
 ## Define samples or substrings of samples to be removed (in uppercase or lowercase)
 substrings = ['wolf', 'fox', 'coyote', 'dhole', 'GDJK_GDJK_24316', 'GDJK_GDJK_24589', 'GoldenJackal01', 'WO001_895', 'WO002_732', 'WO003_636']
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ## Remove content of .txt with name track_name if it already exists
 if os.path.exists('../output/{}'.format(track_name)):
