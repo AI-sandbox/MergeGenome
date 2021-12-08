@@ -14,6 +14,6 @@ In order to split the dataset in a .vcf file per chromosome, you can use the scr
 
 ## 2. Standardize chromosome notation
 
-The standard chromosome nomenclature in CHROM field can be in two forms, **"chr{i}"** or **"i"**, where **i** indicates the chromosome number. Although both are correct, the notation adopted in each dataset has to be the same for merging purposes.
+The standard chromosome nomenclature in CHROM field can be in two forms, **"chr{chromosome_number}"** or **{chromosome_number}**. Although both are correct, the notation adopted in each dataset has to be the same for merging purposes.
 
-In order to change the chromosome nomenclature from "" to "" of all .vcf files per chromosome, you can use the script in `utils/partition_and_rename_chr.py`.
+In order to change the chromosome nomenclature from {chromosome_number} to "chr{chromosome_number}" of all files per chromosome, you can use the script in `utils/partition_and_rename_chr.py`.
