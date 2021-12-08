@@ -18,11 +18,11 @@ from utils.track import track
 ## USER INPUTS
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-## Define base path to input .vcf files for each chromosome to be preprocessed
+## Define path to input .vcf files for each chromosome to be preprocessed
 PATH1 = '/scratch/users/miriambt/data/dogs/formatted_data/4th_dataset/whole_genome/chr{}_unfiltered_phased.vcf'
 PATH2 = '/scratch/users/miriambt/data/dogs/formatted_data/4th_dataset/array/All_Pure_150k_chr{}.vcf'
 
-## Define base path to output .vcf files with preprocessed data for each chromosome
+## Define path to output .vcf files with preprocessed data for each chromosome
 OUTPUT_PATH1 = '/scratch/users/miriambt/data/dogs/formatted_data/4th_dataset/whole_genome/cleaned/chr{}_unfiltered_phased_cleaned.vcf'
 OUTPUT_PATH2 = '/scratch/users/miriambt/data/dogs/formatted_data/4th_dataset/array/cleaned/All_Pure_150k_chr{}_cleaned.vcf'
 
@@ -95,7 +95,7 @@ for i in range(1, 39):
     track('{} SNPs and {} samples in {} dataset after preprocessing'.format(len(data1['variants/ID']), len(data1['samples']), dataset1_name), track_name)
     track('{} SNPs and {} samples in {} dataset after preprocessing\n'.format(len(data2['variants/ID']), len(data2['samples']), dataset2_name), track_name)
     
-    ## Write data in output .vcf file
+    ## Write output in .vcf file
     write_vcf_file(data1, output_path_1)
     write_vcf_file(data2, output_path_2)
     
