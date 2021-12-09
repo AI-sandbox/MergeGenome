@@ -1,6 +1,6 @@
 ## 3. Preprocess .vcf files
 
-Following are explained some of the most important preprocessing steps to clean genomic data:
+Following, are explained some of the most important preprocessing steps to clean genomic data:
 
 * **Remove undesired samples by sample ID (breed name)**: there are some breeds or species that are very different from the other samples in the dataset. These can be identified doing a 2-D PCA plot as outliers. It is better to remove these samples before imputation.
 
