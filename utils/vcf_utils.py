@@ -1,5 +1,11 @@
 ################################################################################
-# Reading/writing .vcf files and performing small transformations
+# Reads .vcf file
+# Writes .vcf file
+# And performs small transformations to .vcf data: 
+#   - Filtering by chromosome
+#   - Renaming chromosome nomenclature
+#   - Obtaining percentage of SNPs with some missing (encoded as -1)
+#   - etc.
 ################################################################################
 
 import os
@@ -32,10 +38,10 @@ def write_vcf_file(vcf_data, output_path_to_vcf_file):
     
     '''
     Objective:
-        - Write SNPs data in .vcf file.
+        - Write vcf_data in .vcf file.
     Input:
-        - vcf_data: modified allel.read_vcf output to be saved.
-        - output_path_to_vcf_file: str output vcf path.       
+        - vcf_data: allel.read_vcf output to be saved.
+        - output_path_to_vcf_file: str to .vcf path.       
     '''
     
     if output_path_to_vcf_file.split(".")[-1] not in ["vcf", "bcf"]:
@@ -52,7 +58,7 @@ def write_vcf_file(vcf_data, output_path_to_vcf_file):
     print(np.unique(npy))
     
     ## Infer chromosome length and number of samples
-    npy = npy.astype(str)  ## int (original)
+    npy = npy.astype(str)
     chmlen, _, _ = data["calldata/GT"].shape
     h, c = npy.shape
     n = h//2
@@ -103,15 +109,15 @@ def filter_by_chromosome(vcf_data, chrom):
         - Filter vcf_data to keep the SNPs of the specified chromosome.
     Input:
         - vcf_data: allel.read_vcf output.
-        - chrom: name/number of the chromosome for which we want to select the SNPs.
+        - chrom: CHROM to select the SNPs. Usually chr{chromosome_number} or {chromosome_number}.
     Output:
         - vcf_data: vcf_data containing only the selected SNPs of the desired chromosome.
     '''
     
-    ## Find the indexes of the SNPs of the desired chromosomme
+    ## Find the indexes of the SNPs that correspond to the chromosome in particular
     indexes_chr = vcf_data['variants/CHROM'] == str(chrom)
     
-    ## Select data for the desired SNPs
+    ## Select data for the SNPs of the chromosome in particular
     for key in vcf_data.keys():
         if key != 'samples':
             vcf_data[key] = vcf_data[key][indexes_chr]
@@ -121,38 +127,37 @@ def filter_by_chromosome(vcf_data, chrom):
 
 def rename_chromosome(vcf_data, before, after):
     '''
-    Objective: rename variants/CHROM in vcf_data.
+    Objective: rename variants/CHROM in vcf_data. Example: from "1" to "chr1".
     Input:
         - vcf_data: allel.read_vcf output.
-        - before: chromosome name before renaming.
-        - after: chromosome name after renaming.
+        - before: chromosome name before renaming. Example: "1".
+        - after: chromosome name after renaming. Example: "chr1".
     Output:
         - vcf_data: vcf_data with renamed variants/CHROM.
     '''
     
     ## Rename variants/CHROM
     vcf_data['variants/CHROM'] = np.where(vcf_data['variants/CHROM'] == before, after, vcf_data['variants/CHROM']) 
-
-    # data['variants/CHROM'] = np.array(list(map(lambda x : 'chr' + x, data['variants/CHROM’])))
     
     return vcf_data
 
 def search_percentage_SNPs_with_missings(vcf_data):
     '''
     Objective:
-        - Return the % of SNPs with some missing value. Missing values are assumed to be encoded as "-1".
+        - Return the % of SNPs with some missing value. Missing values are assumed to be encoded as "-1". If your missings are encoded differently, 
+          change the -1 in the function for the alternative missings nomenclature.
     Input:
         - vcf_data: allel.read_vcf output.
     Output:
-        - perc_missings: % of SNPs with some missing value in calldata/GT.
+        - perc_missings: % of SNPs with some missing value in calldata/GT encoded as "-1".
     '''
     
-    ## Obtain npy matrix with SNPs
+    ## Obtain npy matrix with all the SNPs
     npy = vcf_data['calldata/GT']
     length, num_dogs, num_strands = npy.shape
     npy = npy.reshape(length, num_dogs*2).T
     
-    ## Obtain number of missing values encoded as "-1" in each SNP
+    ## Obtain number of missing values encoded as "-1" in each of the SNPs
     num_missings = np.sum(npy == -1, axis=0)
     
     ## Obtain the % of SNPs with some missing value
@@ -160,19 +165,39 @@ def search_percentage_SNPs_with_missings(vcf_data):
     
     return perc_missings
 
+def missings_in_each_SNP(vcf_data):
+    '''
+    Objective:
+        - Print the % of SNPs that contain some missing value encoded as "-1". If your missings are encoded differently, 
+          change the -1 in the function for the alternative missings nomenclature.
+    Input:
+        - vcf_data: allel.read_vcf output.
+    '''
+    
+    ## Obtain npy matrix with SNPs
+    npy = vcf_data['calldata/GT']
+    length, num_dogs, num_strands = npy.shape
+    npy = npy.reshape(length, num_dogs*2).T
+    
+    ## Obtain number of samples with some missing value encoded as "-1" for each SNP
+    num_neg = np.sum(npy == -1, axis=0)
+
+    ## Print the % of SNPs that contain some missing value
+    print(sum(num_neg>0)/len(num_neg)*100)
+
 
 def rename_missings(vcf_data, before, after):
     '''
-    Objective: rename missings in calldata/GT in vcf_data.
+    Objective: rename missings in calldata/GT in vcf_data, from {before} to {after}.
     Input:
         - vcf_data: allel.read_vcf output.
-        - before: missing value before renaming.
-        - after: missing value after renaming.
+        - before: missing value before renaming. Example: "-1".
+        - after: missing value after renaming. Example: ".".
     Output:
         - vcf_data: vcf_data with renamed missings in calldata/GT.
     '''
     
-    ## Rename variants/CHROM
+    ## Rename variants/CHROM from {before} to {after}
     vcf_data['calldata/GT'] = np.where(vcf_data['calldata/GT'] == before, after, vcf_data['calldata/GT']) 
 
     return vcf_data
@@ -180,30 +205,30 @@ def rename_missings(vcf_data, before, after):
 
 def filter_samples(vcf_data, substrings, track_name, verbose=False):
     '''
-    Objective: filter the data to only keep the samples where substrings are not in sample name.
+    Objective: subsets samples to remove undesired breeds/species with name in substrings list.
     Input:
         - vcf_data: allel.read_vcf output.
         - substrings: substrings of the samples to be removed. 
-          Example: the substring "wolf" would remove a sample with name "IrishWolfhound01".
-          Note: names can be in uppercase or lowercase, they will be standardized before filtering.
-        - verbose: if True, removed sample names will be written in track file.
+          Example: ['wolf', 'fox', 'coyote', 'dhole', 'GDJK_GDJK_24316']. In this case, the sample with ID "IrishWolfhound01" would be removed because
+          "wolf" is a substring of the sample id. Note that the substrings can be in upper or lowercase since they are standardized prior to filtering.
+        - verbose: if True, the names of the sample ID that are removed are written in track file.
     Output:
-        - vcf_data: filtered vcf_data to only keep the desired dog breeds.
+        - vcf_data: filtered vcf_data to only keep the desired dog breeds/species.
     '''
     
     ## Standardize substrings and sample names to lowercase
     substrings = list(map(lambda x: x.lower(), substrings))
     sample_names = list(map(lambda x: x.lower(), vcf_data['samples']))
     
-    ## Define list of booleans with the samples to be kept (as True) and to be removed (as False).
+    ## Define list of booleans with the samples to be kept (True) and to be removed (False).
     samples_keep_remove = []
         
     if verbose:
         track('Removed samples:', track_name)
     
-    ## For each sample name, see if it contains any substring and store results in samples_keep_remove to later filter the samples
+    ## For each sample ID, see if it contains any substring and store results in samples_keep_remove to later filter those samples
     for sample_name in sample_names:
-        ## True if any substring is contained in sample name. Otherwise, false
+        ## True if any substring is contained in sample name, false otherwise
         substring_found = any(substring in sample_name for substring in substrings)
         
         ## Store result
@@ -223,7 +248,7 @@ def filter_samples(vcf_data, substrings, track_name, verbose=False):
     ## Write total number of removed samples
     track('--> {} samples removed in total'.format(removed_samples), track_name)
     
-    ## Filter the samples
+    ## Filter to remove the samples corresponding to undesired breeds/species
     vcf_data['samples'] = vcf_data['samples'][samples_keep_remove]
     vcf_data['calldata/GT'] = vcf_data['calldata/GT'][:,samples_keep_remove,:]
     
@@ -263,23 +288,3 @@ def combine_chrom_strands(chrom_data):
     assert (num_samples == num_dogs*2), "Number of samples changed. Check reshaping function."
 
     return chrom_data_combined
-
-
-def missings_in_each_SNP(vcf_data):
-    '''
-    Objective:
-        - Print the % of SNPs that contain some missing value encoded as "-1".
-    Input:
-        - vcf_data: allel.read_vcf output.
-    '''
-    
-    ## Obtain npy matrix with SNPs
-    npy = vcf_data['calldata/GT']
-    length, num_dogs, num_strands = npy.shape
-    npy = npy.reshape(length, num_dogs*2).T
-    
-    ## Obtain number of samples with some missing value encoded as "-1" for each SNP
-    num_neg = np.sum(npy == -1, axis=0)
-
-    ## Print the % of SNPs that contain some missing value
-    print(sum(num_neg>0)/len(num_neg)*100)
