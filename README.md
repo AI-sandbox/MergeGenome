@@ -10,14 +10,4 @@ The limitations in the imputation algorithms and a lack of consensus in the way 
 
 2. **[Change chromosome notation](readmes/README_2_change_chrom_notation.md)**
 
-3. **[Preprocess .vcf files](readmes/README_3_preprocess_vcf_files.md)**
-
-3.1. Remove undesired samples by sample ID (breed name) 
-
-3.2. Remove ambiguous SNPs
-
-3.3. Correct SNP flips
-
-3.4. Remove SNP mismatches
-
-3.5. Rename missings (from -1 to ".")
+3. **[Preprocess .vcf files](readmes/README_3_preprocess_vcf_files.md)**: remove undesired samples by sample ID (breed name), remove ambiguous SNPs, correct SNP flips, remove SNP mismatches and rename missing values (from -1 to ".").
