@@ -10,7 +10,7 @@ Following, are explained some of the most important preprocessing steps to clean
 
 * **Remove SNP mismatches**: a SNP mismatch between two datasets takes place when the reference or alternate of a SNP at the same position differs among datasets. If SNP flips are not corrected previous to removing SNP mismatches, they will be lost. Hence, it is recommended to correct all SNP flips before removing SNP mismatches.
 
-* **Rename missings**: some widely used software packages such as Beagle can give the following error: *"Caused by: java.lang.IllegalArgumentException: ERROR: invalid allele [-1]"* if missing allele values are encoded as -1. Changing the missing nomenclature to a dot "." should solve the issue.
+* **Rename missings**: some widely used software packages such as Beagle can give the following error: *"Caused by: java.lang.IllegalArgumentException: ERROR: invalid allele [-1]"* if missing allele values are encoded as -1. Changing the missing nomenclature to a dot "." should solve this issue.
 
 In order to run all previous preprocessing steps, you can use the script in `scripts/vcf_preprocessing.py`.
 
