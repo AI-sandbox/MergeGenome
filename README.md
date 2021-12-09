@@ -9,3 +9,15 @@ The limitations in the imputation algorithms and a lack of consensus in the way 
 1. **[Partition data into separate .vcf files (one for each chromosome)](readmes/README_1_partition_into_separate_files.md)**
 
 2. **[Change chromosome notation](readmes/README_2_change_chrom_notation.md)**
+
+3. **[Preprocess .vcf files](readmes/README_3_preprocess_vcf_files.md)**
+
+3.1. Remove undesired samples by sample ID (breed name) 
+
+3.2. Remove ambiguous SNPs
+
+3.3. Correct SNP flips
+
+3.4. Remove SNP mismatches
+
+3.5. Rename missings (from -1 to ".")
