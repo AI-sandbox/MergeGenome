@@ -16,7 +16,9 @@ def track(message, track_path):
        
     ## If it does not already exist, create directory that will contain the .txt with the tracking of the script
     try:
-        os.makedirs(track_path)
+        ## First, remove the name of the .txt file to check if the directory exists
+        last = [pos for pos, char in enumerate(track_path) if char == '/']
+        os.makedirs(track_path[:last[-1]+1])
     except OSError:
         pass
 
