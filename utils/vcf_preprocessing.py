@@ -85,7 +85,7 @@ def search_and_remove_ambiguous_snps(vcf_data, track_name='preprocessing.txt'):
         - Search and remove non-ambiguous SNPs from vcf data.
     Input:
         - vcf_data: allel.read_vcf output. Might contain ambiguous SNPs to be removed.
-          Note: ambiguous SNPs can be A-T, T-A, C-G, or G-C pairs where the first element is the reference (REF) and the second the alternate (ALT).
+          Note: ambiguous SNPs can be A/T, T/A, C/G, or G/C pairs where the first element is the reference (REF) and the second the alternate (ALT).
         - track_name: name of .txt file to write results.
     Output:
         - vcf_data: allel.read_vcf output only with non-ambiguous SNPs (ambiguous SNPs are removed).
@@ -98,7 +98,7 @@ def search_and_remove_ambiguous_snps(vcf_data, track_name='preprocessing.txt'):
     ## Create list that will store the index positions of non-ambiguous SNPs
     non_ambiguous_idx = []
     
-    ## Create counters of the number of ambiguities of type A-T, T-A, C-G, and G-C in this order
+    ## Create counters of the number of ambiguities of type A/T, T/A, C/G, and G/C in this order
     A_T_count = 0
     T_A_count = 0
     C_G_count = 0
@@ -108,19 +108,19 @@ def search_and_remove_ambiguous_snps(vcf_data, track_name='preprocessing.txt'):
     for i in range (0, len(REF)):
         if REF[i] == 'A' and ALT[i][0] == 'T':
             ## If the reference is an A and the alternate is a T...
-            ## Found ambiguity of A-T type
+            ## Found ambiguity of A/T type
             A_T_count += 1
         elif REF[i] == 'T' and ALT[i][0] == 'A':
             ## If the reference is an T and the alternate is a A...
-            ## Found ambiguity of T-A type
+            ## Found ambiguity of T/A type
             T_A_count += 1
         elif REF[i] == 'C' and ALT[i][0] == 'G':
             ## If the reference is an C and the alternate is a G...
-            ## Found ambiguity of C-G type
+            ## Found ambiguity of C/G type
             C_G_count += 1
         elif REF[i] == 'G' and ALT[i][0] == 'C':
             ## If the reference is an G and the alternate is a C...
-            ## Found ambiguity of G-C type
+            ## Found ambiguity of G/C type
             G_C_count += 1
         else:
             # The SNP at position i is not ambiguous
