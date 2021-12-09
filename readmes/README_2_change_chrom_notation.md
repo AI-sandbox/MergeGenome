@@ -2,7 +2,7 @@
 
 The standard chromosome nomenclature in the CHROM field can be in two forms, **chr{chromosome_number}** or **{chromosome_number}**. Although both notations are correct, we have to ensure they are written in the same way before merging both datasets.
 
-In order to change the chromosome nomenclature from {chromosome_number} to chr{chromosome_number} of each file per chromosome, you can use the script in `utils/partition_and_rename_chr.py`.
+In order to change the chromosome nomenclature from {chromosome_number} to chr{chromosome_number} of each file per chromosome, you can use the script in `scripts/partition_and_rename_chr.py`.
 
 ````{python}
 def rename_chromosome(vcf_data, before, after):
