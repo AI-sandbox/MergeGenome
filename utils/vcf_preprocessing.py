@@ -1,6 +1,9 @@
 ################################################################################
-# Renaming chromosomes, removing ambigous SNPs, correcting SNP flips, 
-# and removing mismatches between SNPs in two .vcf files
+# Performs small preprocessing to .vcf data: 
+#   - Removing ambiguous SNPs in a .vcf file
+#   - Correcting SNP flips between SNPs in two .vcf files
+#   - Removing SNP mismatches between SNPs in two .vcf files
+#   - etc.
 ################################################################################
 
 import numpy as np
@@ -8,10 +11,10 @@ from utils.track import track
     
 def select_snps(vcf_data, indexes):
     '''
-    Objective: select the SNPs at the specified indexes (in indexes param).
+    Objective: select the SNPs at the specified index positions (in indexes param).
     Input:
         - vcf_data: allel.read_vcf output.
-        - indexes: list with the indexes to keep.
+        - indexes: list with the indexes of the SNPs to be kept. The SNPs that are not in this list will be removed.
     Output:
         - vcf_data: vcf_data containing the SNPs at the specified indexes.
     '''
@@ -25,10 +28,10 @@ def select_snps(vcf_data, indexes):
 
 def remove_snps(vcf_data, indexes):
     '''
-    Objective: remove the SNPs at the specified indexes (in indexes param).
+    Objective: remove the SNPs at the specified index positions (in indexes param).
     Input:
         - vcf_data: allel.read_vcf output.
-        - indexes: list with the indexes to remove.
+        - indexes: list with the indexes to be removed. The SNPs that are not in this list will be kept.
     Output:
         - vcf_data: vcf_data containing the SNPs at the specified indexes.
     '''
@@ -43,24 +46,32 @@ def remove_snps(vcf_data, indexes):
 
 def count_snps_same_position(vcf_data_1, vcf_data_2, dataset_name_1, dataset_name_2, track_name):
     '''
-    Objective: count the number of SNPs at the same position between the two datasets.
+    Objective: count the number of SNPs at the same position between the two datasets (vcf_data_1 and vcf_data_2).
     Input:
         - vcf_data_1: allel.read_vcf output of the .vcf file 1.
         - vcf_data_2: allel.read_vcf output of the .vcf file 2.
+        - dataset_name_1: name name given to datasets 1.
+        - dataset_name_2: name given to datasets 2.
     '''
     ## Define iterators over dataset 1 and 2
     index1 = 0
     index2 = 0
     
-    ## Define counters of SNPs that coincide in POS
+    ## Define counters of SNPs that are at the same position (same POS)
     n_coincidences = 0
+    
     while index1 < len(vcf_data_1['variants/POS']) and index2 < len(vcf_data_2['variants/POS']):
         if vcf_data_1['variants/POS'][index1] < vcf_data_2['variants/POS'][index2]:
+            ## If the position of the SNP in dataset 1 is smaller than the position of the SNP in dataset 2...
+            ## Increase the iterator of dataset 1
             index1 += 1
         elif vcf_data_1['variants/POS'][index1] > vcf_data_2['variants/POS'][index2]:
+            ## If the position of the SNP in dataset 2 is smaller than the position of the SNP in dataset 1...
+            ## Increase the iterator of dataset 2
             index2 += 1
-        ## Found a SNP at the same position
         else:
+            ## Found a SNP at the same position
+            ## Increase the counter of coincidences and the iterator of datasets 1 and 2
             n_coincidences += 1
             index1 += 1
             index2 += 1
@@ -74,18 +85,17 @@ def search_and_remove_ambiguous_snps(vcf_data, track_name='preprocessing.txt'):
         - Search and remove non-ambiguous SNPs from vcf data.
     Input:
         - vcf_data: allel.read_vcf output. Might contain ambiguous SNPs to be removed.
-          Note: ambiguous SNPs can be A-T, T-A, C-G, or G-C pairs where the first element is the reference 
-          and the second the alternate.
-        - track_name: name of .txt file to write results and findings.
+          Note: ambiguous SNPs can be A-T, T-A, C-G, or G-C pairs where the first element is the reference (REF) and the second the alternate (ALT).
+        - track_name: name of .txt file to write results.
     Output:
-        - vcf_data: contains dictionary with vcf data only for non-ambiguous SNPs (ambiguous SNPs are removed).
+        - vcf_data: allel.read_vcf output only with non-ambiguous SNPs (ambiguous SNPs are removed).
     '''
 
     ## Obtain REF and ALT from vcf_data
     REF = vcf_data['variants/REF']
     ALT = vcf_data['variants/ALT']
     
-    ## Create list that will store the indexes of non-ambiguous SNPs
+    ## Create list that will store the index positions of non-ambiguous SNPs
     non_ambiguous_idx = []
     
     ## Create counters of the number of ambiguities of type A-T, T-A, C-G, and G-C in this order
@@ -96,25 +106,35 @@ def search_and_remove_ambiguous_snps(vcf_data, track_name='preprocessing.txt'):
 
     ## Seach for ambiguous SNPs
     for i in range (0, len(REF)):
-        if REF[i] == 'A' and ALT[i][0] == 'T':    # Ambiguity of A-T type
+        if REF[i] == 'A' and ALT[i][0] == 'T':
+            ## If the reference is an A and the alternate is a T...
+            ## Found ambiguity of A-T type
             A_T_count += 1
-        elif REF[i] == 'T' and ALT[i][0] == 'A':  # Ambiguity of T-A type
+        elif REF[i] == 'T' and ALT[i][0] == 'A':
+            ## If the reference is an T and the alternate is a A...
+            ## Found ambiguity of T-A type
             T_A_count += 1
-        elif REF[i] == 'C' and ALT[i][0] == 'G':  # Ambiguity of C-G type
+        elif REF[i] == 'C' and ALT[i][0] == 'G':
+            ## If the reference is an C and the alternate is a G...
+            ## Found ambiguity of C-G type
             C_G_count += 1
-        elif REF[i] == 'G' and ALT[i][0] == 'C':  # Ambiguity of G-C type
+        elif REF[i] == 'G' and ALT[i][0] == 'C':
+            ## If the reference is an G and the alternate is a C...
+            ## Found ambiguity of G-C type
             G_C_count += 1
         else:
+            # The SNP at position i is not ambiguous
             non_ambiguous_idx.append(i)
 
-    ## Write how many SNP ambiguities of each type were found in .txt file with name track_name
+    ## Write how many ambiguities of each type were found in .txt file with name track_name
     track('--> {} ambiguities found of A-T type'.format(A_T_count), track_name)
     track('--> {} ambiguities found of T-A type'.format(T_A_count), track_name)
     track('--> {} ambiguities found of C-G type'.format(C_G_count), track_name)
     track('--> {} ambiguities found of G-C type'.format(G_C_count), track_name)
     track('--> {} ambiguous SNPs in total'.format(A_T_count+T_A_count+C_G_count+G_C_count), track_name)
     
-    ## Keep the SNPs that are not ambiguous 
+    ## Keep the SNPs that are not ambiguous
+    # Ambigous SNPs are removed next
     vcf_data = select_snps(vcf_data, non_ambiguous_idx)
             
     track('--> All SNPs with ambiguities removed correctly', track_name)
@@ -125,15 +145,18 @@ def search_and_remove_ambiguous_snps(vcf_data, track_name='preprocessing.txt'):
 def correct_flips(vcf_data, indexes):
     '''
     Objective:
-        - Correct flips in the dataset by swapping the reference and the alternate, and changing 0's by 1's and 1's by 0's.
+        - Correct flips in the dataset by swapping the reference (REF) and the alternate (ALT), and also changing 0's by 1's and 1's by 0's.
+          The index positions of the SNPs with flips to be corrected are found in indexes.
     Input:
         - vcf_data: allel.read_vcf output.
-        - indexes: list with the indexes of the SNPs with flips to be corrected.
+        - indexes: list with the index positions of the SNPs that are flipped.
     Output:
-        - vcf_data: contains dictionary with vcf data with corrected flips.
+        - vcf_data: allel.read_vcf output with corrected SNP flips.
     '''
+    
     if len(indexes) > 0:
-        ## Swapping the reference and the alternate
+        ## If there is some SNP flip...
+        ## Swap the reference and the alternate
         ref_aux = vcf_data['variants/REF'][indexes]
         alt_aux = vcf_data['variants/ALT'][indexes,0]
         vcf_data['variants/REF'][indexes] = vcf_data['variants/ALT'][indexes,0]
@@ -143,12 +166,12 @@ def correct_flips(vcf_data, indexes):
         assert (vcf_data['variants/ALT'][indexes,0] == ref_aux).all(), 'The reference and the alternate were not swapped correctly'
         assert (vcf_data['variants/REF'][indexes] == alt_aux).all(), 'The reference and the alternate were not swapped correctly'
         
-        ## Changing 0's by 1's and 1's by 0's
+        ## Change 0's by 1's and 1's by 0's
         snps = vcf_data['calldata/GT'][indexes,:,:]
         vcf_data['calldata/GT'][indexes,:,:] = np.where((snps==0)|(snps==1), snps^1, snps)
         
-        ## Ensure the 0's and 1's where correctly swapped by veryfing that the number of 1's before the swap
-        # Is the same as the number of 0' after the swap
+        ## Ensure the 0's and 1's where correctly swapped, by checking that the number of 1's before the swap
+        # is the same as the number of 0' after the swap
         number_ones_before = np.sum(snps == 1)
         number_zeros_after = np.sum(vcf_data['calldata/GT'][indexes,:,:] == 0)
         assert number_ones_before == number_zeros_after, 'The zeros and ones where not swapped correctly'
@@ -159,40 +182,46 @@ def correct_flips(vcf_data, indexes):
 def search_and_correct_flips_by_pos(vcf_data_1, vcf_data_2, track_name='preprocessing.txt'):
     '''
     Objective:
-        - Search for possible flips in the reference and alternate for SNPs at the same position 
-          in the two datasets (vcf_data_1 and vcf_data_2).
-          Note: a SNP is flipped when the reference in the first dataset is the alternate in the second dataset, 
-          and the alternate in the first dataset is the reference in the second dataset. 
-        - Correct the flips by swapping the reference and the alternate of the second dataset.
-          Also, the 0's are changed by 1's, and viceversa for the flippped SNPs.
+        - Search for possible SNP flips in the reference and alternate, for the SNPs that are at the same position
+          between the two datasets (vcf_data_1 and vcf_data_2).
+          Note: a SNP is flipped when the reference (REF) in the first dataset (vcf_data_1) is the alternate (ALT) in the second dataset (vcf_data_2), 
+          and the alternate in the former is the reference in the latter. 
+        - Correct SNPs flips by swapping the reference and the alternate of the second dataset.
+          Also, the 0's are changed by 1's and viceversa for the those SNPs with a flip.
     Input:
         - vcf_data_1: allel.read_vcf output of the .vcf file 1.
         - vcf_data_2: allel.read_vcf output of the .vcf file 2.
-        - track_name: name of .txt file to write results and findings.
+        - track_name: name of .txt file to write results.
     '''
     
-    ## Define counters of SNPs that coincide in POS
+    ## Define counters of SNPs that are at the same position (same POS)
     n_coincidences = 0
     
-    ## Create list that will store the indexes of SNPs that are flipped (in dataset 2)
+    ## Create list that will store the index positions of the SNPs with a flip (in dataset 2)
     flip_idx2 = []
     
-    ## Define iterators over dataset 1 and 2
+    ## Define iterators over the SNPs in dataset 1 and 2
     index1 = 0
     index2 = 0
     while index1 < len(vcf_data_1['variants/POS']) and index2 < len(vcf_data_2['variants/POS']):
         if vcf_data_1['variants/POS'][index1] < vcf_data_2['variants/POS'][index2]:
+            ## If the position of the SNP in dataset 1 is smaller than the position of the SNP in dataset 2...
+            ## Increase the iterator of dataset 1
             index1 += 1
         elif vcf_data_1['variants/POS'][index1] > vcf_data_2['variants/POS'][index2]:
+            ## If the position of the SNP in dataset 2 is smaller than the position of the SNP in dataset 1...
+            ## Increase the iterator of dataset 2
             index2 += 1
-        ## Found a SNP at the same position
         else:   
-            ## Search if there is a SNP flip
+            ## Found a SNP at the same position...
+            ## Search if there is a SNP flip at this position
             if (vcf_data_1['variants/REF'][index1] == vcf_data_2['variants/ALT'][index2,0] and 
             vcf_data_1['variants/ALT'][index1,0] == vcf_data_2['variants/REF'][index2]):
-                ## Found a SNP flip
+                ## If the reference in dataset 1 is the alternate in dataset 2, and the alternate in dataset 1 is the reference in dataset 2...
+                ## Append to index position of the SNP to flip_idx2
                 flip_idx2.append(index2)
             
+            ## Increase the counter of coincidences and the iterator of datasets 1 and 2
             n_coincidences += 1
             index1 += 1
             index2 += 1
@@ -200,6 +229,7 @@ def search_and_correct_flips_by_pos(vcf_data_1, vcf_data_2, track_name='preproce
     track('--> {} SNPs found at the same position in the two datasets'.format(n_coincidences), track_name)
     track('--> {} flips found in total'.format(len(flip_idx2)), track_name)
     
+    ## Correct SNPs flips at the indexes found in flip_idx2
     vcf_data_2 = correct_flips(vcf_data_2, flip_idx2)
     
     track('--> All SNPs with flips corrected correctly', track_name)
@@ -211,15 +241,16 @@ def search_and_remove_mismatches_by_pos(vcf_data_1, vcf_data_2, track_name='prep
     '''
     Objective:
         - Search and remove mismatches between vcf_data_1 and vcf_data_2.
-          Note: a mismatch is a difference in the reference, the alternate, the identifier or the position of the same 
-          SNP in the two datasets.
+          Note: there is a mismatch when there is a difference in the reference (REF) or alternate (ALT) between SNPs at the same position 
+          in two datasets (vcf_data_1 and vcf_data_2). Note: it is recommended to first correct the SNP flips prior to removing SNP mismatches.
+          You can correct the SNP flips with search_and_correct_flips_by_pos.
     Input:
         - vcf_data_1: allel.read_vcf output of the .vcf file 1.
         - vcf_data_2: allel.read_vcf output of the .vcf file 2.
-        - track_name: name of .txt file to write results and findings.
+        - track_name: name of .txt file to write results.
     '''
     
-    ## Define counters of SNPs that coincide in POS
+    ## Define counters of SNPs that are at the same position (same POS)
     n_coincidences = 0
     
     ## Create lists that will store all the indexes of the SNPs that contain a mismatch at the same position
@@ -231,16 +262,24 @@ def search_and_remove_mismatches_by_pos(vcf_data_1, vcf_data_2, track_name='prep
     index2 = 0
     while index1 < len(vcf_data_1['variants/POS']) and index2 < len(vcf_data_2['variants/POS']):
         if vcf_data_1['variants/POS'][index1] < vcf_data_2['variants/POS'][index2]:
+            ## If the position of the SNP in dataset 1 is smaller than the position of the SNP in dataset 2...
+            ## Increase the iterator of dataset 1
             index1 += 1
         elif vcf_data_1['variants/POS'][index1] > vcf_data_2['variants/POS'][index2]:
+            ## If the position of the SNP in dataset 2 is smaller than the position of the SNP in dataset 1...
+            ## Increase the iterator of dataset 2
             index2 += 1
-        ## Found a SNP at the same position
         else:
+            ## Found a SNP at the same position...
             ## Search if there is a mismatch
             if (vcf_data_1['variants/REF'][index1] != vcf_data_2['variants/REF'][index2] or 
                 vcf_data_1['variants/ALT'][index1,0] != vcf_data_2['variants/ALT'][index2,0]):
+                ## If the reference or the alternate between datasets 1 and 2 do not match...
+                # Save the index positions of the SNPs that present a mismatch in each dataset
                 mismatch_idx1.append(index1)
                 mismatch_idx2.append(index2)
+            
+            ## Increase the counter of coincidences and the iterator of datasets 1 and 2
             n_coincidences += 1
             index1 += 1
             index2 += 1
@@ -260,34 +299,49 @@ def search_and_remove_mismatches_by_pos(vcf_data_1, vcf_data_2, track_name='prep
 def search_and_keep_common_markers(vcf_data_1, vcf_data_2, track_name):
     '''
     Objective:
-        - Search and keep common markers from vcf data.
-          Note: common markers are SNPs with same POS, REF, and ALT.
+        - Search and keep common markers between two datasets (vcf_data_1 and vcf_data_2).
+          Note: common markers are SNPs with same position (POS), reference (REF), and alernate (ALT).
     Input:
         - vcf_data_1: allel.read_vcf output of the .vcf file 1.
         - vcf_data_2: allel.read_vcf output of the .vcf file 2.
-        - track_name: name of .txt file to write results and findings.
+        - track_name: name of .txt file to write results.
     Output:
         - vcf_data_1:
     '''
+    
+    ## Define iterators over dataset 1 and 2
     i = 0
     j = 0
+    
+    ## Create lists that will store all the indexes of the SNPs that are common markers
     indexes_1 = []
     indexes_2 = []
 
     while i < len(vcf_data_1['variants/POS']) and j < len(vcf_data_2['variants/POS']):
         if vcf_data_1['variants/POS'][i] < vcf_data_2['variants/POS'][j]:
+            ## If the position of the SNP in dataset 1 is smaller than the position of the SNP in dataset 2...
+            ## Increase the iterator of dataset 1
             i += 1
         elif vcf_data_1['variants/POS'][i] > vcf_data_2['variants/POS'][j]:
+            ## If the position of the SNP in dataset 2 is smaller than the position of the SNP in dataset 1...
+            ## Increase the iterator of dataset 2
             j += 1
-        else: 
+        else:
+            ## Found a SNP at the same position...
+            ## Search if it corresponds to a common marker
             if (vcf_data_1['variants/REF'][i] == vcf_data_2['variants/REF'][j] and 
                 vcf_data_1['variants/ALT'][i][0] == vcf_data_2['variants/ALT'][j][0]):
+                ## If the reference and the alternate between datasets 1 and 2 match...
+                # Save the index positions of the SNPs that are a common marker in each dataset
                 indexes_1.append(i)
                 indexes_2.append(j)
+            
+            ## Increase the iterator of datasets 1 and 2
             i += 1
             j += 1
     
     ## Keep the SNPs that are common markers
+    # The SNPs that differe in position, reference or alternate are removed
     vcf_data_1 = select_snps(vcf_data_1, indexes_1)
     vcf_data_2 = select_snps(vcf_data_2, indexes_2)
      
