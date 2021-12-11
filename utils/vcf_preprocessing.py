@@ -217,8 +217,8 @@ def search_and_correct_flips_by_pos(vcf_data_1, vcf_data_2, track_name='preproce
             ## Search if there is a SNP flip at this position
             if (vcf_data_1['variants/REF'][index1] == vcf_data_2['variants/ALT'][index2,0] and 
             vcf_data_1['variants/ALT'][index1,0] == vcf_data_2['variants/REF'][index2]):
-                ## If the reference in dataset 1 is the alternate in dataset 2, and the alternate in dataset 1 is the reference in dataset 2...
-                ## Append to index position of the SNP to flip_idx2
+                ## Found a SNP flip. The reference in dataset 1 is the alternate in dataset 2, and the alternate in dataset 1 is the reference in dataset 2...
+                ## Therefore, append the index position of the SNP with a flip in dataset 2 to flip_idx2
                 flip_idx2.append(index2)
             
             ## Increase the counter of coincidences and the iterator of datasets 1 and 2
