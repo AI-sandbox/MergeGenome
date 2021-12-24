@@ -1,19 +1,19 @@
+################################################################################
+# Subsets a dataset to only contain the SNPs present
+# in another dataset
+################################################################################
+
 import sys
 import os
-import numpy as np
-from sklearn.decomposition import PCA
-from sklearn.preprocessing import StandardScaler
-import matplotlib.pyplot as plt
-
 sys.path.append('/home/users/miriambt/my_work/dog-gen-to-phen/preprocessing')
-
 from utils.vcf_utils import read_vcf_file, write_vcf_file
 from utils.vcf_preprocessing import search_and_keep_common_markers
 from utils.track import track
 
-#############################################
-### INPUT
-#############################################
+################################################################################
+
+## USER INPUTS
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ## Define base path to .vcf files containing the SNPs to be subsetted, for each chromosome
 PATH1 = '/scratch/users/miriambt/data/dogs/formatted_data/4th_dataset/whole_genome/cleaned/chr*_unfiltered_phased_cleaned.vcf'
@@ -33,15 +33,21 @@ dataset3_name = 'embark'
 dataset4_name = 'imputed_array_subsetted'
 
 ## Define name of .txt to contain the tracking of the script
-track_name = 'trash_subsetting_{}_{}_to_{}_{}.txt'.format(dataset1_name, dataset2_name, dataset3_name, dataset4_name)
+# Note: track_name should end in .txt
+track_name = 'subsetting_{}_{}_to_{}_{}.txt'.format(dataset1_name, dataset2_name, dataset3_name, dataset4_name)
 
-## Remove content of .txt with name track_name if it already exists
-if os.path.exists('../output/{}'.format(track_name)):
-    os.remove('../output/{}'.format(track_name))
+## Define path to output .txt file that will store the tracking of the script
+track_path = '/home/users/miriambt/my_work/dog-gen-to-phen/preprocessing/output/{}'.format(track_name)
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+## Remove content of {TRACK_PATH} if it already exists
+if os.path.exists(track_path):
+    os.remove(track_path)
 
 ## For every chromosome
-for i in range(20, 39):
-    track('\n------------------------- Chromosome{} -------------------------\n'.format(i), track_name)
+for i in range(1, 39):
+    track('\n------------------------- Chromosome{} -------------------------\n'.format(i), track_path)
     
     ## Define paths for chromosome i
     path1 = PATH1.replace('*', str(i))
@@ -56,18 +62,18 @@ for i in range(20, 39):
     data2 = read_vcf_file(path2)
     data3 = read_vcf_file(path3)
     
-    track('{} SNPs and {} samples in {} dataset'.format(len(data1['variants/ID']), len(data1['samples']), dataset1_name), track_name)
-    track('{} SNPs and {} samples in {} dataset'.format(len(data2['variants/ID']), len(data2['samples']), dataset2_name), track_name)
-    track('{} SNPs and {} samples in {} dataset'.format(len(data3['variants/ID']), len(data3['samples']), dataset3_name), track_name)
+    track('{} SNPs and {} samples in {} dataset'.format(len(data1['variants/ID']), len(data1['samples']), dataset1_name), track_path)
+    track('{} SNPs and {} samples in {} dataset'.format(len(data2['variants/ID']), len(data2['samples']), dataset2_name), track_path)
+    track('{} SNPs and {} samples in {} dataset'.format(len(data3['variants/ID']), len(data3['samples']), dataset3_name), track_path)
     
     ## Keep common SNPs of the first and the second datasets, if present in the third dataset
     # The SNPs that are in the first or second dataset but not in the third dataset are removed
-    data1, data3 = search_and_keep_common_markers(data1, data3, track_name)
-    data2, data3 = search_and_keep_common_markers(data2, data3, track_name)
+    data1, data3 = search_and_keep_common_markers(data1, data3, track_path)
+    data2, data3 = search_and_keep_common_markers(data2, data3, track_path)
     
     ## Write subsetted data in output .vcf file
     write_vcf_file(data1, output_path_1)
     write_vcf_file(data2, output_path_2)
     
-    track('{} SNPs and {} samples in {} dataset'.format(len(data1['variants/ID']), len(data1['samples']), dataset3_name), track_name)
-    track('{} SNPs and {} samples in {} dataset'.format(len(data2['variants/ID']), len(data2['samples']), dataset4_name), track_name)
+    track('{} SNPs and {} samples in {} dataset'.format(len(data1['variants/ID']), len(data1['samples']), dataset3_name), track_path)
+    track('{} SNPs and {} samples in {} dataset'.format(len(data2['variants/ID']), len(data2['samples']), dataset4_name), track_path)
