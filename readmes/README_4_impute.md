@@ -25,7 +25,6 @@ done
 
 #### Output files
 
-There are two output files: 
-
-* **logfile:** gives a summary of the analysis that includes the Beagle version, the command line arguments, and compute time. 
+* **logfile:** gives a summary of the analysis that includes the Beagle version, the command line arguments, and compute time.
+ 
 * **vcf.gz:** bgzip-compressed VCF file that contains phased, non-missing genotypes for all non-reference samples. The output vcf.gz file can be uncompressed with the unix gunzip utility.
