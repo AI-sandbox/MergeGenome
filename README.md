@@ -11,3 +11,5 @@ The limitations in the imputation algorithms and a lack of consensus in the way 
 2. **[Change chromosome notation](readmes/README_2_change_chrom_notation.md)**
 
 3. **[Preprocess .vcf files](readmes/README_3_preprocess_vcf_files.md)**
+
+4. **[Impute SNPs from short to large dataset](readmes/README_4_impute.md)**
