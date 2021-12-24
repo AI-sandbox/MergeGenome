@@ -4,7 +4,7 @@
 
 import pandas as pd
 
-# process genetic map for beagle
+# Process genetic map for beagle
 
 for chm in range(1,39):
     genetic_in = "/home/users/miriambt/my_work/dog-gen-to-phen/preprocessing/genetic_map/chr{}_average_canFam3.1.txt".format(chm)
@@ -17,5 +17,4 @@ for chm in range(1,39):
     with open(genetic_out,"w") as f:
         for itr in data.iterrows():
             i=itr[1]
-            #print(i[0],i[1],i[2])
             f.write("{}\t{}\t{}\t{}\n".format("chr"+str(int(i[0])),".",i[2],int(i[1])))
