@@ -189,8 +189,7 @@ def search_and_correct_flips_by_pos(vcf_data_1, vcf_data_2, track_name='preproce
         - Correct SNPs flips by swapping the reference and the alternate of the second dataset.
           Also, the 0's are changed by 1's and viceversa for the those SNPs with a flip.
     Input:
-        - vcf_data_1: allel.read_vcf output of the .vcf file 1.
-        - vcf_data_2: allel.read_vcf output of the .vcf file 2.
+        - vcf_data_2: allel.read_vcf output with corrected SNP flips.
         - track_name: name of .txt file to write results.
     '''
     
@@ -245,8 +244,8 @@ def search_and_remove_mismatches_by_pos(vcf_data_1, vcf_data_2, track_name='prep
           in two datasets (vcf_data_1 and vcf_data_2). Note: it is recommended to first correct the SNP flips prior to removing SNP mismatches.
           You can correct the SNP flips with search_and_correct_flips_by_pos.
     Input:
-        - vcf_data_1: allel.read_vcf output of the .vcf file 1.
-        - vcf_data_2: allel.read_vcf output of the .vcf file 2.
+        - vcf_data_1: allel.read_vcf output of the .vcf file 1 without SNPs with mismatches.
+        - vcf_data_2: allel.read_vcf output of the .vcf file 2 without removed SNPs with mismatches.
         - track_name: name of .txt file to write results.
     '''
     
@@ -306,7 +305,8 @@ def search_and_keep_common_markers(vcf_data_1, vcf_data_2, track_name):
         - vcf_data_2: allel.read_vcf output of the .vcf file 2.
         - track_name: name of .txt file to write results.
     Output:
-        - vcf_data_1:
+        - vcf_data_1: allel.read_vcf output of the .vcf file 1 for the common markers.
+        - vcf_data_2: allel.read_vcf output of the .vcf file 2 for the common markers.
     '''
     
     ## Define iterators over dataset 1 and 2
