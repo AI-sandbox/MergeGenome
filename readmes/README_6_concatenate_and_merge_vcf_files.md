@@ -12,11 +12,7 @@ bcftools concat embark_chr1.vcf embark_chr2.vcf embark_chr3.vcf embark_chr4.vcf 
 
 **Common error**
 
-It is pretty common that bcftools returns the error: 
-
-> contig 'chr1' is not defined in the header. (Quick workaround: index the file with tabix.)
-
-You can add the missing line in the header from the terminal before using the concat functinon to solve it:
+It is pretty common that bcftools returns the error: *contig 'chr1' is not defined in the header. (Quick workaround: index the file with tabix.)* You can add the missing line in the header from the terminal before using the concat functinon to solve it:
 
 `Example:`
 
