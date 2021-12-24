@@ -4,7 +4,7 @@ The computational time of preprocessing big .vcf files can be substantial. That 
 
 In order to split the dataset in a .vcf file per chromosome, you can use the script in `utils/partition_and_rename_chr.py`. 
 
-````{python}
+```python
 def filter_by_chromosome(vcf_data, chrom):
     '''
     Objective:
@@ -25,4 +25,4 @@ def filter_by_chromosome(vcf_data, chrom):
             vcf_data[key] = vcf_data[key][indexes_chr]
                 
     return vcf_data
-````
+```
