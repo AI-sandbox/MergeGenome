@@ -2,14 +2,14 @@
 
 You can impute the missing variables of the shorter dataset to have the same SNPs as the larger dataset as follows:
 
-````{python}
+```
 for chr in {1..38};
 do
 
 java -Xmx50g -jar /home/packages/beagle.jar gt=/home/miriambt/data/array/cleaned/All_Pure_150k_chr${chr}_cleaned.vcf ref=/home/miriambt/data/whole_genome/cleaned/chr${chr}_unfiltered_phased_cleaned.vcf out=/home/miriambt/data/array/imputed/All_Pure_150k_chr${chr}_cleaned_imputed impute=True chrom=chr${chr}  map=/home/miriambt/data/genetic_map/chr${chr}_beagle_gmap.txt
 
 done
-````
+```
 
 * **gt:** VCF file containing the genomic sequences to be imputed.
 
