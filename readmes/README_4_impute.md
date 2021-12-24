@@ -1,6 +1,6 @@
 ## 4. Impute SNPs (from short to large dataset)
 
-You can impute the missing variables of the shorter dataset to have the same SNPs as the larger dataset as follows:
+You can impute the missing SNPs in a gt dataset to have the same SNPs as in the reference dataset as follows:
 
 ```
 for chr in {1..38};
