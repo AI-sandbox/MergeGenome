@@ -1,6 +1,6 @@
 ## 6. Concatenate and merge .vcf files
 
-### Concatenate .vcf files into single .vcf file (same sample IDs)
+### Concat: Concatenate .vcf files into single .vcf file (same sample IDs)
 
 If multiple .vcf files contain different information about the same samples (i.e., the same sample IDs can be found in all .vcf files) and the desire is to create one .vcf file with information from all the files, the concat function should be used.
 
@@ -22,7 +22,7 @@ To solve it, you might want to add the missing line in the header from the termi
 for chr in {1..38}; do  sed -i "3s/^/##contig=<ID=chr${chr}>\n/" embark_chr${chr}.vcf; done
 ```
 
-### Merging .vcf files (different sample IDs)
+### Merge: Merging .vcf files (different sample IDs)
 
 If multiple .vcf files contain information about different samples (i.e., there is no overlap between sample IDs in all of the .vcf files) and the desire is to create one .vcf file with information from all the files, the merge function should be used.
 
