@@ -1,3 +1,5 @@
-## 1. Partition data into separate .vcf files (one for each chromosome)
+## 5. SNPs subsetting to another dataset
 
-The computational time of preprocessing big .vcf files can be substantial. That is why, working with one .vcf file for each chromosome is in general better than 
+It could be that the amount of SNPs you are dealing with is too large for the type of analysis you want to conduct or that you want to subset a dataset to only contain the SNPs present in another dataset for comparability.
+
+To this end, you can use the script in `scripts/snps_subsetting.py`.
