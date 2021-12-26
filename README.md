@@ -16,6 +16,6 @@ Finally, it explains how to subset a dataset to only contain the SNPs that are a
 
 4. **[Impute SNPs (from short to large dataset)](readmes/README_4_impute.md)**
 
-5. **[SNPs subsetting to another dataset](readmes/README_5_snps_subsetting.md)**
+5. **[Subset SNPs to another dataset](readmes/README_5_snps_subsetting.md)**
 
 6. **[Concatenate and merge .vcf files](readmes/README_6_concatenate_and_merge_vcf_files.md)**
