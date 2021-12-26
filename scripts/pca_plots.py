@@ -113,7 +113,7 @@ plt.xlabel('\nPrincipal Component 1', fontsize = FONTSIZE)
 plt.ylabel('\nPrincipal Component 2', fontsize = FONTSIZE)
 
 ## Save figure in output path
-plt.savefig(output_path+'trained_and_projected_on_{}'.format(dataset1_name.replace(' ', '_')),  bbox_inches='tight')
+plt.savefig(output_path2+'trained_and_projected_on_{}'.format(dataset1_name.replace(' ', '_')),  bbox_inches='tight')
 
 # ------------------- Make PCA plot trained and projected on the SNPs of the first dataset -------------------
 
@@ -133,7 +133,7 @@ plt.xlabel('\nPrincipal Component 1', fontsize = FONTSIZE)
 plt.ylabel('\nPrincipal Component 2', fontsize = FONTSIZE)
 
 ## Save figure in output path
-plt.savefig(output_path+'trained_and_projected_on_{}'.format(dataset2_name.replace(' ', '_')),  bbox_inches='tight')
+plt.savefig(output_path2+'trained_and_projected_on_{}'.format(dataset2_name.replace(' ', '_')),  bbox_inches='tight')
 
 # ------------------- Make PCA plot trained on the SNPs of the first dataset and projected on both -------------------
 
@@ -160,7 +160,7 @@ plt.xlabel('\nPrincipal Component 1', fontsize = FONTSIZE)
 plt.ylabel('\nPrincipal Component 2', fontsize = FONTSIZE)
 
 ## Save figure in output path
-plt.savefig(output_path+'trained_on_{}_projected_on_{}_and_{}'.format(dataset1_name.replace(' ', '_'), 
+plt.savefig(output_path2+'trained_on_{}_projected_on_{}_and_{}'.format(dataset1_name.replace(' ', '_'), 
                                                                       dataset1_name.replace(' ', '_'), 
                                                                       dataset2_name.replace(' ', '_'), bbox_inches='tight'))
 
@@ -189,7 +189,7 @@ plt.xlabel('\nPrincipal Component 1', fontsize = FONTSIZE)
 plt.ylabel('\nPrincipal Component 2', fontsize = FONTSIZE)
 
 ## Save figure in output path
-plt.savefig(output_path+'trained_on_{}_projected_on_{}_and_{}'.format(dataset2_name.replace(' ', '_'), 
+plt.savefig(output_path2+'trained_on_{}_projected_on_{}_and_{}'.format(dataset2_name.replace(' ', '_'), 
                                                                       dataset1_name.replace(' ', '_'), 
                                                                       dataset2_name.replace(' ', '_'), bbox_inches='tight'))
 
@@ -218,6 +218,6 @@ plt.xlabel('\nPrincipal Component 1', fontsize = FONTSIZE)
 plt.ylabel('\nPrincipal Component 2', fontsize = FONTSIZE)
 
 ## Save figure in output path
-plt.savefig(output_path+'trained_on_{}_projected_on_{}_and_{}'.format(dataset2_name.replace(' ', '_'), 
+plt.savefig(output_path2+'trained_on_{}_projected_on_{}_and_{}'.format(dataset2_name.replace(' ', '_'), 
                                                                       dataset1_name.replace(' ', '_'), 
                                                                       dataset2_name.replace(' ', '_'), bbox_inches='tight'))
