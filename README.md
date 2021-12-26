@@ -19,3 +19,7 @@ Finally, it explains how to subset a dataset to only contain the SNPs that are a
 5. **[Subset SNPs to another dataset](readmes/README_5_snps_subsetting.md)**
 
 6. **[Concatenate and merge .vcf files](readmes/README_6_concatenate_and_merge_vcf_files.md)**
+
+# Verification steps
+
+1. **[Make PCA plots](readmes/README_1_make_pca_plots.md)
