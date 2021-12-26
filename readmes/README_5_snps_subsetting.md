@@ -1,4 +1,4 @@
-## 5. SNPs subsetting to another dataset
+## 5. Subset SNPs to the SNPs in another dataset
 
 It could be that the amount of SNPs you are dealing with is too large for the type of analysis you want to conduct or that you want to subset a dataset to only contain the SNPs present in another dataset for comparability.
 
