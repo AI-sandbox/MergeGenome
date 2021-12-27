@@ -89,8 +89,7 @@ def PCA_2D_trained_on_dataset1_projected_on_both(snps1, snps2, plot_params, data
     plt.legend(loc='upper right', prop={'size': plot_params['FONTSIZE']})
 
     ## Save figure in output path
-    plt.savefig(output_path+'trained_on_{}_projected_on_{}_and_{}'.format(dataset1_name.replace(' ', '_'), 
-                                                                          dataset1_name.replace(' ', '_'), 
+    plt.savefig(output_path+'trained_on_{}_projected_on_{}_and_{}'.format(dataset1_name.replace(' ', '_'), dataset1_name.replace(' ', '_'), 
                                                                           dataset2_name.replace(' ', '_'), bbox_inches='tight'))
 
 
@@ -135,5 +134,4 @@ def PCA_2D_trained_and_projected_on_both(snps1, snps2, plot_params, dataset1_nam
     plt.legend(loc='upper right', prop={'size': plot_params['FONTSIZE']})
 
     ## Save figure in output path
-    plt.savefig(output_path2+'trained_and_projected_on_{}_and_{}'.format(dataset1_name.replace(' ', '_'), 
-                                                                          dataset2_name.replace(' ', '_'), bbox_inches='tight'))
+    plt.savefig(output_path2+'trained_and_projected_on_{}_and_{}'.format(dataset1_name.replace(' ', '_'), dataset2_name.replace(' ', '_'), bbox_inches='tight'))
