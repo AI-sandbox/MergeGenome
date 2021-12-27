@@ -108,7 +108,7 @@ def PCA_2D_trained_and_projected_on_both(snps1, snps2, plot_params, dataset1_nam
     '''
     
     ## Concatenate the SNPs data
-    concat = np.concatenate((all_snps_1, all_snps_2), axis=0, out=None)
+    concat = np.concatenate((snps1, snps2), axis=0, out=None)
 
     ## Standardize the SNPs data to have 0 mean and 1 std
     concat_scaled = StandardScaler().fit_transform(concat)
@@ -134,4 +134,4 @@ def PCA_2D_trained_and_projected_on_both(snps1, snps2, plot_params, dataset1_nam
     plt.legend(loc='upper right', prop={'size': plot_params['FONTSIZE']})
 
     ## Save figure in output path
-    plt.savefig(output_path2+'trained_and_projected_on_{}_and_{}'.format(dataset1_name.replace(' ', '_'), dataset2_name.replace(' ', '_'), bbox_inches='tight'))
+    plt.savefig(output_path+'trained_and_projected_on_{}_and_{}'.format(dataset1_name.replace(' ', '_'), dataset2_name.replace(' ', '_'), bbox_inches='tight'))
