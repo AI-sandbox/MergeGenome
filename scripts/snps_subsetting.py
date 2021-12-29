@@ -7,7 +7,7 @@ import sys
 import os
 sys.path.append('/home/users/miriambt/my_work/dog-gen-to-phen/preprocessing')
 from utils.vcf_utils import read_vcf_file, write_vcf_file
-from utils.vcf_preprocessing import search_and_keep_common_markers
+from utils.vcf_preprocessing import search_and_keep_common_markers_single_chr
 from utils.track import track
 
 ################################################################################
@@ -68,8 +68,8 @@ for i in range(1, 39):
     
     ## Keep common SNPs of the first and the second datasets, if present in the third dataset
     # The SNPs that are in the first or second dataset but not in the third dataset are removed
-    data1, data3 = search_and_keep_common_markers(data1, data3, track_path)
-    data2, data3 = search_and_keep_common_markers(data2, data3, track_path)
+    data1, data3, _, _ = search_and_keep_common_markers_single_chr(data1, data3, track_path)
+    data2, data3, _, _ = search_and_keep_common_markers_single_chr(data2, data3, track_path)
     
     ## Write subsetted data in output .vcf file
     write_vcf_file(data1, output_path_1)
