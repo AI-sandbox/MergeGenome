@@ -295,11 +295,12 @@ def search_and_remove_mismatches_by_pos(vcf_data_1, vcf_data_2, track_name='prep
     return vcf_data_1, vcf_data_2
     
 
-def search_and_keep_common_markers(vcf_data_1, vcf_data_2, track_name):
+def search_and_keep_common_markers_single_chr(vcf_data_1, vcf_data_2, track_name):
     '''
     Objective:
         - Search and keep common markers between two datasets (vcf_data_1 and vcf_data_2).
-          Note: common markers are SNPs with same chromosome (CHROM), position (POS), reference (REF), and alernate (ALT).
+          Note: common markers are SNPs with same chromosome (CHROM), position (POS), reference (REF), and alernate (ALT). This function assumes
+          vcf_data_1 and vcf_data_2 contain data for a single chromosome (the same in both datasets).
     Input:
         - vcf_data_1: allel.read_vcf output of the .vcf file 1.
         - vcf_data_2: allel.read_vcf output of the .vcf file 2.
@@ -307,8 +308,64 @@ def search_and_keep_common_markers(vcf_data_1, vcf_data_2, track_name):
     Output:
         - vcf_data_1: allel.read_vcf output of the .vcf file 1 for the common markers.
         - vcf_data_2: allel.read_vcf output of the .vcf file 2 for the common markers.
-        - indexes_1: indexes of the SNPs of dataset 1 that are common markers with dataset 2.
-        - indexes_2: indexes of the SNPs of dataset 2 that are common markers with dataset 1.
+        - indexes_1: indexes of the SNPs in the .vcf file 1 that are common markers with the .vcf file 2.
+        - indexes_2: indexes of the SNPs in the .vcf file 2 that are common markers with the .vcf file 1.
+    '''
+    
+    ## Define iterators over dataset 1 and 2
+    i = 0
+    j = 0
+    
+    ## Create lists that will store all the indexes of the SNPs that are common markers
+    indexes_1 = []
+    indexes_2 = []
+
+    while i < len(vcf_data_1['variants/POS']) and j < len(vcf_data_2['variants/POS']):
+        if vcf_data_1['variants/POS'][i] < vcf_data_2['variants/POS'][j]:
+            ## If the position of the SNP in dataset 1 is smaller than the position of the SNP in dataset 2...
+            ## Increase the iterator of dataset 1
+            i += 1
+        elif vcf_data_1['variants/POS'][i] > vcf_data_2['variants/POS'][j]:
+            ## If the position of the SNP in dataset 2 is smaller than the position of the SNP in dataset 1...
+            ## Increase the iterator of dataset 2
+            j += 1
+        else:
+            ## Found a SNP at the same position...
+            ## Search if it corresponds to a common marker
+            if (vcf_data_1['variants/REF'][i] == vcf_data_2['variants/REF'][j] and 
+                vcf_data_1['variants/ALT'][i][0] == vcf_data_2['variants/ALT'][j][0]):
+                ## If the reference and the alternate between datasets 1 and 2 match...
+                # Save the index positions of the SNPs that are a common marker in each dataset
+                indexes_1.append(i)
+                indexes_2.append(j)
+            
+            ## Increase the iterator of datasets 1 and 2
+            i += 1
+            j += 1
+    
+    ## Keep the SNPs that are common markers
+    # The SNPs that differe in position, reference or alternate are removed
+    vcf_data_1 = select_snps(vcf_data_1, indexes_1)
+    vcf_data_2 = select_snps(vcf_data_2, indexes_2)
+     
+    track('{} common markers in total'.format(len(indexes_1)), track_name)
+    
+    return vcf_data_1, vcf_data_2, indexes_1, indexes_2
+
+
+def search_and_keep_common_markers_several_chr(vcf_data_1, vcf_data_2, track_name):
+    '''
+    Objective:
+        - Search and keep common markers between two datasets (vcf_data_1 and vcf_data_2).
+          Note: common markers are SNPs with same chromosome (CHROM), position (POS), reference (REF), and alernate (ALT). This function accepts
+          vcf_data_1 and vcf_data_2 data for multiple chromosomes.
+    Input:
+        - vcf_data_1: allel.read_vcf output of the .vcf file 1.
+        - vcf_data_2: allel.read_vcf output of the .vcf file 2.
+        - track_name: name of .txt file to write results.
+    Output:
+        - indexes_1: indexes of the SNPs in the .vcf file 1 that are common markers with the .vcf file 2.
+        - indexes_2: indexes of the SNPs in the .vcf file 2 that are common markers with the .vcf file 1.
     '''
     
     ## Define iterators over dataset 1 and 2
@@ -345,12 +402,7 @@ def search_and_keep_common_markers(vcf_data_1, vcf_data_2, track_name):
                 ## Increase the iterator of datasets 1 and 2
                 i += 1
                 j += 1
-    
-    ## Keep the SNPs that are common markers
-    # The SNPs that differe in position, reference or alternate are removed
-    vcf_data_1 = select_snps(vcf_data_1, indexes_1)
-    vcf_data_2 = select_snps(vcf_data_2, indexes_2)
-     
+
     track('{} common markers in total'.format(len(indexes_1)), track_name)
     
     return vcf_data_1, vcf_data_2, indexes_1, indexes_2
