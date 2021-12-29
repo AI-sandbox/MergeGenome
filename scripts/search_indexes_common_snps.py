@@ -11,7 +11,7 @@ import pandas as pd
 
 sys.path.append('/home/users/miriambt/my_work/dog-gen-to-phen/preprocessing')
 from utils.vcf_utils import read_vcf_file, filter_by_chromosome
-from utils.vcf_preprocessing import search_indexes_common_snps
+from utils.vcf_preprocessing import search_and_keep_common_markers_several_chr
 from utils.track import track
 
 ################################################################################
@@ -20,15 +20,21 @@ from utils.track import track
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ## Define base path to .vcf files with all chromosomes data
-PATH1 = '/scratch/users/miriambt/data/dogs/formatted_data/4th_dataset/merged/merged_filteredsamples_allchr.vcf'
-PATH2 = '/scratch/users/miriambt/data/dogs/formatted_data/4th_dataset/array/cleaned/All_Pure_150k_allchr_cleaned.vcf'
+#PATH1 = '/scratch/users/miriambt/data/dogs/formatted_data/4th_dataset/merged/merged_filteredsamples_allchr.vcf'
+#PATH2 = '/scratch/users/miriambt/data/dogs/formatted_data/4th_dataset/array/cleaned/All_Pure_150k_allchr_cleaned.vcf'
+
+PATH1 = '/scratch/users/miriambt/data/dogs/formatted_data/4th_dataset/embark/embark_allchr.vcf'
+PATH2 = '/scratch/users/miriambt/data/dogs/formatted_data/4th_dataset/whole_to_array/X_whole_to_array_allchr.vcf'
 
 ## Define path were the numpy array with the indexes of the common SNPs will be saved
-PATH_INDEXES = '/home/users/miriambt/my_work/dog-gen-to-phen/classification_imputation/data/indexes_{}_in_{}'
+PATH_INDEXES = '/home/users/miriambt/my_work/dog-gen-to-phen/imputation/data/indexes_{}_in_{}'
 
 ## Define name of datasets 1 and 2
-dataset1_name = 'merged'
-dataset2_name = 'array'
+#dataset1_name = 'merged'
+#dataset2_name = 'array'
+
+dataset1_name = 'embark'
+dataset2_name = 'whole_to_array'
 
 ## Define name of .txt to contain the tracking of the script
 track_name = 'searching_snps_of_{}_in_{}.txt'.format(dataset1_name, dataset2_name)
@@ -50,10 +56,10 @@ track('{} SNPs and {} samples in {} dataset'.format(len(data1['variants/ID']), l
 track('{} SNPs and {} samples in {} dataset\n'.format(len(data2['variants/ID']), len(data2['samples']), dataset2_name), track_path)
 
 ## Obtain indexes of the SNPs in data1 that are also in data2
-indexes1, indexes2 = search_indexes_common_snps(data1, data2, track_path)
+_, _, indexes1, indexes2 = search_and_keep_common_markers_several_chr(data1, data2, track_path)
 
 ## Save the found indexes
-np.save(PATH_INDEXES.format(dataset1_name, dataset2_name), indexes1)
+# np.save(PATH_INDEXES.format(dataset1_name, dataset2_name), indexes1)
 
 ## Ensure the indexes were correctly found
 count = 0
