@@ -24,4 +24,3 @@ Finally, it explains how to subset a dataset to only contain the SNPs that are a
 
 1. **[Plot of PCA/UMAP/tSNE](readmes/README_1_make_pca_plots.md)**
 2. **[Plot of SNPs means](readmes/README_2_plot_snps_means.md)**
-3. **[Search indexes common SNPs](readmes/README_3_search_indexes_common_snps.md)**
