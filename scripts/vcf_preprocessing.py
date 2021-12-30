@@ -19,7 +19,7 @@ from utils.track import track
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ## Define path to input .vcf files with data for each chromosome to be preprocessed
-# PATH1 is the path to dataset 1 (short number of SNPs), PATH2 is the path to dataset 2 (large number of SNPs)
+# PATH1 is the path to dataset 1 (large number of SNPs), PATH2 is the path to dataset 2 (short number of SNPs)
 PATH1 = '/scratch/users/miriambt/data/dogs/formatted_data/4th_dataset/whole_genome/chr{}_unfiltered_phased.vcf'
 PATH2 = '/scratch/users/miriambt/data/dogs/formatted_data/4th_dataset/array/All_Pure_150k_chr{}.vcf'
 
