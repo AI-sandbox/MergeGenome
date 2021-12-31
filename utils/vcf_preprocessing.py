@@ -420,6 +420,7 @@ def search_and_remove_snps_different_means(vcf_data_1, vcf_data_2, threshold, tr
     Input:
         - vcf_data_1: allel.read_vcf output of the .vcf file 1.
         - vcf_data_2: allel.read_vcf output of the .vcf file 2.
+        - threshold: value between 0.0 and 1.0. All SNPs with a mean absolute difference higher than this value will be removed.
         - track_name: name of .txt file to write results.
     Output:
         - vcf_data_1: allel.read_vcf output of the .vcf file 1 without the SNPs with a mean absolute difference > threshold.
