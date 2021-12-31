@@ -7,6 +7,7 @@
 ################################################################################
 
 import numpy as np
+from utils.vcf_utils import combine_chrom_strands
 from utils.track import track
     
 def select_snps(vcf_data, indexes):
@@ -364,6 +365,8 @@ def search_and_keep_common_markers_several_chr(vcf_data_1, vcf_data_2, track_nam
         - vcf_data_2: allel.read_vcf output of the .vcf file 2.
         - track_name: name of .txt file to write results.
     Output:
+        - vcf_data_1: allel.read_vcf output of the .vcf file 1 for the common markers.
+        - vcf_data_2: allel.read_vcf output of the .vcf file 2 for the common markers.
         - indexes_1: indexes of the SNPs in the .vcf file 1 that are common markers with the .vcf file 2.
         - indexes_2: indexes of the SNPs in the .vcf file 2 that are common markers with the .vcf file 1.
     '''
@@ -406,3 +409,60 @@ def search_and_keep_common_markers_several_chr(vcf_data_1, vcf_data_2, track_nam
     track('{} common markers in total'.format(len(indexes_1)), track_name)
     
     return vcf_data_1, vcf_data_2, indexes_1, indexes_2
+
+
+def search_and_remove_snps_different_means(vcf_data_1, vcf_data_2, threshold, track_name):
+    '''
+    Objective:
+        - Search and remove common SNPs between vcf_data_1 and vcf_data_2 with a mean absolute difference > threshold.
+          Note: common SNPs are SNPs with same chromosome (CHROM), position (POS), reference (REF), and alernate (ALT). This function assumes
+          vcf_data_1 and vcf_data_2 contain data for a single chromosome (the same in both datasets).
+    Input:
+        - vcf_data_1: allel.read_vcf output of the .vcf file 1.
+        - vcf_data_2: allel.read_vcf output of the .vcf file 2.
+        - track_name: name of .txt file to write results.
+    Output:
+        - vcf_data_1: allel.read_vcf output of the .vcf file 1 without the SNPs with a mean absolute difference > threshold.
+        - vcf_data_2: allel.read_vcf output of the .vcf file 2 without the SNPs with a mean absolute difference > threshold.
+    '''
+        
+    ## Obtain SNPs data for datasets 1 and 2
+    snps_1 = vcf_data_1['calldata/GT']
+    snps_2 = vcf_data_2['calldata/GT']
+        
+    ## Convert SNPs from MxNx2 to MxN shape (averaged)
+    # For dataset 1...
+    length_1, num_dogs_1, num_strands_1 = snps_1.shape
+    snps_1 = snps_1.reshape(length_1, num_dogs_1*2).T
+    snps_1 = combine_chrom_strands(snps_1)
+    # And for dataset 2...
+    length_2, num_dogs_2, num_strands_2 = snps_2.shape
+    snps_2 = snps_2.reshape(length_2, num_dogs_2*2).T
+    snps_2 = combine_chrom_strands(snps_2)
+    
+    ## Search indexes of common markers
+    _, _, indexes_1, indexes_2 = search_and_keep_common_markers_single_chr(vcf_data_1.copy(), vcf_data_2.copy(), track_name)
+    
+    ## Select SNPs data of common markers
+    snps_1 = snps_1[:, indexes_1]
+    snps_2 = snps_2[:, indexes_2]
+    
+    ## Compute the mean of the common SNPs in each dataset
+    mean_1 = np.mean(snps_1, axis=0)
+    mean_2 = np.mean(snps_2, axis=0)
+    
+    ## Compute the indexes of the SNPs to be removed in datasets 1 and 2
+    idx_1_to_remove = np.array(indexes_1)[abs(mean_1 - mean_2) > threshold]
+    idx_2_to_remove = np.array(indexes_2)[abs(mean_1 - mean_2) > threshold]
+    
+    assert len(idx_1_to_remove) == len(idx_2_to_remove) == sum(abs(mean_1 - mean_2) > threshold), 'The amount of indexes removed in each dataset is not the same. There has been an error.'
+    
+    track('Found {} SNPs with a mean absolute difference higher than {}'.format(sum(abs(mean_1 - mean_2) > threshold), threshold), track_name)
+        
+    ## Remove the SNPs that have a mean absolute difference > threshold
+    vcf_data_1 = remove_snps(vcf_data_1, idx_1_to_remove)
+    vcf_data_2 = remove_snps(vcf_data_2, idx_2_to_remove)
+    
+    track('All SNPs with a mean absolute difference higher than {} removed correctly'.format(threshold), track_name)
+    
+    return vcf_data_1, vcf_data_2
