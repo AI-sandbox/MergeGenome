@@ -12,6 +12,7 @@ import os
 import allel
 import numpy as np
 import pandas as pd
+import random
 
 from utils.track import track
 
@@ -54,9 +55,7 @@ def write_vcf_file(vcf_data, output_path_to_vcf_file):
     
     ## Obtain metadata from .vcf file
     data = vcf_data
-    
-    print(np.unique(npy))
-    
+        
     ## Infer chromosome length and number of samples
     npy = npy.astype(str)
     chmlen, _, _ = data["calldata/GT"].shape
@@ -102,6 +101,7 @@ def write_vcf_file(vcf_data, output_path_to_vcf_file):
     df.to_csv(output_path_to_vcf_file,sep="\t",index=False,mode="a",header=False)
     
     return
+
 
 def filter_by_chromosome(vcf_data, chrom):
     '''
@@ -255,20 +255,67 @@ def filter_samples(vcf_data, substrings, track_name, verbose=False):
     return vcf_data
 
 
+def train_test_split(vcf_data, train_percentage):
+    '''
+    Objective: perform train/test splitting. A set of samples are randomly selected to go to the train set (as much as train_percentage).
+    The rest of samples go to the train set.
+    Input:
+        - vcf_data: allel.read_vcf output.
+        - train_percentage: percentage of samples that will go to the train set. 
+    Output:
+        - vcf_data_train: vcf_data with the samples of the train set.
+        - vcf_data_test: vcf_data with the samples of the test set.
+    '''
+    ## Obtain number of samples and SNPs in vcf_data
+    samples = len(vcf_data['samples'])
+    snps = len(vcf_data['variants/ID'])
+    
+    ## Define vector with all the sample indexes (from 0 to samples-1)
+    row_idxs = list(range(0,samples))
+
+    ## Define number of samples that will go to the train and test sets
+    n_train = round(train_percentage*samples)
+    n_test = samples - n_train
+
+    ## Randomly sample n_train numbers from row_idxs without replacement
+    # Set seed for reproducibility
+    random.seed(0)
+    train_idxs = random.sample(row_idxs, n_train)
+
+    ## Ensure all numbers in train_idxs are unique
+    assert len(np.unique(train_idxs)) == n_train, 'There are repeated row indexes for the train set. Check again.'
+
+    ## Obtain the indexes of the samples that will go to the test set
+    test_idxs = list(set(row_idxs) - set(train_idxs))
+
+    ## Ensure all numbers in test_idxs are unique
+    assert len(np.unique(test_idxs)) == n_test, 'There are repeated row indexes for the test set. Check again.'
+    
+    ## Make two copies of vcf_data
+    vcf_data_train = vcf_data.copy()
+    vcf_data_test = vcf_data.copy()
+    
+    ## Modify the first copy to filter by the samples that go to the train set
+    vcf_data_train['samples'] = vcf_data_train['samples'][train_idxs]
+    vcf_data_train['calldata/GT'] = vcf_data_train['calldata/GT'][:,train_idxs,:]
+    
+    ## Modify the second copy to filter by the samples that go to the test set
+    vcf_data_test['samples'] = vcf_data_test['samples'][test_idxs]
+    vcf_data_test['calldata/GT'] = vcf_data_test['calldata/GT'][:,test_idxs,:]
+    
+    assert len(vcf_data_train['samples']) + len(vcf_data_test['samples']) == len(vcf_data['samples']), 'The number of samples in the train and test sets does not match the original number of samples'
+    
+    return vcf_data_train, vcf_data_test
+    
+
 def combine_chrom_strands(chrom_data):
     '''
-    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Inputs:
-        - chrom_data: matrix of chromosone data (SNPs) in
-              the shape (num_dogs*2, length). The maternal
-              and paternal strands should be split and
-              consecutively placed in the matrix
-
-    Outputs:
-        - chrom_data_combined: numpy matrix of chromosone data
-              (SNPs) with combined maternal and paternal
-              strands. Shape should be (num_dogs, length)
-    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Input:
+        - chrom_data: matrix of chromosone data (SNPs) in the shape (num_dogs*2, length). The maternal and paternal strands should be split and
+          consecutively placed in the matrix.
+    Output:
+        - chrom_data_combined: numpy matrix of chromosone data (SNPs) with combined maternal and paternal strands. 
+          Shape should be (num_dogs, length).
     '''
 
     ## Determine the dimensions of the chromosone data (SNPs)
