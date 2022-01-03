@@ -371,6 +371,10 @@ def search_and_keep_common_markers_several_chr(vcf_data_1, vcf_data_2, track_nam
         - indexes_2: indexes of the SNPs in the .vcf file 2 that are common markers with the .vcf file 1.
     '''
     
+    ## Create lists that will store all the indexes of the SNPs that are common markers
+    indexes_1 = []
+    indexes_2 = []
+
     ## Define iterators over dataset 1 and 2
     i = 0
     j = 0
@@ -379,24 +383,24 @@ def search_and_keep_common_markers_several_chr(vcf_data_1, vcf_data_2, track_nam
     indexes_1 = []
     indexes_2 = []
 
-    while i < len(vcf_data_1['variants/POS']) and j < len(vcf_data_2['variants/POS']):
-        if vcf_data_1['variants/CHROM'][i][3:] < vcf_data_2['variants/CHROM'][j][3:]:
+    while i < len(dataY_test['variants/POS']) and j < len(dataY_test_pred['variants/POS']):
+        if int(dataY_test['variants/CHROM'][i][3:]) < int(dataY_test_pred['variants/CHROM'][j][3:]):
             i += 1
-        elif vcf_data_1['variants/CHROM'][i][3:] > vcf_data_2['variants/CHROM'][j][3:]:
+        elif int(dataY_test['variants/CHROM'][i][3:]) > int(dataY_test_pred['variants/CHROM'][j][3:]):
             j += 1
-        elif vcf_data_1['variants/POS'][i] < vcf_data_2['variants/POS'][j]:
+        elif dataY_test['variants/POS'][i] < dataY_test_pred['variants/POS'][j]:
             ## If the position of the SNP in dataset 1 is smaller than the position of the SNP in dataset 2...
             ## Increase the iterator of dataset 1
             i += 1
-        elif vcf_data_1['variants/POS'][i] > vcf_data_2['variants/POS'][j]:
+        elif dataY_test['variants/POS'][i] > dataY_test_pred['variants/POS'][j]:
             ## If the position of the SNP in dataset 2 is smaller than the position of the SNP in dataset 1...
             ## Increase the iterator of dataset 2
             j += 1
         else:
             ## Found a SNP at the same position...
             ## Search if it corresponds to a common marker
-            if (vcf_data_1['variants/REF'][i] == vcf_data_2['variants/REF'][j] and 
-                vcf_data_1['variants/ALT'][i][0] == vcf_data_2['variants/ALT'][j][0]):
+            if (dataY_test['variants/REF'][i] == dataY_test_pred['variants/REF'][j] and 
+                dataY_test['variants/ALT'][i][0] == dataY_test_pred['variants/ALT'][j][0]):
                 ## If the reference and the alternate between datasets 1 and 2 match...
                 # Save the index positions of the SNPs that are a common marker in each dataset
                 indexes_1.append(i)
@@ -405,8 +409,12 @@ def search_and_keep_common_markers_several_chr(vcf_data_1, vcf_data_2, track_nam
                 ## Increase the iterator of datasets 1 and 2
                 i += 1
                 j += 1
-
     track('{} common markers in total'.format(len(indexes_1)), track_name)
+    
+    ## Keep the SNPs that are common markers
+    # The SNPs that differe in position, reference or alternate are removed
+    vcf_data_1 = select_snps(vcf_data_1, indexes_1)
+    vcf_data_2 = select_snps(vcf_data_2, indexes_2)
     
     return vcf_data_1, vcf_data_2, indexes_1, indexes_2
 
