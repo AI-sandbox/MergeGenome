@@ -383,24 +383,24 @@ def search_and_keep_common_markers_several_chr(vcf_data_1, vcf_data_2, track_nam
     indexes_1 = []
     indexes_2 = []
 
-    while i < len(dataY_test['variants/POS']) and j < len(dataY_test_pred['variants/POS']):
-        if int(dataY_test['variants/CHROM'][i][3:]) < int(dataY_test_pred['variants/CHROM'][j][3:]):
+    while i < len(vcf_data_1['variants/POS']) and j < len(vcf_data_2['variants/POS']):
+        if int(vcf_data_1['variants/CHROM'][i][3:]) < int(vcf_data_2['variants/CHROM'][j][3:]):
             i += 1
-        elif int(dataY_test['variants/CHROM'][i][3:]) > int(dataY_test_pred['variants/CHROM'][j][3:]):
+        elif int(vcf_data_1['variants/CHROM'][i][3:]) > int(vcf_data_2['variants/CHROM'][j][3:]):
             j += 1
-        elif dataY_test['variants/POS'][i] < dataY_test_pred['variants/POS'][j]:
+        elif vcf_data_1['variants/POS'][i] < vcf_data_2['variants/POS'][j]:
             ## If the position of the SNP in dataset 1 is smaller than the position of the SNP in dataset 2...
             ## Increase the iterator of dataset 1
             i += 1
-        elif dataY_test['variants/POS'][i] > dataY_test_pred['variants/POS'][j]:
+        elif vcf_data_1['variants/POS'][i] > vcf_data_2['variants/POS'][j]:
             ## If the position of the SNP in dataset 2 is smaller than the position of the SNP in dataset 1...
             ## Increase the iterator of dataset 2
             j += 1
         else:
             ## Found a SNP at the same position...
             ## Search if it corresponds to a common marker
-            if (dataY_test['variants/REF'][i] == dataY_test_pred['variants/REF'][j] and 
-                dataY_test['variants/ALT'][i][0] == dataY_test_pred['variants/ALT'][j][0]):
+            if (vcf_data_1['variants/REF'][i] == vcf_data_2['variants/REF'][j] and 
+                vcf_data_1['variants/ALT'][i][0] == vcf_data_2['variants/ALT'][j][0]):
                 ## If the reference and the alternate between datasets 1 and 2 match...
                 # Save the index positions of the SNPs that are a common marker in each dataset
                 indexes_1.append(i)
@@ -409,6 +409,7 @@ def search_and_keep_common_markers_several_chr(vcf_data_1, vcf_data_2, track_nam
                 ## Increase the iterator of datasets 1 and 2
                 i += 1
                 j += 1
+                
     track('{} common markers in total'.format(len(indexes_1)), track_name)
     
     ## Keep the SNPs that are common markers
