@@ -37,7 +37,7 @@ for i in range (1, 39):
     data_chr_i = filter_by_chromosome(data.copy(), str(i))
     
     ## Rename variants/CHROM from {i} to chr{i}
-    # If the variants/CHROM nomenclature is already in the chr{i} form, it does nothing
+    # If the variants/CHROM nomenclature is already in the chr{i} form, do nothing
     data_chr_i = rename_chromosome(data_chr_i, str(i), 'chr{}'.format(i))
     
     ## Write data for chromosome i in output .vcf file
