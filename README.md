@@ -4,7 +4,7 @@ The small number of samples present in some datasets may be insufficient for ana
 
 The limitations in the imputation algorithms and a lack of consensus in the way DNA sequences are read -among others-, make the merging process hard in some cases. This repository underlies the importance of cleaning genomic sequences prior to analysis and explains the sequence of processing steps to merge a shorter dataset with a larger reference dataset.
 
-Finally, it explains how to subset a dataset to only contain the SNPs that are also present in another dataset. This step is particularly relevant for selecting the SNPs that in another study, were considered more important for analysis.
+Finally, it explains how to subset a dataset to only contain the SNPs that are also present in another dataset. This step is particularly relevant in order to select the SNPs that, in another study, were considered more important for analysis.
 
 # Preprocessing steps
 
