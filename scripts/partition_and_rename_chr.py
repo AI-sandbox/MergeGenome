@@ -1,7 +1,8 @@
 ################################################################################
-# Reads a single .vcf file
+# Reads a single .vcf file with genomic data
 # Filters the data by chromosome
-# Renames variants/CHROM nomenclature from '1' to 'chr1', ..., '38' to 'chr38'
+# If the variants/CHROM nomenclature is in the form '1', ..., '38', 
+# renames from '1' to 'chr1', ..., '38' to 'chr38'
 # Writes the result in separate .vcf files, one for each chromosome
 ################################################################################
 
@@ -27,14 +28,17 @@ OUTPUT_PATH = '/scratch/users/miriambt/data/dogs/formatted_data/4th_dataset/arra
 data = read_vcf_file(PATH)
 
 for i in range (1, 39):
-    ## Define path to output .vcf file with data for chromosome i
+    ## For each chromosome number...
+    
+    ## Define path to output .vcf file with genomic data for chromosome i
     output_path = OUTPUT_PATH.format(i)
     
     ## Filter the data to include the SNPs for chromosome i
     data_chr_i = filter_by_chromosome(data.copy(), str(i))
     
-    ## Rename variants/CHROM from {i} to chr{i} 
+    ## Rename variants/CHROM from {i} to chr{i}
+    # If the variants/CHROM nomenclature is already in the chr{i} form, it does nothing
     data_chr_i = rename_chromosome(data_chr_i, str(i), 'chr{}'.format(i))
     
-    ## Write data in output .vcf file
+    ## Write data for chromosome i in output .vcf file
     write_vcf_file(data_chr_i, output_path)
