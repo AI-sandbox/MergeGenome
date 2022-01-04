@@ -8,6 +8,6 @@ The computational time of preprocessing big .vcf files can be substantial. In ge
 
 3. It prevents from having trouble with memory.
 
-### Script
+## Script
 
 In order to split the dataset in a .vcf file per chromosome, you can use the script in `utils/partition_and_rename_chr.py`. 
