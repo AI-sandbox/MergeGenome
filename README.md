@@ -1,4 +1,4 @@
-# Introduction to merging genomic datasets
+# Toolkit for Merging Genomic Datasets
 
 The small number of samples present in some datasets may be insufficient for analysis. This is especially the case of deep neural networks, which in general require large amounts of data for training. There are some ways to deal with the paucity of data without the need to obtain more real-world data. An example of this is generating synthetic data. However, if you have access to multiple datasets that share some SNPs, the simplest approach is to merge them by the **common markers** (i.e. SNPs with identical CHROM, POS, REF, and ALT fields). The main drawback of merging datasets is that if a dataset contains much shorter DNA sequences than the others, a big amount of SNPs are gonna be lost. A way of avoiding this is through **imputation**, for example, of missing variables of the shorter dataset to have the same SNPs as in the larger dataset -**the latter called reference**-.
 
