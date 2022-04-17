@@ -1,7 +1,8 @@
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Dataset
+# 1. Partition .vcf file by chromosome
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-test_size: 0.2
+vcf_input_file_path: '/scratch/users/miriambt/data/dogs/formatted_data/4th_dataset/array/All_Pure_150k.vcf'
+vcf_output_files_path: '/scratch/users/miriambt/data/dogs/formatted_data/4th_dataset/array/All_Pure_150k_chr{}.vcf'
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Reproducibility
