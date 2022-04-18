@@ -183,3 +183,5 @@ log/
 configs/
 
 .nfs0000000304201e42000024ca
+
+.gitignore.swp
