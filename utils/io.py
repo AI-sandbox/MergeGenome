@@ -1,33 +1,41 @@
+################################################################################
+# Util functions to read and write .vcf files
+################################################################################
+
 import allel
+import pandas as pd
+from typing import Dict
 
-def read_vcf_file(path_to_vcf_file):
-    '''
-    Objective:
-        - Read .vcf file and return the content of the .vcf file.
-    Input:
-        - path_to_vcf_file: path to .vcf file.
-    Output:
-        - vcf_data: dictionary with the content of .vcf file.
-    '''
+def read_vcf_file(input_path: str) -> Dict:
+    """
+    Reads data .vcf file.
     
-    ## Read the .vcf file using skikit-allel
-    vcf_data = allel.read_vcf(path_to_vcf_file)
-    
-    return vcf_data
+    Args:
+        input_path (str): path to .vcf file.
+    Returns:
+        (Dict): dictionary with the content of .vcf file.
+
+    """
+
+    # Read the .vcf file using skikit-allel
+    return allel.read_vcf(input_path)
 
 
-def write_vcf_file(vcf_data, output_path_to_vcf_file):
+def write_vcf_file(vcf_data: Dict, output_path: str) -> None:
+    """
+    Write vcf_data in .vcf file in the specified output path.
     
-    '''
-    Objective:
-        - Write vcf_data in .vcf file.
-    Input:
-        - vcf_data: allel.read_vcf output to be saved.
-        - output_path_to_vcf_file: str to .vcf path.       
-    '''
+    Args:
+        vcf_data (Dict): dictionary with the content of .vcf file to be saved.
+        output_path (str): str to .vcf path.
     
-    if output_path_to_vcf_file.split(".")[-1] not in ["vcf", "bcf"]:
-        output_path_to_vcf_file += ".vcf"
+    Returns:
+        (None)
+
+    """
+    
+    if output_path.split(".")[-1] not in ["vcf", "bcf"]:
+        output_path += ".vcf"
     
     ## Obtain npy matrix with SNPs
     npy = vcf_data['calldata/GT']
@@ -61,7 +69,7 @@ def write_vcf_file(vcf_data, output_path_to_vcf_file):
     df["INFO"]   = ["."]*chmlen
     df["FORMAT"] = ["GT"]*chmlen
     
-    ## Genotype data for each sample
+    # Genotype data for each sample
     for i in range(n):
         # Get that particular individual's maternal and paternal snps
         maternal = npy[i*2,:].astype(str) # maternal is the first
@@ -73,10 +81,10 @@ def write_vcf_file(vcf_data, output_path_to_vcf_file):
         df[data_samples[i]] = genotype_dog
 
     # Write header
-    with open(output_path_to_vcf_file,"w") as f:
+    with open(output_path,"w") as f:
         f.write("##fileformat=VCFv4.1\n")
         f.write('##FORMAT=<ID=GT,Number=1,Type=String,Description="Phased Genotype">\n')
         f.write("#"+"\t".join(df.columns)+"\n") # Mandatory header
     
     # Genotype data
-    df.to_csv(output_path_to_vcf_file,sep="\t",index=False,mode="a",header=False)
+    df.to_csv(output_path, sep="\t", index=False, mode="a", header=False)

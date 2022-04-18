@@ -1,12 +1,10 @@
-# Toolkit for Merging Genomic Datasets
+# MergeGenome - A Python-based Toolkit for Merging VCF files
 
-The small number of samples present in some datasets may be insufficient for analysis. This is especially the case of deep neural networks, which in general require large amounts of data for training. There are some ways to deal with the paucity of data without the need to obtain more real-world data. An example of this is generating synthetic data. However, if you have access to multiple datasets that share some SNPs, the simplest approach is to merge them by the **common markers** (i.e. SNPs with identical CHROM, POS, REF, and ALT fields). The main drawback of merging datasets is that if a dataset contains much shorter DNA sequences than the others, a big amount of SNPs are gonna be lost. A way of avoiding this is through **imputation**, for example, of missing variables of the shorter dataset to have the same SNPs as in the larger dataset -**the latter called reference**-.
+This repository includes a Python implementation of the MergeGenome toolkit, which underlies the importance of cleaning genomic sequences prior to analysis. The MergeGenome toolkit is designed to integrate DNA sequences from a query and a reference datasets in variant call format (VCF) while targeting data quality. MergeGenome is a robust pipeline of comprehensive steps to merge both datasets, including chromosome nomenclature standardization, SNP ambiguities removal, SNP flips detection, SNP mismatches elimination, and query/reference mismatches detection and, optionally, fixing.
 
-The limitations in the imputation algorithms and a lack of consensus in the way DNA sequences are read -among others-, make the merging process hard in most cases. This repository underlies the importance of cleaning genomic sequences prior to analysis and explains the sequence of processing steps to merge a shorter dataset with a larger reference dataset.
+It also includes the implementation of other common tasks related to merging genomic sequences, such as identifying the common markers (i.e. SNPs with identical CHROM, POS, REF, and ALT fields) between two datasets and subsetting the available features to those common markers. This step is particularly relevant in order to select the SNPs that, in another study, were considered more important for analysis.
 
-Finally, it explains how to subset a dataset to only contain the SNPs that are also present in another dataset. This step is particularly relevant in order to select the SNPs that, in another study, were considered more important for analysis.
-
-# Preprocessing steps
+# Description
 
 1. **[Partition data into separate .vcf files (one for each chromosome)](readmes/README_1_partition_into_separate_files.md)**
 

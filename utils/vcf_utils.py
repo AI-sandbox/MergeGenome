@@ -1,36 +1,82 @@
 ################################################################################
-# Reads .vcf file
-# Writes .vcf file
-# And performs small transformations to .vcf data: 
-#   - Filtering by chromosome
-#   - Renaming chromosome nomenclature
-#   - Obtaining percentage of SNPs with some missing (encoded as -1)
-#   - etc.
+# Functions to assist with the manipulation of .vcf files:
+# * Obtain chromosomes with available data
+# * Filtering data by chromosome
+# * Rename chromosome nomenclature
+# * Obtaining percentage of SNPs with some missing value (encoded as -1)
 ################################################################################
 
 import os
 import numpy as np
 import pandas as pd
 import random
+from typing import Dict, List
 
 from utils.track import track
 
 
-def filter_by_chromosome(vcf_data, chrom):
-    '''
-    Objective:
-        - Filter vcf_data to keep the SNPs of the specified chromosome.
-    Input:
-        - vcf_data: allel.read_vcf output.
-        - chrom: CHROM to select the SNPs. Usually chr{chromosome_number} or {chromosome_number}.
-    Output:
-        - vcf_data: vcf_data containing only the selected SNPs of the desired chromosome.
-    '''
+def obtain_chromosomes(vcf_data: Dict) -> List:
+    """
+    Obtains the name of the chromosomes with available data.
     
-    ## Find the indexes of the SNPs that correspond to the chromosome in particular
+    Args:
+        vcf_data (Dict): dictionary with the content of .vcf file.
+    
+    Returns:
+        (List): list with the unique chromosomes in 'variants/CHROM'
+        in order of appearance.
+
+    """
+    
+    # Obtain the chromosomes in data as unique keys where order is preserved
+    chroms = dict.fromkeys(vcf_data['variants/CHROM'])
+    
+    # Convert to list
+    return list(chroms)
+
+
+def obtain_renamed_chrom(actual_chrom: str) -> str:
+    """
+    Obtains the new notation for a specific chromosome.
+    
+    Args:
+        actual_chrom (str): chromosome notation before renaming.
+    
+    Returns:
+        new_chrom (str): new chromosome notation after renaming.
+
+    """
+
+    if actual_chrom.startswith('chr'):
+        if actual_chrom[4].isdigit():
+            new_chrom = actual_chrom[4]
+
+    elif actual_chrom.isdigit():
+        new_chrom = f'chr{actual_chrom}'
+
+    else:
+        new_chrom = actual_chrom
+
+    return new_chrom
+
+
+def filter_by_chromosome(vcf_data: Dict, chrom: str) -> Dict:
+    """
+    Filters data to keep the info of a specified chromosome.
+    
+    Args:
+        vcf_data (Dict): dictionary with the content of .vcf file.
+        chrom (str): chromosome in 'variants/CHROM'.
+    
+    Returns:
+        vcf_data (Dict): vcf_data with filtered data for the desired chromosome.
+
+    """
+    
+    # Find the indexes of the SNPs of the particular chromosome
     indexes_chr = vcf_data['variants/CHROM'] == str(chrom)
     
-    ## Select data for the SNPs of the chromosome in particular
+    # Select data for the SNPs of the particular chromosome
     for key in vcf_data.keys():
         if key != 'samples':
             vcf_data[key] = vcf_data[key][indexes_chr]
@@ -38,21 +84,26 @@ def filter_by_chromosome(vcf_data, chrom):
     return vcf_data
 
 
-def rename_chromosome(vcf_data, before, after):
-    '''
-    Objective: rename variants/CHROM in vcf_data. Example: from "1" to "chr1".
-    Input:
-        - vcf_data: allel.read_vcf output.
-        - before: chromosome name before renaming. Example: "1".
-        - after: chromosome name after renaming. Example: "chr1".
-    Output:
-        - vcf_data: vcf_data with renamed variants/CHROM.
-    '''
+def rename_chromosome(vcf_data: Dict, actual_chrom:str, new_chrom:str) -> Dict:
+    """
+    Renames variants/CHROM in vcf_data.
     
-    ## Rename variants/CHROM
-    vcf_data['variants/CHROM'] = np.where(vcf_data['variants/CHROM'] == before, after, vcf_data['variants/CHROM']) 
+    Args:
+        vcf_data (Dict): dictionary with the content of .vcf file.
+        actual_chrom (str): chromosome notation before renaming.
+        new_chrom (str): new chromosome notation after renaming.
+
+    Returns:
+        vcf_data (Dict): vcf_data with renamed variants/CHROM notation.
+    
+    """
+
+    # Rename variants/CHROM notation
+    vcf_data['variants/CHROM'] = np.where(vcf_data['variants/CHROM'] == actual_chrom, new_chrom, vcf_data['variants/CHROM'])
     
     return vcf_data
+
+
 
 
 def search_percentage_SNPs_with_missings(vcf_data):
@@ -169,59 +220,6 @@ def filter_samples(vcf_data, substrings, track_name, verbose=False):
     
     return vcf_data
 
-
-def train_test_split(vcf_data, train_percentage):
-    '''
-    Objective: perform train/test splitting. A set of samples are randomly selected to go to the train set (as much as train_percentage).
-    The rest of samples go to the train set.
-    Input:
-        - vcf_data: allel.read_vcf output.
-        - train_percentage: percentage of samples that will go to the train set. 
-    Output:
-        - vcf_data_train: vcf_data with the samples of the train set.
-        - vcf_data_test: vcf_data with the samples of the test set.
-    '''
-    ## Obtain number of samples and SNPs in vcf_data
-    samples = len(vcf_data['samples'])
-    snps = len(vcf_data['variants/ID'])
-    
-    ## Define vector with all the sample indexes (from 0 to samples-1)
-    row_idxs = list(range(0,samples))
-
-    ## Define number of samples that will go to the train and test sets
-    n_train = round(train_percentage*samples)
-    n_test = samples - n_train
-
-    ## Randomly sample n_train numbers from row_idxs without replacement
-    # Set seed for reproducibility
-    random.seed(0)
-    train_idxs = random.sample(row_idxs, n_train)
-
-    ## Ensure all numbers in train_idxs are unique
-    assert len(np.unique(train_idxs)) == n_train, 'There are repeated row indexes for the train set. Check again.'
-
-    ## Obtain the indexes of the samples that will go to the test set
-    test_idxs = list(set(row_idxs) - set(train_idxs))
-
-    ## Ensure all numbers in test_idxs are unique
-    assert len(np.unique(test_idxs)) == n_test, 'There are repeated row indexes for the test set. Check again.'
-    
-    ## Make two copies of vcf_data
-    vcf_data_train = vcf_data.copy()
-    vcf_data_test = vcf_data.copy()
-    
-    ## Modify the first copy to filter by the samples that go to the train set
-    vcf_data_train['samples'] = vcf_data_train['samples'][train_idxs]
-    vcf_data_train['calldata/GT'] = vcf_data_train['calldata/GT'][:,train_idxs,:]
-    
-    ## Modify the second copy to filter by the samples that go to the test set
-    vcf_data_test['samples'] = vcf_data_test['samples'][test_idxs]
-    vcf_data_test['calldata/GT'] = vcf_data_test['calldata/GT'][:,test_idxs,:]
-    
-    assert len(vcf_data_train['samples']) + len(vcf_data_test['samples']) == len(vcf_data['samples']), 'The number of samples in the train and test sets does not match the original number of samples'
-    
-    return vcf_data_train, vcf_data_test
-    
 
 def combine_chrom_strands(chrom_data):
     '''

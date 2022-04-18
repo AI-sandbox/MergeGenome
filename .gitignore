@@ -175,3 +175,6 @@ testing/
 
 # Output folder
 output/
+
+# Log/txt file
+.log

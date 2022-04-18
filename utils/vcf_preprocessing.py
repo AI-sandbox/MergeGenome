@@ -10,6 +10,7 @@ import numpy as np
 from utils.vcf_utils import combine_chrom_strands
 from utils.track import track
     
+
 def select_snps(vcf_data, indexes):
     '''
     Objective: select the SNPs at the specified index positions (in indexes param).
