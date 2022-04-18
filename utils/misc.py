@@ -6,6 +6,7 @@ import os
 import argparse
 from typing import List
 
+
 def check_arguments(paths: List, rename_chr: bool = False, rename_map: dict = None) -> None:
     """
     Checks that the file paths and formats are correct.

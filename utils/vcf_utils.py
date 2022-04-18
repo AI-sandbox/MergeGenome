@@ -71,9 +71,9 @@ def obtain_renamed_chrom(rename_chr: bool, actual_chrom: str, rename_map: dict) 
         
         else:
             if actual_chrom.startswith('chr'):
-                if actual_chrom[4].isdigit():
+                if actual_chrom[4:].isdigit():
                     # Change from 'chr<chrom_number>' to '<chrom_number>'
-                    new_chrom = actual_chrom[4]
+                    new_chrom = actual_chrom[4:]
                     
             elif actual_chrom.isdigit():
                 # Change from ''<chrom_number>' to 'chr<chrom_number>'

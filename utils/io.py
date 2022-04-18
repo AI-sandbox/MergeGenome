@@ -7,6 +7,7 @@ import allel
 import pandas as pd
 from typing import Dict
 
+
 def read_vcf_file(input_path: str) -> Dict:
     """
     Reads data .vcf file.

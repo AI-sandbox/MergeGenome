@@ -1,7 +1,6 @@
 ################################################################################
 # Function to partition the input file in a separate file per chromosome.
-# Optionally, change the chromosome notation. If it is in the form '<chr_number>',
-# change it to 'chr<chr_number>', and viceversa.
+# Optionally, change the chromosome notation.
 ################################################################################
 
 import os
@@ -61,4 +60,4 @@ def partition_by_chromosome(input_path: str, output_folder: str, rename_chr: boo
         
         # Write data for chromosome in output .vcf file
         logger.debug(f'Writing VCF data for chromosome {new_chrom}.')
-        write_vcf_file(data_chrom, output_folder, output_name)
+        # write_vcf_file(data_chrom, output_folder, output_name)

@@ -24,6 +24,13 @@ partition_parser.add_argument('-r', '--rename-chr', action='store_true', help='R
 partition_parser.add_argument('-m', '--rename-map', required=False, help='Dictionary with mapping from actual to new chromosome notation.')
 partition_parser.add_argument('-d', '--debug', required=False, help='Path to file to store info/debug messages.')
 
+# Define subparser for rename command
+partition_parser = subparsers.add_parser('rename', help='.')
+partition_parser.add_argument('-f', '--file', required=True, help='Path to .vcf file with data for a particular chromosome.')
+partition_parser.add_argument('-o', '--output-folder', required=True, help='Path to output folder to store the modified .vcf file.')
+partition_parser.add_argument('-m', '--rename-map', required=False, help='Dictionary with mapping from actual to new chromosome notation.')
+partition_parser.add_argument('-d', '--debug', required=False, help='Path to file to store info/debug messages.')
+
 # Parse the arguments
 args = parser.parse_args()
 
@@ -32,11 +39,18 @@ logger = get_logger(__name__, args.debug)
 
 if args.command == 'partition':
     
-    # Check the input file exists and its format is supported
+    # Check the input arguments are correct
     check_arguments([args.file], args.rename_chr, args.rename_map)
     
     # Partition the file in a separate file per chromosome
     partition_by_chromosome(args.file, args.output_folder, args.rename_chr, args.rename_map, logger)
     
 
+if args.command == 'rename':
+    
+    # Check the input arguments are correct
+    check_arguments([args.file])
+    
+    # 
+    
     
