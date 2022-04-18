@@ -19,9 +19,9 @@ subparsers = parser.add_subparsers(help='Choose a command', dest='command')
 # Define subparser for partition command
 partition_parser = subparsers.add_parser('partition', help='To partition the data in a separate file per chromosome.')
 partition_parser.add_argument('-f', '--file', type=str, required=True, help='Path to input .vcf file.')
-partition_parser.add_argument('-o', '--output-folder', type=str, required=True, help='Path to output folder.')
-partition_parser.add_argument('-r', '--rename-chr', action='store_true', help='Rename (or not) chromosome notation.')
-partition_parser.add_argument('-d', '--debug', type=str, required=False, help='Path to file storing info/debug messages.')
+partition_parser.add_argument('-o', '--output-folder', type=str, required=True, help='Path to output folder to store separate .vcf files.')
+partition_parser.add_argument('-r', '--rename-chr', action='store_true', help='Rename chromosome notation.')
+partition_parser.add_argument('-d', '--debug', type=str, required=False, help='Path to file to store info/debug messages.')
 
 # Parse the arguments
 args = parser.parse_args()

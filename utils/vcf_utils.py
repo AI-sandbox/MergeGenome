@@ -103,7 +103,7 @@ def rename_chromosome(vcf_data: Dict, actual_chrom:str, new_chrom:str) -> Dict:
     
     return vcf_data
 
-
+# -----------------------
 
 
 def search_percentage_SNPs_with_missings(vcf_data):

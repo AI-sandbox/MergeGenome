@@ -1,13 +1,18 @@
-## 1. Partition data into separate .vcf files (one for each chromosome) and change chromosome nomenclature
+## Partition data into separate VCF files (one per chromosome)
 
-The computational time of preprocessing big .vcf files can be substantial. In general, working with one .vcf file for each chromosome is better than treating the whole dataset at once because:
+The first preprocessing step is to partition data into manageable independent VCF files (one file per chromosome) in an effort to fasten data retrieval, smooth the management of raw data, and exploit parallel execution. Otherwise, accessing and manipulating large-scale multidimensional biological data might be excessively costly both in terms of execution time and memory consumption.
 
-1. Most of the computations are faster when treating with smaller datasets.
+Before writing the resulting VCF files, the chromosome notation in the variants/CHROM field can optionally be modified. The chromosome notation of the reference and the query datasets should be the same prior to merging. Standardizing the chromosome notation at this step is preferable to doing it in another step so as to fasten the preprocessing.
 
-2. Having separate files allows processing the data for each chromosome in parallel.
+## Usage
 
-3. It prevents from having trouble with memory.
+```
+$ python3 MergeGenome.py partition -f <file_path> -o <output_folder>
+```
 
-## Script
+Input flags include:
 
-In order to split the dataset in a .vcf file per chromosome, you can use the script in `utils/partition_and_rename_chr.py`. 
+'-f', '--file' PATH, Path to input VCF file (required).
+'-o', '--output-folder' PATH, Path to output folder to store the separate VCF files (required).
+'-r', '--rename-chr', Rename chromosome notation (optional).
+'-d', '--debug' PATH, Path to file to store info/debug messages (optional).
