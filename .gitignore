@@ -177,7 +177,7 @@ testing/
 output/
 
 # Log/txt file
-*.log
+log/
 
 # configs
-./configs/
+configs/
