@@ -178,3 +178,6 @@ output/
 
 # Log/txt file
 .log
+
+# configs
+./configs/

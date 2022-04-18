@@ -2,9 +2,9 @@
 
 This repository includes a Python implementation of the MergeGenome toolkit, which underlies the importance of cleaning genomic sequences prior to analysis. The MergeGenome toolkit is designed to integrate DNA sequences from a query and a reference datasets in variant call format (VCF) while targeting data quality. MergeGenome is a robust pipeline of comprehensive steps to merge both datasets, including chromosome nomenclature standardization, SNP ambiguities removal, SNP flips detection, SNP mismatches elimination, and query/reference mismatches detection and, optionally, fixing.
 
-It also includes the implementation of other common tasks related to merging genomic sequences, such as identifying the common markers (i.e. SNPs with identical CHROM, POS, REF, and ALT fields) between two datasets and subsetting the available features to those common markers. This step is particularly relevant in order to select the SNPs that, in another study, were considered more important for analysis.
+It also includes the implementation of other common tasks related to merging genomic sequences, such as identifying the common markers (i.e. SNPs with identical CHROM, POS, REF, and ALT fields) between two datasets and subsetting the available data to those common markers.
 
-# Description
+# Steps & Usage
 
 1. **[Partition data into separate .vcf files (one for each chromosome)](readmes/README_1_partition_into_separate_files.md)**
 
@@ -18,7 +18,7 @@ It also includes the implementation of other common tasks related to merging gen
 
 6. **[Concatenate and merge .vcf files](readmes/README_6_concatenate_and_merge_vcf_files.md)**
 
-# Verification steps
+# Verification steps & Usage
 
 1. **[Plot of PCA/UMAP/tSNE](readmes/README_1_make_pca_plots.md)**
 
