@@ -9,6 +9,7 @@ import sys
 from utils.logger import get_logger, parser_msg
 from utils.misc import check_arguments, check_configurations
 from modules.partition_and_rename_chr import partition_by_chromosome
+from modules.rename_chr import rename_chromosome
 
 # Define parser to read from command line
 parser = argparse.ArgumentParser(usage=parser_msg())
@@ -51,6 +52,6 @@ if args.command == 'rename':
     # Check the input arguments are correct
     check_arguments([args.file])
     
-    # 
-    
+    # Rename chromosomme notation
+    rename_chromosome(args.file, args.output_folder, args.rename_map, logger)
     

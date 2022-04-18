@@ -1,4 +1,4 @@
-## 2. Rename chromosome notation
+## Rename chromosome notation
 
 A necessary step prior to analyzing and preprocessing two VCF files with data from the same chromosome is to ensure the chromosome nomenclature in the variants/CHROM field is in the same format. Usually, the chromosome nomenclature is in one of two forms: *<chrom_number>* or *chr<chrom_number>*. By default, the rename command changes the format from *<chrom_number>* to *chr<chrom_number>* or (vice-versa). If the notation is in neither of these formats, it does nothing. To specify a different notation, use the `--rename-chr` flag to specify a notation mapping for all the chromosomes to modify, where the key is the old notation for the chromosome in particular and the value is the new notation.
 

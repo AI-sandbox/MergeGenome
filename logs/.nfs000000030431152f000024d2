@@ -1,7 +1,0 @@
-[2022-04-18 12:04:35,720]-[DEBUG]: Reading the provided genomic file.
-[2022-04-18 12:05:27,031]-[INFO]: There are 150131 SNPs and 1355 samples in total.
-[2022-04-18 12:05:27,078]-[INFO]: There are 39 chromosomes in total.
-[2022-04-18 12:05:27,079]-[DEBUG]: Filtering data for chromosome 1.
-[2022-04-18 12:05:27,149]-[INFO]: There are 7739 SNPs and 1355 samples for chromosome 1.
-[2022-04-18 12:05:27,149]-[DEBUG]: Renaming chromosome notation from 1 to chr1.
-[2022-04-18 12:05:27,150]-[DEBUG]: Writing VCF data for chromosome chr1.

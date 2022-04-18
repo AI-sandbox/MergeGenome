@@ -71,9 +71,9 @@ def obtain_renamed_chrom(rename_chr: bool, actual_chrom: str, rename_map: dict) 
         
         else:
             if actual_chrom.startswith('chr'):
-                if actual_chrom[4:].isdigit():
+                if actual_chrom[3:].isdigit():
                     # Change from 'chr<chrom_number>' to '<chrom_number>'
-                    new_chrom = actual_chrom[4:]
+                    new_chrom = actual_chrom[3:]
                     
             elif actual_chrom.isdigit():
                 # Change from ''<chrom_number>' to 'chr<chrom_number>'
@@ -106,7 +106,7 @@ def filter_by_chromosome(vcf_data: dict, chrom: str) -> dict:
     return vcf_data
 
 
-def rename_chromosome(vcf_data: dict, actual_chrom:str, new_chrom:str) -> dict:
+def rename_chrom_field(vcf_data: dict, actual_chrom:str, new_chrom:str) -> dict:
     """
     Renames variants/CHROM in vcf_data.
     

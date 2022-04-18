@@ -7,14 +7,16 @@ import os
 import logging
 
 from utils.io import read_vcf_file, write_vcf_file
-from utils.vcf_utils import obtain_chromosomes, obtain_renamed_chrom, filter_by_chromosome, rename_chromosome
+from utils.vcf_utils import obtain_chromosomes, obtain_renamed_chrom, filter_by_chromosome, rename_chrom_field
 
 
 def partition_by_chromosome(input_path: str, output_folder: str, rename_chr: bool, rename_map: dict, logger: logging.Logger) -> None:
     """
     Partitions the input file in a separate .vcf file per chromosome.
-    Optionally, change the chromosome notation. If it is in the form '<chr_number>',
-    change it to 'chr<chr_number>', and viceversa.
+    Optionally, change the chromosome notation. Changes the chromosome notation. 
+    If the chromosome notation is in the form '<chr_number>', it renames it to 
+    'chr<chr_number>' (or vice-versa). If rename_map dictionary is provided,
+    it renames the keys by the values.
     
     Args:
         input_path (str): path to .vcf file.
@@ -53,11 +55,11 @@ def partition_by_chromosome(input_path: str, output_folder: str, rename_chr: boo
                 
             # Renames variants/CHROM
             logger.debug(f'Renaming chromosome notation from {chrom} to {new_chrom}.')
-            data_chrom = rename_chromosome(data_chrom, chrom, new_chrom)
+            data_chrom = rename_chrom_field(data_chrom, chrom, new_chrom)
         
         # Define output name to .vcf file
         output_name = f'{os.path.basename(input_path)[:-4]}_{new_chrom}.vcf'
         
         # Write data for chromosome in output .vcf file
         logger.debug(f'Writing VCF data for chromosome {new_chrom}.')
-        # write_vcf_file(data_chrom, output_folder, output_name)
+        write_vcf_file(data_chrom, output_folder, output_name)
