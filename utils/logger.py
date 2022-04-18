@@ -29,21 +29,18 @@ def get_logger(name: str, log_path: str) -> logging.Logger:
     # Specify the layout of log records in the final output
     formatter = logging.Formatter('[%(asctime)s]-[%(levelname)s]: %(message)s')
 
-    # Store log messages in log file
     if log_path is not None:
         
+        # Remove content from log file
         if os.path.exists(log_path):
-            # Remove content of log file
             os.remove(log_path)
         
+        # Store log messages in log file
         logging.basicConfig(filename=log_path, encoding='utf-8', format='[%(asctime)s]-[%(levelname)s]: %(message)s')
     
     # Add both formatter and debug chanel to logger
     ch.setFormatter(formatter)
     logger.addHandler(ch)
-    
-    logging.basicConfig(filename='aa.log', encoding='utf-8', 
-                        format='[%(asctime)s]-[%(name)s]-[%(levelname)s]: %(message)s', level=logging.DEBUG) #format="%(message)s"
 
     return logger
 

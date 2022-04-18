@@ -10,12 +10,12 @@ import os
 import numpy as np
 import pandas as pd
 import random
-from typing import Dict, List
+from typing import List
 
 from utils.track import track
 
 
-def obtain_chromosomes(vcf_data: Dict) -> List:
+def obtain_chromosomes(vcf_data: dict) -> List:
     """
     Obtains the name of the chromosomes with available data.
     
@@ -35,32 +35,54 @@ def obtain_chromosomes(vcf_data: Dict) -> List:
     return list(chroms)
 
 
-def obtain_renamed_chrom(actual_chrom: str) -> str:
+def obtain_renamed_chrom(rename_chr: bool, actual_chrom: str, rename_map: dict) -> str:
     """
-    Obtains the new notation for a specific chromosome.
+    Obtains the new notation for a specific chromosome. If rename_chr=True and 
+    rename_map=None, the variants/CHROM format will change from '<chrom_number>' 
+    to 'chr<chrom_number>' or vice-versa. If the notation of a chromosome is in 
+    neither of these formats, its notation will remain the same. If rename_chr=True
+    and rename_map is specified, the renaming will be done with a mapping for all 
+    the chromosomes to modify.
     
     Args:
+        rename_chr (bool): rename (or not) the chromosome nomenclature.
         actual_chrom (str): chromosome notation before renaming.
+        rename_map (str): dictionary with mapping from old to new chromosome notation.
+                          The keys are the old notations and the values are the new notations.
     
     Returns:
         new_chrom (str): new chromosome notation after renaming.
 
     """
-
-    if actual_chrom.startswith('chr'):
-        if actual_chrom[4].isdigit():
-            new_chrom = actual_chrom[4]
-
-    elif actual_chrom.isdigit():
-        new_chrom = f'chr{actual_chrom}'
-
-    else:
-        new_chrom = actual_chrom
+    
+    # Initially, set the new chromosome notation as the old one
+    new_chrom = actual_chrom
+    
+    if rename_chr:
+        
+        if (rename_map is not None):
+            
+            # Extract dict from str
+            rename_map = eval(rename_map)
+            
+            if actual_chrom in rename_map.keys():
+                # Change through mapping
+                new_chrom = rename_map[actual_chrom]
+        
+        else:
+            if actual_chrom.startswith('chr'):
+                if actual_chrom[4].isdigit():
+                    # Change from 'chr<chrom_number>' to '<chrom_number>'
+                    new_chrom = actual_chrom[4]
+                    
+            elif actual_chrom.isdigit():
+                # Change from ''<chrom_number>' to 'chr<chrom_number>'
+                new_chrom = f'chr{actual_chrom}'
 
     return new_chrom
 
 
-def filter_by_chromosome(vcf_data: Dict, chrom: str) -> Dict:
+def filter_by_chromosome(vcf_data: dict, chrom: str) -> dict:
     """
     Filters data to keep the info of a specified chromosome.
     
@@ -84,7 +106,7 @@ def filter_by_chromosome(vcf_data: Dict, chrom: str) -> Dict:
     return vcf_data
 
 
-def rename_chromosome(vcf_data: Dict, actual_chrom:str, new_chrom:str) -> Dict:
+def rename_chromosome(vcf_data: dict, actual_chrom:str, new_chrom:str) -> dict:
     """
     Renames variants/CHROM in vcf_data.
     

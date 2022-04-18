@@ -28,6 +28,7 @@ def select_snps(vcf_data, indexes):
             
     return vcf_data
 
+
 def remove_snps(vcf_data, indexes):
     '''
     Objective: remove the SNPs at the specified index positions (in indexes param).
