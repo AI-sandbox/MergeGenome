@@ -20,11 +20,11 @@ Input flags include:
 1. Change chromosome notation from *<chrom_number>* to *chr<chrom_number>* (or vice-versa):
 
 ```
-$ python3 MergeGenome.py rename -f array.vcf -o ./array_partitioned/
+$ python3 MergeGenome.py rename -f query.vcf -o ./query/
 ```
 
 2. Change chromosome notation from "1" to "chr_1", and from "2" to "chr_2". Also save debug info in log file:
 
 ```
-$ python3 MergeGenome.py rename -f array.vcf -o ./array_partitioned/ -m '{"1":"chr_1", "2":"chr_2"}' -d partition.log
+$ python3 MergeGenome.py rename -f query.vcf -o ./query/ -m '{"1":"chr_1", "2":"chr_2"}' -d rename.log
 ```

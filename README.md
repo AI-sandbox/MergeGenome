@@ -10,7 +10,7 @@ This repository also includes the implementation of other common tasks related t
 
 2. **[Rename chromosome notation](readmes/README_2_rename_chrom_notation.md)**
 
-3. **[Preprocess .vcf files](readmes/README_3_preprocess_vcf_files.md)**
+3. **[Clean VCF files](readmes/README_3_clean_vcf_files.md)**
 
 4. **[Impute SNPs (from short to large dataset)](readmes/README_4_impute.md)**
 

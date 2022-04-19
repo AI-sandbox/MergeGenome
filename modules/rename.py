@@ -32,7 +32,7 @@ def rename_chromosome(input_path: str, output_folder: str, rename_map: dict, log
     # Obtain the dimensions of the data
     logger.info(f'There are {len(data["variants/ID"])} SNPs and {len(data["samples"])} samples in total.')
     
-    # Ensure there the file contains data of a particular chromosome
+    # Ensure the file contains data of a particular chromosome
     chroms = obtain_chromosomes(data)
     assert len(chroms) == 1, 'The provided genomic file contains data for more than one chromosome.\
     Partition data into a separate VCF (partition command).'

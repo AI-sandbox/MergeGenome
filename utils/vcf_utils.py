@@ -11,6 +11,7 @@ import numpy as np
 import pandas as pd
 import random
 from typing import List
+import logging
 
 from utils.track import track
 
@@ -20,7 +21,7 @@ def obtain_chromosomes(vcf_data: dict) -> List:
     Obtains the name of the chromosomes with available data.
     
     Args:
-        vcf_data (Dict): dictionary with the content of .vcf file.
+        vcf_data (dict): allel.read_vcf output.
     
     Returns:
         (List): list with the unique chromosomes in 'variants/CHROM'
@@ -87,11 +88,11 @@ def filter_by_chromosome(vcf_data: dict, chrom: str) -> dict:
     Filters data to keep the info of a specified chromosome.
     
     Args:
-        vcf_data (Dict): dictionary with the content of .vcf file.
+        vcf_data (dict): allel.read_vcf output.
         chrom (str): chromosome in 'variants/CHROM'.
     
     Returns:
-        vcf_data (Dict): vcf_data with filtered data for the desired chromosome.
+        vcf_data (dict): vcf_data with filtered data for the desired chromosome.
 
     """
     
@@ -106,17 +107,17 @@ def filter_by_chromosome(vcf_data: dict, chrom: str) -> dict:
     return vcf_data
 
 
-def rename_chrom_field(vcf_data: dict, actual_chrom:str, new_chrom:str) -> dict:
+def rename_chrom_field(vcf_data: dict, actual_chrom: str, new_chrom: str) -> dict:
     """
     Renames variants/CHROM in vcf_data.
     
     Args:
-        vcf_data (Dict): dictionary with the content of .vcf file.
+        vcf_data (dict): allel.read_vcf output.
         actual_chrom (str): chromosome notation before renaming.
         new_chrom (str): new chromosome notation after renaming.
 
     Returns:
-        vcf_data (Dict): vcf_data with renamed variants/CHROM notation.
+        vcf_data (dict): vcf_data with renamed variants/CHROM notation.
     
     """
 
@@ -125,19 +126,70 @@ def rename_chrom_field(vcf_data: dict, actual_chrom:str, new_chrom:str) -> dict:
     
     return vcf_data
 
-# -----------------------
+
+def filter_samples(vcf_data: dict, substrings: List[str], logger: logging.Logger):
+    """
+    Subsets samples to remove undesired breeds/species with name in substrings list.
+    
+    Args:
+        vcf_data (dict): allel.read_vcf output.
+        substrings (List[str]): substrings of the samples to be removed. Example: ['wolf', 'fox', 'coyote', 'dhole', 'GDJK_GDJK_24316']. 
+                                In this case, the sample with ID "IrishWolfhound01" would be removed because "wolf" is a substring of 
+                                the sample id. Note that the substrings can be in upper or lowercase since they are standardized prior to
+                                filtering.
+        logger (logging.Logger): debug/information tracker.
+    
+    Returns:
+        vcf_data (dict): filtered vcf_data to only keep the desired dog breeds/species.
+    
+    """
+    
+    # Standardize substrings and sample names to lowercase
+    substrings = list(map(lambda x: x.lower(), substrings))
+    sample_names = list(map(lambda x: x.lower(), vcf_data['samples']))
+    remove_samples = []
+    
+    # Define list of booleans with the samples to be kept (True) and to be removed (False).
+    binary_samples = []
+    
+    # For each sample ID, see if it contains any substring and store results in binary_samples to later filter those samples
+    for sample_name in sample_names:
+        
+        # True if any substring is contained in sample name, false otherwise
+        substring_found = any(substring in sample_name for substring in substrings)
+        
+        # Store result
+        # Note: samples with true values will be kept. Otherwise, they will be removed
+        binary_samples.append(not substring_found)
+        
+        # Write sample names that will be removed in track file
+        if substring_found:
+            remove_samples.append(sample_name)
+    
+    # Obtain total number of removed samples
+    removed_samples = len(binary_samples) - sum(binary_samples)
+    
+    # Write total number of removed samples
+    logger.info(f'--> {removed_samples} samples removed in total')
+    
+    # Filter to remove the samples corresponding to undesired breeds/species
+    vcf_data['samples'] = vcf_data['samples'][binary_samples]
+    vcf_data['calldata/GT'] = vcf_data['calldata/GT'][:,binary_samples,:]
+    
+    return vcf_data
 
 
-def search_percentage_SNPs_with_missings(vcf_data):
-    '''
-    Objective:
-        - Return the % of SNPs with some missing value. Missing values are assumed to be encoded as "-1". If your missings are encoded differently, 
-          change the -1 in the function for the alternative missings nomenclature.
-    Input:
-        - vcf_data: allel.read_vcf output.
-    Output:
-        - perc_missings: % of SNPs with some missing value in calldata/GT encoded as "-1".
-    '''
+def search_percentage_SNPs_with_missings(vcf_data: dict, miss_code: [float, str]) -> float:
+    """
+    Computes the percentage of SNPs with some missing value in a certain codification.
+    
+    Args:
+        vcf_data: allel.read_vcf output.
+    
+    Returns:
+        perc_missings: % of SNPs with some missing value in calldata/GT encoded as "-1".
+    
+    """
     
     ## Obtain npy matrix with all the SNPs
     npy = vcf_data['calldata/GT']
@@ -188,58 +240,6 @@ def rename_missings(vcf_data, before, after):
     ## Rename variants/CHROM from {before} to {after}
     vcf_data['calldata/GT'] = np.where(vcf_data['calldata/GT'] == before, after, vcf_data['calldata/GT']) 
 
-    return vcf_data
-
-
-def filter_samples(vcf_data, substrings, track_name, verbose=False):
-    '''
-    Objective: subsets samples to remove undesired breeds/species with name in substrings list.
-    Input:
-        - vcf_data: allel.read_vcf output.
-        - substrings: substrings of the samples to be removed. 
-          Example: ['wolf', 'fox', 'coyote', 'dhole', 'GDJK_GDJK_24316']. In this case, the sample with ID "IrishWolfhound01" would be removed because
-          "wolf" is a substring of the sample id. Note that the substrings can be in upper or lowercase since they are standardized prior to filtering.
-        - verbose: if True, the names of the sample ID that are removed are written in track file.
-    Output:
-        - vcf_data: filtered vcf_data to only keep the desired dog breeds/species.
-    '''
-    
-    ## Standardize substrings and sample names to lowercase
-    substrings = list(map(lambda x: x.lower(), substrings))
-    sample_names = list(map(lambda x: x.lower(), vcf_data['samples']))
-    
-    ## Define list of booleans with the samples to be kept (True) and to be removed (False).
-    samples_keep_remove = []
-        
-    if verbose:
-        track('Removed samples:', track_name)
-    
-    ## For each sample ID, see if it contains any substring and store results in samples_keep_remove to later filter those samples
-    for sample_name in sample_names:
-        ## True if any substring is contained in sample name, false otherwise
-        substring_found = any(substring in sample_name for substring in substrings)
-        
-        ## Store result
-        # Samples with true values will be kept. Otherwise, they will be removed
-        samples_keep_remove.append(not substring_found)
-        
-        ## Write sample names that will be removed in track file
-        if verbose and substring_found:
-            track('-> ' + sample_name, track_name)
-    
-    ## Obtain total number of removed samples
-    removed_samples = len(samples_keep_remove) - sum(samples_keep_remove)
-    
-    if verbose and removed_samples == 0:
-        track('None', track_name)
-    
-    ## Write total number of removed samples
-    track('--> {} samples removed in total'.format(removed_samples), track_name)
-    
-    ## Filter to remove the samples corresponding to undesired breeds/species
-    vcf_data['samples'] = vcf_data['samples'][samples_keep_remove]
-    vcf_data['calldata/GT'] = vcf_data['calldata/GT'][:,samples_keep_remove,:]
-    
     return vcf_data
 
 
