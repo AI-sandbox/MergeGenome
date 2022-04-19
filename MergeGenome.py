@@ -42,7 +42,10 @@ partition_parser.add_argument('-s', '--remove-sample-ID', required=False, nargs=
 partition_parser.add_argument('-a', '--remove-ambiguous-snps', action='store_true', help='Remove (or not) ambiguous SNPs.')
 partition_parser.add_argument('-f', '--correct-snp-flips', action='store_true', help='Correct (or not) SNP in the query with respect to the reference.')
 partition_parser.add_argument('-m', '--remove-mismatching-snps', action='store_true', help='Remove (or not) mismatching SNPs.')
-partition_parser.add_argument('-v', '--rename-map', required=False, help='Dictionary with mapping from old to new missing notation.')
+partition_parser.add_argument('-v', '--rename-map-query', required=False, help='Dictionary with mapping from old to new missing notation for the '\
+                              'query.')
+partition_parser.add_argument('-w', '--rename-map-reference', required=False, help='Dictionary with mapping from old to new missing notation for the'\
+                              'reference.')
 partition_parser.add_argument('-d', '--debug', required=False, help='Path to file to store info/debug messages.')
 
 # Parse the arguments
@@ -75,6 +78,7 @@ if args.command == 'clean':
     
     # Clean genomic data
     clean_genomic_data(args.reference, args.query, args.output_folder, args.remove_sample_ID, args.remove_ambiguous_snps, 
-                       args.correct_snp_flips, args.remove_mismatching_snps, args.rename_map, logger)
+                       args.correct_snp_flips, args.remove_mismatching_snps, args.rename_map_query, 
+                       args.rename_map_reference, logger)
     
     

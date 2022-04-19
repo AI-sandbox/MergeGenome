@@ -17,7 +17,8 @@ from utils.vcf_clean import search_and_remove_ambiguous_snps, search_and_correct
 
 def clean_genomic_data(reference_paths: List[str], query_paths: List[str], output_folder: str, 
                        remove_sample_ID: List[str], remove_ambiguous_snps: bool, 
-                       correct_snp_flips: bool, remove_mismatching_snps: bool, rename_map: str, logger: logging.Logger) -> None:
+                       correct_snp_flips: bool, remove_mismatching_snps: bool, rename_map_query: str, 
+                       rename_map_reference: str, logger: logging.Logger) -> None:
     """
     Cleans/preprocesses the genomic sequences from all reference and query files provided
     by applying all the preprocessing steps specified as input.
@@ -30,7 +31,8 @@ def clean_genomic_data(reference_paths: List[str], query_paths: List[str], outpu
         remove_ambiguous_snps (bool): remove (or not) ambiguous SNPs between the reference and the query.
         correct_snp_flips (bool): correct (or not) SNP in the query with respect to the reference.
         remove_mismatching_snps (bool): remove (or not) mismatching SNPs between the reference and the query.
-        rename_map (str): dictionary with mapping from old to new missing notation.
+        rename_map_query (str): dictionary with mapping from old to new missing notation for the query.
+        rename_map_reference (str): dictionary with mapping from old to new missing notation for the reference.
         logger (logging.Logger): debug/information tracker.
         
     Returns:
@@ -102,19 +104,23 @@ def clean_genomic_data(reference_paths: List[str], query_paths: List[str], outpu
             logger.info(f'There are {len(query["variants/ID"])} SNPs and {len(query["samples"])} samples ' \
                         f'in total in the query after removing mismatching SNPs.')
         
-        if rename_map is not None:
+        if rename_map_reference is not None:
             
             # Obtain dict from str
-            rename_map = eval(rename_map)
+            rename_map_reference = eval(rename_map_reference)
             
             # Rename missing values in the reference
-            logger.debug(f'Renaming missing values in the reference from {rename_map.keys()} to {rename_map.values()}.')
-            reference = rename_missings(reference, rename_map.keys(), rename_map.values())
-            
-            # Rename missing values in the query
-            logger.debug(f'Renaming missing values in the reference from {rename_map.keys()} to {rename_map.values()}.')
-            query = rename_missings(query, rename_map.keys(), rename_map.values())
+            logger.debug(f'Renaming missing values in the reference from {rename_map_reference.keys()} to {rename_map_reference.values()}.')
+            reference = rename_missings(reference, rename_map_reference.keys(), rename_map_reference.values())
         
+        if rename_map_query is not None:
+            
+            # Obtain dict from str
+            rename_map_query = eval(rename_map_query)
+        
+            # Rename missing values in the query
+            logger.debug(f'Renaming missing values in the query from {rename_map_query.keys()} to {rename_map_query.values()}.')
+            query = rename_missings(query, rename_map_query.keys(), rename_map_query.values())
         
         # Define output name to cleaned reference and query .vcf files
         output_name_reference = f'{os.path.basename(reference_path)[:-4]}_cleaned.vcf'

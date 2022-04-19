@@ -37,7 +37,8 @@ Input flags include:
 * -a, --remove-ambiguous-snps, Remove (or not) ambiguous SNPs (optional).
 * -f, --correct-snp-flips, Correct (or not) SNP in the query with respect to the reference (optional).
 * -m, --remove-mismatching-snps, Remove (or not) mismatching SNPs (optional).
-* -v, --rename-map, Dictionary with mapping from old to new missing notation.
+* -v, --rename-map-query, Dictionary with mapping from old to new missing notation in the reference (optional).
+* -w, --rename-map-reference, Dictionary with mapping from old to new missing notation in the query (optional).
 * -d, --debug PATH, Path to file to store info/debug messages (optional).
 
 **Examples**

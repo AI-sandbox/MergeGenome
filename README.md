@@ -12,7 +12,7 @@ This repository also includes the implementation of other common tasks related t
 
 3. **[Clean VCF files](readmes/README_3_clean_vcf_files.md)**
 
-4. **[Impute SNPs (from short to large dataset)](readmes/README_4_impute.md)**
+4. **[Impute](readmes/README_4_impute.md)**
 
 5. **[Subset SNPs to another dataset](readmes/README_5_snps_subsetting.md)**
 
