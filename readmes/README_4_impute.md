@@ -1,22 +1,22 @@
 ## Impute
 
-One way to avoid missing all non-matching SNPs when merging genomic datasets is through imputation (e.g. of low-resolution genotype arrays to induce them to have all SNPs from a higher-resolution panel). The potential appplications of genotype imputation are several, from boosting the power of phenotype prediction models and genomewide association studies [1] to allowing comparisons between studies.
+One way to avoid missing all non-matching SNPs when merging genomic datasets is through imputation (e.g. of low-resolution genotype arrays to induce them to have all SNPs from a higher-resolution panel). The potential applications of genotype imputation are several, from boosting the power of phenotype prediction models and genomewide association studies to allowing comparisons between studies.
 
-There are several genotype imputation softwares to induce shorter DNA sequences to have all the variants from the longer DNA sequences. This way, all relevant information stored in the high-dimensional data is preserved. 
+There are several genotype imputation softwares to induce shorter DNA sequences to have all the variants from the longer DNA sequences. This way, all relevant information stored in the high-dimensional data is preserved. MergeGenome describes how to use Beagle v5.1 to impute the low-resolution dataset (query or target panel) to the high-resolution dataset (reference panel). This way, all sequences are forced to be of the same length, specifically, of the genotype arrays in the reference after cleaning.
 
-MergeGenome describes how to use Beagle v5.1 [2] to impute the low-resolution dataset (query or target panel) to the high-resolution dataset (reference panel). This way, all sequences are forced to be of the same length, specifically, of the genotype arrays in the reference after cleaning. 
-
-To improve the imputation performance, it is recommended to provide Beagle with the genetic map.
+To improve the imputation performance, it is recommended to provide Beagle with a genetic map.
 
 ## Usage
 
-To use Beagle (for more info, read the [documentation](https://faculty.washington.edu/browning/beagle/beagle_5.3_07Feb22.pdf).):
+To use Beagle:
 
 ```
 java -Xmx50g -jar <beagle.jar> gt=<query_file> ref=<reference_file> out=<output_fike> impute=True chrom=<chrom_number>  map=<beagle_map_file>
 ```
 
-**Examples**
+For more information, read the [documentation](https://faculty.washington.edu/browning/beagle/beagle_5.3_07Feb22.pdf).
+
+**Example**
 
 1. Impute target panel given the reference panel, for chromosome files from 1 to 38:
 
@@ -30,7 +30,3 @@ map=/home/genetic_map/chr${chr}_beagle_gmap.txt
 
 done
 ```
-
-[1] William YS Wang, Bryan J Barratt, David G Clayton, and John A Todd. Genome-wide association studies: theoretical and practical concerns. Nature Reviews Genetics, 6(2):109–118, 2005.
-
-[2] Brian L Browning and Sharon R Browning. Geno- type imputation with millions of reference samples. The American Journal of Human Genetics, 98(1):116– 126, 2016.
