@@ -16,7 +16,7 @@ This repository also includes the implementation of other common tasks related t
 
 5. **[Subset SNPs to another dataset](readmes/README_5_snps_subsetting.md)**
 
-6. **[Concatenate and merge .vcf files](readmes/README_6_concatenate_and_merge_vcf_files.md)**
+6. **[Concat/Merge VCF files](readmes/README_6_concatenate_and_merge_vcf_files.md)**
 
 # Evaluation
 

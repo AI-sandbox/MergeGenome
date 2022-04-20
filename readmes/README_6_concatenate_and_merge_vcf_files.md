@@ -1,4 +1,4 @@
-## 6. Concat/Merge VCF files
+## Concat/Merge VCF files
 
 ### Concat: Concatenate VCF files into single VCF file (same sample IDs)
 
