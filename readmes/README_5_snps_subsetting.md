@@ -1,8 +1,8 @@
 ## Subset
 
-There are multiple statistical challenges of highdimensional data. The fact that not all variants are equally important sometimes lead to select the most relevant features for further analysis. 
+There are multiple statistical challenges of high dimensional data. The fact that not all variants are equally important sometimes lead to select the most relevant features for further analysis. In case of having a third "subsetted" dataset with a pre-selection of the important features, you can subset your your data to the common features.
 
-MergeGenome subset command filters the common markers between two datasets with data from a specific chromosome.
+MergeGenome subset command filters the common markers between a query and a reference dataset with data from a specific chromosome.
 
 ## Usage
 
