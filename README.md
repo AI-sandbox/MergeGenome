@@ -16,10 +16,18 @@ This repository also includes the implementation of other common tasks related t
 
 5. **[Subset SNPs to another dataset](readmes/README_5_snps_subsetting.md)**
 
-6. **[Concat/Merge VCF files](readmes/README_6_concatenate_and_merge_vcf_files.md)**
+6. **[Detect and fix mismatches](readmes/README_6_detect_and_fix_mismatches.md)**
+
+7. **[Concat VCF files](readmes/README_7_concat_vcf_files.md)**
+
+8. **[Merge VCF files](readmes/README_8_merge_vcf_files.md)**
+
+<!---
 
 # Evaluation
 
-1. **[Plot of PCA/UMAP/tSNE](readmes/README_1_make_pca_plots.md)**
+--- 1. **[Plot of PCA/UMAP/tSNE](readmes/README_1_make_pca_plots.md)**
 
 3. **[Plot of SNPs means](readmes/README_2_plot_snps_means.md)**
+
+--->

@@ -36,8 +36,8 @@ partition_parser.add_argument('-d', '--debug', required=False, help='Path to fil
 
 # Define subparser for clean command
 partition_parser = subparsers.add_parser('clean', help='.')
-partition_parser.add_argument('-r', '--reference', required=True, nargs="*", help='Paths to reference .vcf files with data for each chromosome.')
 partition_parser.add_argument('-q', '--query', required=True, nargs="*", help='Paths to query .vcf files with data for each chromosome.')
+partition_parser.add_argument('-r', '--reference', required=True, nargs="*", help='Paths to reference .vcf files with data for each chromosome.')
 partition_parser.add_argument('-o', '--output-folder', required=True, help='Path to output folder to store the modified .vcf files.')
 partition_parser.add_argument('-s', '--remove-sample-ID', required=False, nargs="*", help='Sample IDs or substring of sample IDs to remove.')
 partition_parser.add_argument('-a', '--remove-ambiguous-snps', action='store_true', help='Remove (or not) ambiguous SNPs.')
@@ -51,8 +51,8 @@ partition_parser.add_argument('-d', '--debug', required=False, help='Path to fil
 
 # Define subparser for subset command
 partition_parser = subparsers.add_parser('subset', help='.')
-partition_parser.add_argument('-r', '--reference', required=True, nargs="*", help='Paths to reference .vcf files with data for each chromosome.')
 partition_parser.add_argument('-q', '--query', required=True, nargs="*", help='Paths to query .vcf files with data for each chromosome.')
+partition_parser.add_argument('-r', '--reference', required=True, nargs="*", help='Paths to reference .vcf files with data for each chromosome.')
 partition_parser.add_argument('-o', '--output-folder', required=True, help='Path to output folder to store the modified .vcf files.')
 partition_parser.add_argument('-d', '--debug', required=False, help='Path to file to store info/debug messages.')
 
