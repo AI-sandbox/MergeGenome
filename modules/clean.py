@@ -59,7 +59,6 @@ def clean_genomic_data(reference_paths: List[str], query_paths: List[str], outpu
         assert chroms_r[0] == chroms_q[0], 'The reference and the query contain data for a different chromosome. Check the order of the inputs.'
         logger.info(f'Cleaning chromosome {chroms_r[0]}...')
         
-        
         if remove_sample_ID is not None:
             
             # Subset samples to remove undesired breeds/species with name in substrings list in the reference
@@ -99,10 +98,6 @@ def clean_genomic_data(reference_paths: List[str], query_paths: List[str], outpu
             # Remove mismtaching SNPs between the reference and the query
             logger.debug('Searching/removing mismatching SNPs between the reference and the query')
             reference, query = search_and_remove_mismatches_by_pos(reference, query, logger)
-            logger.info(f'There are {len(reference["variants/ID"])} SNPs and {len(reference["samples"])} samples ' \
-                        f'in total in the reference after removing mismatching SNPs.')
-            logger.info(f'There are {len(query["variants/ID"])} SNPs and {len(query["samples"])} samples ' \
-                        f'in total in the query after removing mismatching SNPs.')
         
         if rename_map_reference is not None:
             

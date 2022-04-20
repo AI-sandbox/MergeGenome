@@ -8,7 +8,7 @@ import pandas as pd
 from typing import Dict
 
 
-def read_vcf_file(input_path: str) -> Dict:
+def read_vcf_file(input_path: str) -> dict:
     """
     Reads data .vcf file.
     

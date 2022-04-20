@@ -23,17 +23,17 @@ Input flags include:
 1. Partition without renaming chromosome notation:
 
 ```
-$ python3 MergeGenome.py partition -f query.vcf -o ./query/
+$ python3 MergeGenome.py partition -f query.vcf -o ./output/
 ```
 
 2. Partition and change chromosome notation from *<chrom_number>* to *chr<chrom_number>* (or vice-versa):
 
 ```
-$ python3 MergeGenome.py partition -f query.vcf -o ./query/ -r
+$ python3 MergeGenome.py partition -f query.vcf -o ./output/ -r
 ```
 
 3. Partition and change chromosome notation from "1" to "chr_1", and from "2" to "chr_2". Also save debug info in log file:
 
 ```
-$ python3 MergeGenome.py partition -f query.vcf -o ./query/ -r -m '{"1":"chr_1", "2":"chr_2"}' -d partition.log
+$ python3 MergeGenome.py partition -f query.vcf -o ./output/ -r -m '{"1":"chr_1", "2":"chr_2"}' -d partition.log
 ```

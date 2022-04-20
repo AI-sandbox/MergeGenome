@@ -1,5 +1,26 @@
-## 5. Subset SNPs to the SNPs in another dataset
+## Subset
 
-It could be that the amount of SNPs you are dealing with is too large for the type of analysis you want to conduct or that you want to subset a dataset to only contain the SNPs present in another dataset for comparability.
+There are multiple statistical challenges of highdimensional data. The fact that not all variants are equally important sometimes lead to select the most relevant features for further analysis. 
 
-To this end, you can use the script in `scripts/snps_subsetting.py`.
+MergeGenome subset command filters the common markers between two datasets with data from a specific chromosome.
+
+## Usage
+
+```
+$ python3 MergeGenome.py subset -r <reference_file_1>...<reference_file_n> -q <query_file_1>...<query_file_n> -o <output_folder>
+```
+
+Input flags include:
+
+* -r, --reference LIST, Paths to reference .vcf files with data for each chromosome (required).
+* -q, --query LIST, Path to query .vcf files with data for each chromosome (required).
+* -o, --output-folder PATH, Path to output folder to store the modified VCF files (required).
+* -d, --debug PATH, Path to file to store info/debug messages (optional).
+
+**Examples**
+
+1. Keep the common markers between the reference and the query:
+
+```
+python3 MergeGenome.py subset -r reference_chr1.vcf -q query_chr1.vcf -o ./output/
+```

@@ -189,6 +189,7 @@ def search_and_correct_flips_by_pos(reference: dict, query: dict, logger: loggin
     # Define iterators over the SNPs in dataset 1 and 2
     index1 = 0
     index2 = 0
+    
     while index1 < len(reference['variants/POS']) and index2 < len(query['variants/POS']):
         if reference['variants/POS'][index1] < query['variants/POS'][index2]:
             # If the position of the SNP in dataset 1 is smaller than the position of the SNP in dataset 2...
@@ -282,6 +283,11 @@ def search_and_remove_mismatches_by_pos(reference: dict, query: dict, logger: lo
     reference = remove_snps(reference, mismatch_idx1)
     query = remove_snps(query, mismatch_idx2)
     
+    logger.info(f'There are {len(reference["variants/ID"])} SNPs and {len(reference["samples"])} samples ' \
+                        f'in total in the reference after removing mismatching SNPs.')
+    logger.info(f'There are {len(query["variants/ID"])} SNPs and {len(query["samples"])} samples ' \
+                f'in total in the query after removing mismatching SNPs.')
+    
     return reference, query
     
 
@@ -340,7 +346,7 @@ def search_and_keep_common_markers_single_chr(reference: dict, query: dict, logg
     reference = select_snps(reference, idxs_reference)
     query = select_snps(query, idxs_query)
      
-    track('{} common markers in total'.format(len(idxs_reference)), track_name)
+    logger.info(f'--> {len(idxs_reference)} common markers in total')
     
     return reference, query, idxs_reference, idxs_query
 

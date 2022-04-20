@@ -14,7 +14,7 @@ To use Beagle:
 java -Xmx50g -jar <beagle.jar> gt=<query_file> ref=<reference_file> out=<output_fike> impute=True chrom=<chrom_number>  map=<beagle_map_file>
 ```
 
-For more information, read the [documentation](https://faculty.washington.edu/browning/beagle/beagle_5.3_07Feb22.pdf).
+For more information, you can read the [documentation](https://faculty.washington.edu/browning/beagle/beagle_5.3_07Feb22.pdf).
 
 **Example**
 
