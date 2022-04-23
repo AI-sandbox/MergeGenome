@@ -5,6 +5,8 @@
 
 import os
 import logging
+import h5py
+import numpy as np
 
 from utils.io import read_vcf_file, write_vcf_file
 from utils.vcf_utils import obtain_chromosomes, obtain_renamed_chrom, filter_by_chromosome, rename_chrom_field

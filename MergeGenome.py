@@ -12,6 +12,7 @@ from modules.partition import partition_by_chromosome
 from modules.rename import rename_chromosome
 from modules.clean import clean_genomic_data
 from modules.subset import subset_common_markers
+from scripts.store_allele_data import store_allele_data_in_npy_or_h5
 
 # Define parser to read from command line
 parser = argparse.ArgumentParser(usage=parser_msg())
@@ -28,14 +29,14 @@ partition_parser.add_argument('-m', '--rename-map', required=False, help='Dictio
 partition_parser.add_argument('-d', '--debug', required=False, help='Path to file to store info/debug messages.')
 
 # Define subparser for rename command
-partition_parser = subparsers.add_parser('rename', help='.')
+partition_parser = subparsers.add_parser('rename', help='To rename chromosome notation.')
 partition_parser.add_argument('-f', '--file', required=True, help='Path to .vcf file with data for a particular chromosome.')
 partition_parser.add_argument('-o', '--output-folder', required=True, help='Path to output folder to store the modified .vcf file.')
 partition_parser.add_argument('-m', '--rename-map', required=False, help='Dictionary with mapping from actual to new chromosome notation.')
 partition_parser.add_argument('-d', '--debug', required=False, help='Path to file to store info/debug messages.')
 
 # Define subparser for clean command
-partition_parser = subparsers.add_parser('clean', help='.')
+partition_parser = subparsers.add_parser('clean', help='To clean genomic sequences.')
 partition_parser.add_argument('-q', '--query', required=True, nargs="*", help='Paths to query .vcf files with data for each chromosome.')
 partition_parser.add_argument('-r', '--reference', required=True, nargs="*", help='Paths to reference .vcf files with data for each chromosome.')
 partition_parser.add_argument('-o', '--output-folder', required=True, help='Path to output folder to store the modified .vcf files.')
@@ -50,10 +51,19 @@ partition_parser.add_argument('-w', '--rename-map-reference', required=False, he
 partition_parser.add_argument('-d', '--debug', required=False, help='Path to file to store info/debug messages.')
 
 # Define subparser for subset command
-partition_parser = subparsers.add_parser('subset', help='.')
+partition_parser = subparsers.add_parser('subset', help='To subset the data to the common markers.')
 partition_parser.add_argument('-q', '--query', required=True, nargs="*", help='Paths to query .vcf files with data for each chromosome.')
 partition_parser.add_argument('-r', '--reference', required=True, nargs="*", help='Paths to reference .vcf files with data for each chromosome.')
 partition_parser.add_argument('-o', '--output-folder', required=True, help='Path to output folder to store the modified .vcf files.')
+partition_parser.add_argument('-d', '--debug', required=False, help='Path to file to store info/debug messages.')
+
+# Define subparser for store-allele command
+partition_parser = subparsers.add_parser('store-allele', help='To store formatted allele data in .npy or .h5 format.')
+partition_parser.add_argument('-q', '--query', required=True, help='Path to input .vcf file.')
+partition_parser.add_argument('-s', '--data-format', required=True, choices=['separated', 'averaged.'], 
+                              help='Separate or average maternal and paternal strands.')
+partition_parser.add_argument('-f', '--file-format', required=True, choices=['.npy', '.h5'], help='Format of the output file.')
+partition_parser.add_argument('-o', '--output-folder', required=True, help='Path to output folder to store the formatted allele data.')
 partition_parser.add_argument('-d', '--debug', required=False, help='Path to file to store info/debug messages.')
 
 # Parse the arguments
@@ -96,5 +106,13 @@ if args.command == 'subset':
     
     # Subset genomic data
     subset_common_markers(args.reference, args.query, args.output_folder, logger)
+    
+if args.command == 'store-allele':
+    
+    # Check the input arguments are correct
+    check_arguments([args.query])
+    
+    # Subset genomic data
+    store_allel_data_in_npy_or_h5(args.query, args.output_folder, args.data_format, args.file_format, logger)
     
     

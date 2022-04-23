@@ -22,5 +22,5 @@ Input flags include:
 1. Keep the common markers between the reference and the query:
 
 ```
-python3 MergeGenome.py subset -r reference_chr1.vcf -q query_chr1.vcf -o ./output/
+$ python3 MergeGenome.py subset -r reference_chr1.vcf -q query_chr1.vcf -o ./output/
 ```
