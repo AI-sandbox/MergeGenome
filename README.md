@@ -24,7 +24,7 @@ This repository also includes the implementation of other common tasks related t
 
 # Other util preprocessing commands
 
-9. **[Store_allele_data in NPY or H5 file](readmes/README_9_store_allele_data.md)
+9. **[Store_allele_data in NPY or H5 file](readmes/README_9_store_allele_data.md)**
 
 <!---
 --- 1. **[Plot of PCA/UMAP/tSNE](readmes/README_1_make_pca_plots.md)**
