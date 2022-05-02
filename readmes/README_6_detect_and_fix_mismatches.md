@@ -1,4 +1,4 @@
-## DataFix
+## Detect and fix mismatches
 
 When merging DNA sequences from different sources, it is important to remove any SNP that, by itself or combined, allows identifying the source of the sequences. The SNP distribution of zeros and ones should be similar for all sources with the same species and ancestries. However, no tool encompasses filtering such – likely erroneous – SNPs.
 
