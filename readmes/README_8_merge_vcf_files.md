@@ -11,14 +11,14 @@ bgzip -ci <query_allchr.vcf> > <query_allchr.vcf.gz>
 bgzip -ci <reference_allchr.vcf> > <reference_allchr.vcf.gz>
 
 rm -f file.list
-for F in  <query_allchr.vcf>.gz <reference_allchr.vcf.gz>
+for F in <query_allchr.vcf>.gz <reference_allchr.vcf.gz>
 do
       bcftools sort -O b -o ${F}.bcf $F
       bcftools index ${F}.bcf
       echo "${F}.bcf" >> file.list
 done
 
-bcftools merge  --file-list file.list  -O z -o <merged_file>
+bcftools merge --file-list file.list -O z -o <merged_file>
 ```
 
 **Example**
@@ -28,12 +28,12 @@ bgzip -ci query_allchr.vcf > query_allchr.vcf.gz
 bgzip -ci reference_allchr.vcf > reference_allchr.vcf.gz
 
 rm -f file.list
-for F in  query_allchr.vcf.gz reference_allchr.vcf.gz
+for F in query_allchr.vcf.gz reference_allchr.vcf.gz
 do
       bcftools sort -O b -o ${F}.bcf $F
       bcftools index ${F}.bcf
       echo "${F}.bcf" >> file.list
 done
 
-bcftools merge  --file-list file.list  -O z -o merged.vcf.gz
+bcftools merge --file-list file.list -O z -o merged.vcf.gz
 ```

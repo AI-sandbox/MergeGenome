@@ -22,7 +22,7 @@ This repository also includes the implementation of other common tasks related t
 
 8. **[Merge VCF files](readmes/README_8_merge_vcf_files.md)**
 
-# Other util preprocessing commands
+# Other preprocessing steps
 
 9. **[Store allele data (NPY or H5)](readmes/README_9_store_allele_data.md)**
 

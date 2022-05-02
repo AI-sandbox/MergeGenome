@@ -17,11 +17,11 @@ Input flags include:
 * -q, --query LIST, Path to query .vcf files with data for each chromosome (required).
 * -o, --output-folder PATH, Path to output folder to store the modified VCF files (required).
 * -s, --data-format STRING, Separate or average maternal and paternal strands (required).
-    separated: split maternal and paternal strands into separate samples. 
-    averaged: combine maternal and  paternal strands by averaging them.
+    **separated**: split maternal and paternal strands into separate samples. 
+    **averaged**: combine maternal and  paternal strands by averaging them.
 * -f, --file-format, Format of the output file (required).
-    .npy: store data in numpy format.
-    .h5: store data in h5py format.
+    **.npy**: store data in numpy format.
+    **.h5**: store data in h5py format.
 * -d, --debug PATH, Path to file to store info/debug messages (optional).
 
 **Examples**

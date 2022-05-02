@@ -1,6 +1,6 @@
 ################################################################################
 # Runs a specific preprocessing task to properly merge genomic datasets 
-# in .vcf format
+# in VCF format
 ################################################################################
 
 import argparse
@@ -38,16 +38,16 @@ partition_parser.add_argument('-d', '--debug', required=False, help='Path to fil
 # Define subparser for clean command
 partition_parser = subparsers.add_parser('clean', help='To clean genomic sequences.')
 partition_parser.add_argument('-q', '--query', required=True, nargs="*", help='Paths to query .vcf files with data for each chromosome.')
-partition_parser.add_argument('-r', '--reference', required=True, nargs="*", help='Paths to reference .vcf files with data for each chromosome.')
+partition_parser.add_argument('-r', '--reference', required=False, nargs="*", help='Paths to reference .vcf files with data for each chromosome.')
 partition_parser.add_argument('-o', '--output-folder', required=True, help='Path to output folder to store the modified .vcf files.')
-partition_parser.add_argument('-s', '--remove-sample-ID', required=False, nargs="*", help='Sample IDs or substring of sample IDs to remove.')
-partition_parser.add_argument('-a', '--remove-ambiguous-snps', action='store_true', help='Remove (or not) ambiguous SNPs.')
+partition_parser.add_argument('-s', '--remove-sample-ID-query', required=False, nargs="*", help='Sample IDs or substring of sample IDs to remove from the query.')
+partition_parser.add_argument('-t', '--remove-sample-ID-reference', required=False, nargs="*", help='Sample IDs or substring of sample IDs to remove from the reference.')
+partition_parser.add_argument('-a', '--remove-ambiguous-snps-query', action='store_true', help='Remove (or not) ambiguous SNPs from the query.')
+partition_parser.add_argument('-b', '--remove-ambiguous-snps-reference', action='store_true', help='Remove (or not) ambiguous SNPs from the reference.')
 partition_parser.add_argument('-f', '--correct-snp-flips', action='store_true', help='Correct (or not) SNP in the query with respect to the reference.')
 partition_parser.add_argument('-m', '--remove-mismatching-snps', action='store_true', help='Remove (or not) mismatching SNPs.')
-partition_parser.add_argument('-v', '--rename-map-query', required=False, help='Dictionary with mapping from old to new missing' \
-                              'notation for the query.')
-partition_parser.add_argument('-w', '--rename-map-reference', required=False, help='Dictionary with mapping from old to new missing notation' \
-                              'for the reference.')
+partition_parser.add_argument('-v', '--rename-map-query', required=False, help='Dictionary with mapping from old to new missing notation for the query.')
+partition_parser.add_argument('-w', '--rename-map-reference', required=False, help='Dictionary with mapping from old to new missing notation for the reference.')
 partition_parser.add_argument('-d', '--debug', required=False, help='Path to file to store info/debug messages.')
 
 # Define subparser for subset command
@@ -92,17 +92,20 @@ if args.command == 'rename':
 if args.command == 'clean':
     
     # Check the input arguments are correct
-    check_arguments(args.reference+args.query)
+    check_arguments(args.query)
+    if args.reference is not None:
+        check_arguments(args.reference)
     
     # Clean genomic data
-    clean_genomic_data(args.reference, args.query, args.output_folder, args.remove_sample_ID, args.remove_ambiguous_snps, 
+    clean_genomic_data(args.query, args.reference, args.output_folder, args.remove_sample_ID_query, args.remove_sample_ID_reference,
+                       args.remove_ambiguous_snps_query, args.remove_ambiguous_snps_reference,
                        args.correct_snp_flips, args.remove_mismatching_snps, args.rename_map_query, 
                        args.rename_map_reference, logger)
     
 if args.command == 'subset':
     
     # Check the input arguments are correct
-    check_arguments(args.reference+args.query)
+    check_arguments(args.query + args.reference)
     
     # Subset genomic data
     subset_common_markers(args.reference, args.query, args.output_folder, logger)
@@ -112,7 +115,7 @@ if args.command == 'store-allele':
     # Check the input arguments are correct
     check_arguments([args.query])
     
-    # Subset genomic data
-    store_allel_data_in_npy_or_h5(args.query, args.output_folder, args.data_format, args.file_format, logger)
+    # Store averaged or separated maternal and paternal strands in .npy or .h5
+    store_allele_data_in_npy_or_h5(args.query, args.output_folder, args.data_format, args.file_format, logger)
     
     

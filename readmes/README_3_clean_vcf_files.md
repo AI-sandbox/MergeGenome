@@ -31,10 +31,12 @@ $ python3 MergeGenome.py clean -r <reference_file_1>...<reference_file_n> -q <qu
 Input flags include:
 
 * -q, --query LIST, Path to query .vcf files with data for each chromosome (required).
-* -r, --reference LIST, Paths to reference .vcf files with data for each chromosome (required).
+* -r, --reference LIST, Paths to reference .vcf files with data for each chromosome (optional).
 * -o, --output-folder PATH, Path to output folder to store the modified VCF files (required).
-* -s, --remove-sample-ID LIST, Sample IDs or substring of sample IDs to remove (optional).
-* -a, --remove-ambiguous-snps, Remove (or not) ambiguous SNPs (optional).
+* -s, --remove-sample-ID LIST, Sample IDs or substring of sample IDs to remove from the query (optional).
+* -s, --remove-sample-ID LIST, Sample IDs or substring of sample IDs to remove from the reference (optional).
+* -a, --remove-ambiguous-snps, Remove (or not) ambiguous SNPs from the query (optional).
+* -b, --remove-ambiguous-snps, Remove (or not) ambiguous SNPs from the reference (optional).
 * -f, --correct-snp-flips, Correct (or not) SNP in the query with respect to the reference (optional).
 * -m, --remove-mismatching-snps, Remove (or not) mismatching SNPs (optional).
 * -v, --rename-map-query, Dictionary with mapping from old to new missing notation in the reference (optional).
@@ -43,31 +45,31 @@ Input flags include:
 
 **Examples**
 
-1. Remove genomic sequences by sample ID:
+1. Remove genomic sequences by sample ID from the query:
 
 ```
-$ python3 MergeGenome.py clean -q query_chr1.vcf -r reference_chr1.vcf -o ./output/ -s wolf fox coyote dhole
+$ python3 MergeGenome.py clean -q query_chr1.vcf -o ./output/ -s wolf fox coyote dhole
 ```
 
-2. Remove ambiguous SNPs:
+2. Remove ambiguous SNPs from the query and reference:
 
 ```
-$ python3 MergeGenome.py clean -q query_chr1.vcf -r reference_chr1.vcf -o ./output/ -a
+$ python3 MergeGenome.py clean -q query_chr1.vcf -r reference_chr1.vcf -o ./output/ -a -b
 ```
 
-3. Correct SNP flips:
+3. Correct SNP flips from the query with respect to the reference:
 
 ```
 $ python3 MergeGenome.py clean -q query_chr1.vcf -r reference_chr1.vcf -o ./output/ -f
 ```
 
-4. Remove SNP mismatches: 
+4. Remove SNP mismatches between the query and the reference: 
 
 ```
 $ python3 MergeGenome.py clean -q query_chr1.vcf -r reference_chr1.vcf -o ./output/ -m
 ```
 
-5. Rename missing values from -1 to '.' in both in the query and the reference:
+5. Rename missing values from -1 to '.' both in the query and the reference:
 
 ```
 $ python3 MergeGenome.py clean -q query_chr1.vcf -r reference_chr1.vcf -o ./output/ -v '{-1:"."}' -w '{-1:"."}'
