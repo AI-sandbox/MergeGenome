@@ -33,10 +33,10 @@ Input flags include:
 * -q, --query LIST, Path to query .vcf files with data for each chromosome (required).
 * -r, --reference LIST, Paths to reference .vcf files with data for each chromosome (optional).
 * -o, --output-folder PATH, Path to output folder to store the modified VCF files (required).
-* -s, --remove-sample-ID LIST, Sample IDs or substring of sample IDs to remove from the query (optional).
-* -s, --remove-sample-ID LIST, Sample IDs or substring of sample IDs to remove from the reference (optional).
-* -a, --remove-ambiguous-snps, Remove (or not) ambiguous SNPs from the query (optional).
-* -b, --remove-ambiguous-snps, Remove (or not) ambiguous SNPs from the reference (optional).
+* -s, --remove-sample-ID-query LIST, Sample IDs or substring of sample IDs to remove from the query (optional).
+* -s, --remove-sample-ID-reference LIST, Sample IDs or substring of sample IDs to remove from the reference (optional).
+* -a, --remove-ambiguous-snps-query, Remove (or not) ambiguous SNPs from the query (optional).
+* -b, --remove-ambiguous-snps-reference, Remove (or not) ambiguous SNPs from the reference (optional).
 * -f, --correct-snp-flips, Correct (or not) SNP in the query with respect to the reference (optional).
 * -m, --remove-mismatching-snps, Remove (or not) mismatching SNPs (optional).
 * -v, --rename-map-query, Dictionary with mapping from old to new missing notation in the reference (optional).
