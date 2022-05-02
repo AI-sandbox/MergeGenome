@@ -51,7 +51,7 @@ Input flags include:
 $ python3 MergeGenome.py clean -q query_chr1.vcf -o ./output/ -s wolf fox coyote dhole
 ```
 
-2. Remove ambiguous SNPs from the query and reference:
+2. Remove ambiguous SNPs from both the query and reference:
 
 ```
 $ python3 MergeGenome.py clean -q query_chr1.vcf -r reference_chr1.vcf -o ./output/ -a -b
@@ -63,7 +63,7 @@ $ python3 MergeGenome.py clean -q query_chr1.vcf -r reference_chr1.vcf -o ./outp
 $ python3 MergeGenome.py clean -q query_chr1.vcf -r reference_chr1.vcf -o ./output/ -f
 ```
 
-4. Remove SNP mismatches between the query and the reference: 
+4. Remove SNP mismatches between the query and the reference:
 
 ```
 $ python3 MergeGenome.py clean -q query_chr1.vcf -r reference_chr1.vcf -o ./output/ -m
@@ -73,6 +73,12 @@ $ python3 MergeGenome.py clean -q query_chr1.vcf -r reference_chr1.vcf -o ./outp
 
 ```
 $ python3 MergeGenome.py clean -q query_chr1.vcf -r reference_chr1.vcf -o ./output/ -v '{-1:"."}' -w '{-1:"."}'
+```
+
+6. Apply all previous cleaning steps for the query and reference, and for each chromosome:
+
+```
+$ python3 MergeGenome.py clean -q query_chr*.vcf -r reference_chr*.vcf -o ./output/ -s wolf fox coyote dhole -a -b -f -m -v '{-1:"."}' -w '{-1:"."}'
 ```
 
 
