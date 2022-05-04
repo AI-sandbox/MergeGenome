@@ -46,7 +46,7 @@ def subset_common_markers(reference_paths: List[str], query_paths: List[str], ou
         assert len(chroms_r) == len(chroms_q) == 1, 'The reference or the query contain data for more than one chromosome.'\
         'Use partition command to partition the data into a separate VCF file per chromosome.'
         assert chroms_r[0] == chroms_q[0], 'The reference and the query contain data for a different chromosome. Check the order of the inputs.'
-        logger.info(f'Cleaning chromosome {chroms_r[0]}...')
+        logger.debug(f'Cleaning chromosome {chroms_r[0]}...')
         
         ## Keep common SNPs of the first and the second datasets, if present in the third dataset
         # The SNPs that are in the first or second dataset but not in the third dataset are removed

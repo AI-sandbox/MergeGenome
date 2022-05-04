@@ -65,7 +65,7 @@ def clean_genomic_data(query_paths: List[str], reference_paths: List[str], outpu
             assert len(chroms_r) == len(chroms_q) == 1, 'The reference or the query contain data for more than one chromosome.'\
             'Use partition command to partition the data into a separate VCF file per chromosome.'
             assert chroms_r[0] == chroms_q[0], 'The reference and the query contain data for a different chromosome. Check the order of the inputs.'
-            logger.info(f'Cleaning chromosome {chroms_r[0]}...')
+            logger.debug(f'Cleaning chromosome {chroms_r[0]}...')
         
         if remove_sample_ID_query is not None:
             

@@ -1,99 +1,83 @@
 ################################################################################
-# Makes SNP plot and save it in output path
+# Plot the SNP means of the common markers between the reference and 
+# the query datasets
 ################################################################################
 
-import sys
 import os
 import numpy as np
 import pandas as pd
+from typing import Dict
 import matplotlib.pyplot as plt
 
-sys.path.append('/home/users/miriambt/my_work/dog-gen-to-phen/preprocessing')
 from utils.vcf_utils import read_vcf_file, combine_chrom_strands
-from utils.vcf_preprocessing import search_and_keep_common_markers_single_chr
-from utils.plot_utils import snp_means
-from utils.track import track
+from utils.vcf_clean import search_and_keep_common_markers_single_chr
+from utils.plot_utils import snp_means_plot
 
-################################################################################
 
-## USER INPUTS
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-## Define base name to paths
-PATH1 = '/scratch/users/miriambt/data/dogs/formatted_data/4th_dataset/embark/embark_chr{}.vcf'
-PATH2 = '/scratch/users/miriambt/data/dogs/formatted_data/4th_dataset/array_imputed_subset/imputed_array_subset_chr{}.vcf'
-
-## Define path to directory that will contain the folder with the SNPs means plot
-output_path = '/home/users/miriambt/my_work/dog-gen-to-phen/preprocessing/output/SNP_means_plots/'
-
-## Define name of datasets 1 and 2
-dataset1_name = 'Embark'
-dataset2_name = 'Imputed Array Subsetted'
-
-## Define name of .txt that will contain the tracking of the script (saved prints)
-# Note: track_name should end in .txt
-track_name = 'plotting_snp_means_{}_and_{}.txt'.format(dataset1_name, dataset2_name)
-
-## Define path to output .txt file that will store the tracking of the script
-track_path = '/home/users/miriambt/my_work/dog-gen-to-phen/preprocessing/output/{}'.format(track_name)
-
-## Define plot characteristics
-plot_params = {
-        'FONTSIZE' : 25,
-        'FIG_WIDTH' : 26,
-        'FIG_HEIGHT' : 15,
-        's' : 0.1,
-        'alpha' : 1.0,
-        'color' : '#306998'
-}
-
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-## If it does not already exist, create directory that will contain the folder with PCA plots
-if not os.path.exists(output_path):
-    os.makedirs(output_path)
-
-## Remove content of .txt with name track_name if it already exists
-if os.path.exists(track_path):
-    os.remove(track_path)
+def plot_snp_means(query_paths: List[str], reference_paths: List[str], plot_dict: Dict, output_folder: str, logger: logging.Logger) -> None:
+    """
+    Plots the SNP means of all the common markers between the reference and 
+    the query datasets. If data for more than one chromosome is provided,
+    it will be concatenated and displayed in a single plot. The mean of 
+    each SNP for each dataset is computed by first averaging the maternal
+    and the paternal strands.
     
-for i in range(1, 39):
-    ## For each chromosome number...
-    track('\n------------------------- Reading data of chromosome {} -------------------------\n'.format(i), track_path)
-    
-    ## Define path to input .vcf files for chromosome i of datasets 1 and 2
-    path1 = PATH1.format(i)
-    path2 = PATH2.format(i)
-    
-    ## Read input .vcf files for chromosome i of datasets 1 and 2
-    data1 = read_vcf_file(path1)
-    data2 = read_vcf_file(path2)
-    
-    ## Common markers
-    data1_chr, data2_chr, _, _ = search_and_keep_common_markers_single_chr(data1, data2, track_path)
-    
-    ## Obtain snps for chromosome i
-    snps_1 = data1_chr['calldata/GT']
-    snps_2 = data2_chr['calldata/GT']
+    Args:
+        query_paths (List[str]): list with order paths to all query .vcf files to clean/preprocess.
+        reference_paths (List[str]): list with order paths to all reference .vcf files to clean/preprocess.
+        plot_dict[Dict]: dictionary with the configuration parameters of the plot.
+        output_folder (str): folder to save the output.
+        logger (logging.Logger): debug/information tracker.
         
-    ## Convert snps from MxNx2 to MxN shape (averaged)
-    length_1, num_dogs_1, num_strands_1 = snps_1.shape
-    snps_1 = snps_1.reshape(length_1, num_dogs_1*2).T
-    snps_1 = combine_chrom_strands(snps_1)
+    Returns:
+        (None)
+    
+    """
 
-    length_2, num_dogs_2, num_strands_2 = snps_2.shape
-    snps_2 = snps_2.reshape(length_2, num_dogs_2*2).T
-    snps_2 = combine_chrom_strands(snps_2)
-       
-    ## Concatenate snps for all chromosomes
-    if i == 1:
-        all_snps_1 = snps_1
-        all_snps_2 = snps_2
-    else:
-        all_snps_1 = np.concatenate((all_snps_1, snps_1), axis=1)
-        all_snps_2 = np.concatenate((all_snps_2, snps_2), axis=1)
+    for query_path, reference_path in zip(query_paths, reference_paths):
         
-track('\n {} common SNPs in total between {} and {} datasets'.format(all_snps_1.shape[1], dataset1_name, dataset2_name), track_path)
+        # Read the query .vcf file using scikit-allel
+        logger.debug('Reading the query file.')
+        query = read_vcf_file(query_path)
+        logger.info(f'There are {len(query["variants/ID"])} SNPs and {len(query["samples"])} samples in total in the query.')
+        
+        logger.debug('Reading the reference file.')
+        reference = read_vcf_file(reference_path)
+        logger.info(f'There are {len(reference["variants/ID"])} SNPs and {len(reference["samples"])} samples in total in the reference.')
+        
+        # Ensure the reference and the query contain data for the same chromosome
+        chroms_r = obtain_chromosomes(reference)
+        chroms_q = obtain_chromosomes(query)
+        assert len(chroms_r) == len(chroms_q) == 1, 'The reference or the query contain data for more than one chromosome.'\
+        'Use partition command to partition the data into a separate VCF file per chromosome.'
+        assert chroms_r[0] == chroms_q[0], 'The reference and the query contain data for a different chromosome. Check the order of the inputs.'
+        logger.debug(f'Cleaning chromosome {chroms_r[0]}...')
+        
+        # Common markers
+        reference, query, _, _ = search_and_keep_common_markers_single_chr(reference, query, logger)
+        
+        # Obtain snps for a specific chromosome
+        query_snps = query['calldata/GT']
+        reference_snps = reference['calldata/GT']
+        
+        # Convert snps from MxNx2 to MxN shape (averaged)
+        length_query, num_dogs_query, num_strands_query = query_snps.shape
+        query_snps = query_snps.reshape(length_query, num_dogs_query*2).T
+        query_snps = combine_chrom_strands(query_snps)
 
-## Plot the SNP means for the SNPs that are common markers between all_snps_1 and all_snps_2
-snp_means(all_snps_1, all_snps_2, plot_params, dataset1_name, dataset2_name, output_path)
+        length_reference, num_dogs_reference, num_strands_reference = reference_snps.shape
+        reference_snps = reference_snps.reshape(length_reference, num_dogs_reference*2).T
+        reference_snps = combine_chrom_strands(reference_snps)
+        
+        # Concatenate snps for all chromosomes
+        if i == 1:
+            all_query_snps = query_snps
+            all_reference_snps = reference_snps
+        else:
+            all_query_snps = np.concatenate((all_query_snps, query_snps), axis=1)
+            all_reference_snps = np.concatenate((all_reference_snps, reference_snps), axis=1)
+        
+        logger.info(f'{all_query_snps.shape[1]} common SNPs in total between the query and the reference datasets.')
+    
+    # Plot the SNP means for the SNPs that are common markers between all_query_snps and all_reference_snps
+    snp_means_plot(all_query_snps, all_reference_snps, plot_dict, output_folder)

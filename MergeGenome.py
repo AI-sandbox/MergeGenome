@@ -60,10 +60,24 @@ partition_parser.add_argument('-d', '--debug', required=False, help='Path to fil
 # Define subparser for store-allele command
 partition_parser = subparsers.add_parser('store-allele', help='To store formatted allele data in .npy or .h5 format.')
 partition_parser.add_argument('-q', '--query', required=True, help='Path to input .vcf file.')
+partition_parser.add_argument('-o', '--output-folder', required=True, help='Path to output folder to store the formatted allele data.')
 partition_parser.add_argument('-s', '--data-format', required=True, choices=['separated', 'averaged.'], 
                               help='Separate or average maternal and paternal strands.')
 partition_parser.add_argument('-f', '--file-format', required=True, choices=['.npy', '.h5'], help='Format of the output file.')
-partition_parser.add_argument('-o', '--output-folder', required=True, help='Path to output folder to store the formatted allele data.')
+partition_parser.add_argument('-d', '--debug', required=False, help='Path to file to store info/debug messages.')
+
+# Define subparser for plot-snp-means command
+partition_parser = subparsers.add_parser('plot-snp-means', help='To plot the SNP means for the common markers between the query and the reference.')
+partition_parser.add_argument('-q', '--query', required=True, nargs="*", help='Paths to query .vcf files with data for each chromosome.')
+partition_parser.add_argument('-r', '--reference', required=True, nargs="*", help='Paths to reference .vcf files with data for each chromosome.')
+partition_parser.add_argument('-o', '--output-folder', required=True, help='Path to output folder to store the plot with the SNP means.')
+partition_parser.add_argument('-x', '--x-axis-name', required=False, default="query", help='Name given to the query dataset that will appear in the x-axis.')
+partition_parser.add_argument('-y', '--y-axis-name', required=False, default="reference", help='Name given to the reference dataset that will apprear in the y-axis.')
+partition_parser.add_argument('-f', '--fontsize', required=False, default=25, help='Fontsize in the plot.')
+partition_parser.add_argument('-w', '--figure-width', required=False, default=26, help='Figure width of the plot.')
+partition_parser.add_argument('-h', '--figure-height', required=False, default=15, help='Figure height of the plot.')
+partition_parser.add_argument('-s', '--size-points', required=False, default=0.1, help='Size of the points in the plot.')
+partition_parser.add_argument('-c', '--color-points', required=False, default='#306998', help='Color of the points in the plot.')
 partition_parser.add_argument('-d', '--debug', required=False, help='Path to file to store info/debug messages.')
 
 # Parse the arguments
@@ -86,7 +100,7 @@ if args.command == 'rename':
     # Check the input arguments are correct
     check_arguments([args.file])
     
-    # Rename chromosomme notation
+    # Rename chromosome notation
     rename_chromosome(args.file, args.output_folder, args.rename_map, logger)
     
 if args.command == 'clean':
@@ -118,4 +132,19 @@ if args.command == 'store-allele':
     # Store averaged or separated maternal and paternal strands in .npy or .h5
     store_allele_data_in_npy_or_h5(args.query, args.output_folder, args.data_format, args.file_format, logger)
     
+if args.command == 'plot-snp-means':
     
+    # Check the input arguments are correct
+    check_arguments(args.query + args.reference)
+    
+    # Define plot configuration
+    plot_dict = {"x_axis_name" : args.x_axis_name, 
+                 "y_axis_name": args.y_axis_name, 
+                 "FONTSIZE" : args.fontsize, 
+                 "FIG_WIDTH": args.figure_width,
+                 "FIG_HEIGHT": args.figure_height, 
+                 "s": args.size_points,
+                 "color": args.color.points}
+    
+    # Plot the SNP means for the query and the reference
+    plot_snp_means(args.query, args.reference, plot_dict, args.output_folder, logger)
