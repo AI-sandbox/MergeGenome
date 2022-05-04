@@ -22,15 +22,10 @@ This repository also includes the implementation of other common tasks related t
 
 8. **[Merge VCF files](readmes/README_8_merge_vcf_files.md)**
 
+# Evaluation
+
+9. **[Evaluate with SNP means plot](readmes/README_9_evaluate_with_snp_means_plot.md)**
+
 # Other preprocessing steps
 
-9. **[Store allele data (NPY or H5)](readmes/README_9_store_allele_data.md)**
-
-10. **[Evaluate with SNP means plot](readmes/README_10_evaluate_with_snp_means_plot.md)**
-
-<!---
---- 1. **[Plot of PCA/UMAP/tSNE](readmes/README_1_make_pca_plots.md)**
-
-3. **[Plot of SNPs means](readmes/README_2_plot_snps_means.md)**
-
---->
+10. **[Store allele data (NPY or H5)](readmes/README_10_store_allele_data.md)**
