@@ -32,7 +32,7 @@ Input flags include:
 
 * -q, --query LIST, Path to query .vcf files with data for each chromosome (required).
 * -r, --reference LIST, Paths to reference .vcf files with data for each chromosome (optional).
-* -o, --output-folder PATH, Path to output folder to store the modified VCF files (required).
+* -o, --output-folder PATH, Path to output folder to store the modified VCF files (required). Note: make sure a '/' appears at the end of the output folder.
 * -s, --remove-sample-ID-query LIST, Sample IDs or substring of sample IDs to remove from the query (optional).
 * -s, --remove-sample-ID-reference LIST, Sample IDs or substring of sample IDs to remove from the reference (optional).
 * -a, --remove-ambiguous-snps-query, Remove (or not) ambiguous SNPs from the query (optional).

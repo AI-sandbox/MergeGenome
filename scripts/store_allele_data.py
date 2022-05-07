@@ -63,20 +63,25 @@ def store_allele_data_in_npy_or_h5(input_path: str, output_folder: str, data_for
         # Define output name to .npy file
         output_name = f'{os.path.basename(input_path)[:-4]}_{data_format}.npy'
         
+        # Define entire outputput path
+        output_path = output_folder + output_name
+        
         # Save the snps data in .npy format
-        logger.debug('Saving data in .npy format.')
-        np.save(output_folder + output_name, snps)
+        logger.debug(f'Saving data in .npy format in {output_path}.')
+        np.save(output_path, snps)
 
     elif file_format == '.h5':
 
         # Define output name to .npy file
         output_name = f'{os.path.basename(input_path)[:-4]}_{data_format}.h5'
         
+        # Define entire outputput path
+        output_path = output_folder + output_name
+        
         # Save the snps data in .h5 format
-        logger.debug('Saving data in .h5 format.')
+        logger.debug(f'Saving data in .h5 format in {output_path}.')
         h5f = h5py.File(output_path + output_file, 'w')
         h5f.create_dataset(name=output_folder + output_name, data=snps)
-    
     
     
     

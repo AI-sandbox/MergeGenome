@@ -15,13 +15,19 @@ $ python3 MergeGenome.py store-allele -q <query_file> -o <output_folder>
 Input flags include:
 
 * -q, --query LIST, Path to query .vcf files with data for each chromosome (required).
-* -o, --output-folder PATH, Path to output folder to store the modified VCF files (required).
+* -o, --output-folder PATH, Path to output folder to store the modified VCF files (required). Note: make sure a '/' appears at the end of the output folder.
 * -s, --data-format STRING, Separate or average maternal and paternal strands (required).
-    **separated**: split maternal and paternal strands into separate samples. 
-    **averaged**: combine maternal and  paternal strands by averaging them.
+    
+&emsp **separated**: split maternal and paternal strands into separate samples. 
+    
+&emsp **averaged**: combine maternal and  paternal strands by averaging them.
+
 * -f, --file-format, Format of the output file (required).
-    **.npy**: store data in numpy format.
-    **.h5**: store data in h5py format.
+    
+&emsp **.npy**: store data in numpy format.
+    
+&emsp **.h5**: store data in h5py format.
+
 * -d, --debug PATH, Path to file to store info/debug messages (optional).
 
 **Examples**

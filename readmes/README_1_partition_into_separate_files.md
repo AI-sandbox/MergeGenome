@@ -13,7 +13,7 @@ $ python3 MergeGenome.py partition -f <file_path> -o <output_folder>
 Input flags include:
 
 * -f, --file PATH, Path to input VCF file (required).
-* -o, --output-folder PATH, Path to output folder to store the separate VCF files (required).
+* -o, --output-folder PATH, Path to output folder to store the separate VCF files (required). Note: make sure a '/' appears at the end of the output folder.
 * -r, --rename-chr, Rename chromosome notation (optional).
 * -m, --rename-map DICT, Dictionary with mapping from actual/s to new/s chromosome notation/s (optional).
 * -d, --debug PATH, Path to file to store info/debug messages (optional).

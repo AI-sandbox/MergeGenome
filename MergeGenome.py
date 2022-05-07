@@ -61,7 +61,7 @@ partition_parser.add_argument('-d', '--debug', required=False, help='Path to fil
 partition_parser = subparsers.add_parser('store-allele', help='To store formatted allele data in .npy or .h5 format.')
 partition_parser.add_argument('-q', '--query', required=True, help='Path to input .vcf file.')
 partition_parser.add_argument('-o', '--output-folder', required=True, help='Path to output folder to store the formatted allele data.')
-partition_parser.add_argument('-s', '--data-format', required=True, choices=['separated', 'averaged.'], 
+partition_parser.add_argument('-s', '--data-format', required=True, choices=['separated', 'averaged'], 
                               help='Separate or average maternal and paternal strands.')
 partition_parser.add_argument('-f', '--file-format', required=True, choices=['.npy', '.h5'], help='Format of the output file.')
 partition_parser.add_argument('-d', '--debug', required=False, help='Path to file to store info/debug messages.')
@@ -75,7 +75,7 @@ partition_parser.add_argument('-x', '--x-axis-name', required=False, default="qu
 partition_parser.add_argument('-y', '--y-axis-name', required=False, default="reference", help='Name given to the reference dataset that will apprear in the y-axis.')
 partition_parser.add_argument('-f', '--fontsize', required=False, default=25, help='Fontsize in the plot.')
 partition_parser.add_argument('-w', '--figure-width', required=False, default=26, help='Figure width of the plot.')
-partition_parser.add_argument('-h', '--figure-height', required=False, default=15, help='Figure height of the plot.')
+partition_parser.add_argument('-i', '--figure-height', required=False, default=15, help='Figure height of the plot.')
 partition_parser.add_argument('-s', '--size-points', required=False, default=0.1, help='Size of the points in the plot.')
 partition_parser.add_argument('-c', '--color-points', required=False, default='#306998', help='Color of the points in the plot.')
 partition_parser.add_argument('-d', '--debug', required=False, help='Path to file to store info/debug messages.')

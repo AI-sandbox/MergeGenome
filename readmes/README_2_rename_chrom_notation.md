@@ -11,7 +11,7 @@ $ python3 MergeGenome.py rename -f <file_path> -o <output_folder>
 Input flags include:
 
 * -f, --file PATH, Path to .vcf file with data for a particular chromosome (required).
-* -o, --output-folder PATH, Path to output folder to store the modified VCF file (required).
+* -o, --output-folder PATH, Path to output folder to store the modified VCF file (required). Note: make sure a '/' appears at the end of the output folder.
 * -m, --rename-map DICT, Dictionary with mapping from actual to new chromosome notation (optional).
 * -d, --debug PATH, Path to file to store info/debug messages (optional).
 

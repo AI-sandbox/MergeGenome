@@ -14,12 +14,12 @@ Input flags include:
 
 * -q, --query LIST, Path to query .vcf files with data for each chromosome (required).
 * -r, --reference LIST, Paths to reference .vcf files with data for each chromosome (required).
-* -o, --output-folder PATH, Path to output folder to store the modified VCF files (required).
+* -o, --output-folder PATH, Path to output folder to store the modified VCF files (required). Note: make sure a '/' appears at the end of the output folder.
 * -x, --x-axis-name STR, Name given to the query dataset that will appear in the x-axis (optional). Default=query.
 * -y, --y-axis-name STR, Name given to the query dataset that will appear in the y-axis (optional). Default=reference.
 * -f, --fontsize INT, Fontsize in the plot (optional). Default=25.
 * -w, --figure-width INT, Figure width of the plot (optional). Default=26.
-* -h, --figure-height INT, Figure height of the plot (optional). Default=15.
+* -i, --figure-height INT, Figure height of the plot (optional). Default=15.
 * -s, --size-points INT, Size of the points in the plot (optional). Default=0.1.
 * -c, --color-points INT, Color of the points in the plot (optional). Default=#306998.
 * -d, --debug PATH, Path to file to store info/debug messages (optional).
@@ -35,5 +35,5 @@ $ python3 MergeGenome.py plot-snp-means -q query_chr1.vcf -r reference_chr1.vcf 
 2. Plot the SNP means between the common markers of all the chromosomes in the query and reference datasets, setting the fontsize to 15 and the figure size to (16, 9). Also save debug info in log file:
 
 ```
-$ python3 MergeGenome.py plot-snp-means -q query_chr*.vcf -r reference_chr*.vcf -o ./output/ -f 15 -w 16 -h 9 -d
+$ python3 MergeGenome.py plot-snp-means -q query_chr*.vcf -r reference_chr*.vcf -o ./output/ -f 15 -w 16 -i 9 -d
 ```
