@@ -1,4 +1,4 @@
-## Evaluate with PCA plots
+## PCA plots
 
 The Principal Component Analysis (PCA) dimensionality reduction technique can be used in bioinformatics to identify outlier samples, where a sample is a DNA squence. For instance, when dealing with dog DNA sequences, samples from village or mixed dogs might be consistently different than from purebred dogs. Also, a sample might be very unsimilar to the rest because it sequencing went wrong. Either way, outlier samples might mislead any future analysis, so it is important to identify them and treat them properly.
 
@@ -31,17 +31,17 @@ Input flags include:
 1. Plot PCA on query data:
 
 ```
-$ python3 MergeGenome.py plot-pcaa -q query_chr1.vcf -o ./output/
+$ python3 MergeGenome.py plot-pca -q query_chr1.vcf -o ./output/
 ```
 
 2. Plot PCA on the common markers between the query and the reference, trained on the query and projected on both datasets:
 
 ```
-$ python3 MergeGenome.py plot-snp-means -q query_chr1.vcf -r reference_chr1.vcf -o ./output/
+$ python3 MergeGenome.py plot-pca -q query_chr1.vcf -r reference_chr1.vcf -o ./output/
 ```
 
 3. Plot PCA on the common markers between the query and the reference, trained and projected on both datasets:
 
 ```
-$ python3 MergeGenome.py plot-snp-means -q query_chr1.vcf -r reference_chr1.vcf -o ./output/ -t
+$ python3 MergeGenome.py plot-pca -q query_chr1.vcf -r reference_chr1.vcf -o ./output/ -t
 ```
