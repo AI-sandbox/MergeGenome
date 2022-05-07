@@ -18,15 +18,15 @@ Input flags include:
 * -o, --output-folder PATH, Path to output folder to store the modified VCF files (required). Note: make sure a '/' appears at the end of the output folder.
 * -s, --data-format STRING, Separate or average maternal and paternal strands (required).
     
-&emsp; **separated**: split maternal and paternal strands into separate samples. 
+&emsp;&ensp; separated: split maternal and paternal strands into separate samples. 
     
-&emsp; **averaged**: combine maternal and  paternal strands by averaging them.
+&emsp;&ensp; averaged: combine maternal and  paternal strands by averaging them.
 
 * -f, --file-format, Format of the output file (required).
     
-&emsp; **.npy**: store data in numpy format.
+&emsp;&ensp; .npy: store data in numpy format.
     
-&emsp; **.h5**: store data in h5py format.
+&emsp;&ensp; .h5: store data in h5py format.
 
 * -d, --debug PATH, Path to file to store info/debug messages (optional).
 
