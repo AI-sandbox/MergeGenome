@@ -14,7 +14,7 @@ from modules.clean import clean_genomic_data
 from modules.subset import subset_common_markers
 from evaluation.mean_plots import plot_snp_means
 from evaluation.mean_plots import plot_pca
-from scripts.store_allele_data import store_allele_data_in_npy_or_h5
+from scripts.store_allele_data import store_allele_data_in_npy_or_h5, store_common_indexes
 
 # Define parser to read from command line
 parser = argparse.ArgumentParser(usage=parser_msg())
@@ -93,6 +93,14 @@ partition_parser.add_argument('-q', '--query', required=True, help='Path to inpu
 partition_parser.add_argument('-o', '--output-folder', required=True, help='Path to output folder to store the formatted allele data.')
 partition_parser.add_argument('-s', '--data-format', required=True, choices=['separated', 'averaged'], 
                               help='Separate or average maternal and paternal strands.')
+partition_parser.add_argument('-f', '--file-format', required=True, choices=['.npy', '.h5'], help='Format of the output file.')
+partition_parser.add_argument('-d', '--debug', required=False, help='Path to file to store info/debug messages.')
+
+# Define subparser for store-indexes-common command
+partition_parser = subparsers.add_parser('store-indexes-common', help='Store indexes of common markers.')
+partition_parser.add_argument('-q', '--query', required=True, nargs="*", help='Paths to query .vcf files with data for each chromosome.')
+partition_parser.add_argument('-r', '--reference', required=False, nargs="*", help='Paths to reference .vcf files with data for each chromosome.')
+partition_parser.add_argument('-o', '--output-folder', required=True, help='Path to output folder to store the modified .vcf files.')
 partition_parser.add_argument('-f', '--file-format', required=True, choices=['.npy', '.h5'], help='Format of the output file.')
 partition_parser.add_argument('-d', '--debug', required=False, help='Path to file to store info/debug messages.')
 
@@ -182,3 +190,11 @@ elif args.command == 'store-allele':
     
     # Store averaged or separated maternal and paternal strands in .npy or .h5
     store_allele_data_in_npy_or_h5(args.query, args.output_folder, args.data_format, args.file_format, logger)
+    
+elif args.command == 'store-common-indexes':
+    
+    # Check the input arguments are correct
+    check_arguments([args.query]+[args.reference])
+    
+    # Store indexes of common markers between the query and the reference in .npy or .h5
+    store_indexes_common_markers(args.query, args.reference, args.output_folder, args.file_format, logger)

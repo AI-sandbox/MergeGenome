@@ -1,80 +1,90 @@
 ################################################################################
-# Searches for the indexes of the SNPs of a dataset
-# that are also present in another dataset
-# The indexes of the common markers are saved in a numpy array
+# Searches for the indexes of the SNPs of a query
+# dataset that are also present in a reference dataset and viceversa
+# The indexes of the common markers are saved in a .npy or .h5 file
 ################################################################################
 
-import sys
 import os
+import logging
+from typing import List
+import h5py
 import numpy as np
-import pandas as pd
 
-sys.path.append('/home/users/miriambt/my_work/dog-gen-to-phen/preprocessing')
-from utils.vcf_utils import read_vcf_file, filter_by_chromosome
-from utils.vcf_preprocessing import search_and_keep_common_markers_several_chr
-from utils.track import track
+from utils.io import read_vcf_file
+from utils.vcf_clean import search_and_keep_common_markers_several_chr
 
-################################################################################
 
-## USER INPUTS
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-## Define base path to .vcf files with all chromosomes data
-PATH1 = '/scratch/users/miriambt/data/dogs/formatted_data/4th_dataset/merged/merged_filteredsamples_allchr.vcf'
-PATH2 = '/scratch/users/miriambt/data/dogs/formatted_data/4th_dataset/array/cleaned/All_Pure_150k_allchr_cleaned.vcf'
-
-#PATH1 = '/scratch/users/miriambt/data/dogs/formatted_data/4th_dataset/embark/embark_allchr.vcf'
-#PATH2 = '/scratch/users/miriambt/data/dogs/formatted_data/4th_dataset/whole_to_array/X_whole_to_array_allchr.vcf'
-
-#PATH1 = '/scratch/users/miriambt/data/dogs/formatted_data/4th_dataset/embark/embark_rm_01/embark_allchr_rm_01.vcf'
-#PATH2 = '/scratch/users/miriambt/data/dogs/formatted_data/4th_dataset/whole_to_array/whole_to_array_rm_01/X_whole_to_array_allchr_rm_01.vcf'
-
-#PATH1 = '/home/users/miriambt/my_work/dog-gen-to-phen/imputation/data/Y_test_imputed/Y_test_imputed_allchr.vcf'
-#PATH2 = '/home/users/miriambt/my_work/dog-gen-to-phen/imputation/data/Y_test_allchr.vcf'
-
-## Define name of datasets 1 and 2
-dataset1_name = 'merged'
-dataset2_name = 'array'
-
-#dataset1_name = 'embark_rm_01'
-#dataset2_name = 'whole_to_array_rm_01'
-
-#dataset1_name = 'Y_test_imputed'
-#dataset2_name = 'Y_test'
-
-## Define path were the numpy array with the indexes of the common SNPs will be saved
-PATH_INDEXES = '/home/users/miriambt/my_work/dog-gen-to-phen/imputation/data/indexes_{}_in_{}'.format(dataset1_name, dataset2_name)
-
-## Define name of .txt to contain the tracking of the script
-track_name = 'searching_snps_of_{}_in_{}.txt'.format(dataset1_name, dataset2_name)
-
-## Define path to output .txt file that will store the tracking of the script
-track_path = '/home/users/miriambt/my_work/dog-gen-to-phen/preprocessing/output/{}'.format(track_name)
-
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-## Remove content of .txt with name track_name if it already exists
-if os.path.exists(track_path):
-    os.remove(track_path)
+def store_indexes_common_markers(query_path: str, reference_path: str, output_folder: str, file_format: str) -> None:
+    """
+    Searches for the indexes of the SNPs of a query dataset that are also 
+    present in a reference dataset and viceversa. The indexes of the
+    common markers are saved in a .npy or .h5 file.
     
-## Read input .vcf files for chromosome i of datasets 1 and 2
-data1 = read_vcf_file(PATH1)
-data2 = read_vcf_file(PATH2)
+    Args:
+        query_path (str): path to query .vcf file.
+        reference_path (str): path to reference .vcf file.
+        output_folder (str): folder to save the output.
+        file_format (str): format of the file to store the indexes.
+        logger (logging.Logger): debug/information tracker.
+        
+    Returns:
+        (None)
+    
+    """
+    
+    # Read the reference and query .vcf files using scikit-allel
+    logger.debug('Reading the reference and query files.')
+    reference = read_vcf_file(reference_path)
+    query = read_vcf_file(query_path)
 
-track('{} SNPs and {} samples in {} dataset'.format(len(data1['variants/ID']), len(data1['samples']), dataset1_name), track_path)
-track('{} SNPs and {} samples in {} dataset\n'.format(len(data2['variants/ID']), len(data2['samples']), dataset2_name), track_path)
+    # Obtain the dimensions of the reference and query
+    logger.info(f'There are {len(reference["variants/ID"])} SNPs and {len(reference["samples"])} samples in total in the reference.')
+    logger.info(f'There are {len(query["variants/ID"])} SNPs and {len(query["samples"])} samples in total in the query.')
 
-## Obtain indexes of the SNPs in data1 that are also in data2
-_, _, indexes1, indexes2 = search_and_keep_common_markers_several_chr(data1.copy(), data2.copy(), track_path)
+    # Obtain indexes of the common markers between the query and the referece
+    _, _, indexes_query, indexes_reference = search_and_keep_common_markers_several_chr(query, reference, logger)
 
-## Save the found indexes
-np.save(PATH_INDEXES.format(dataset1_name, dataset2_name), indexes1)
+    # Define counter of common markers to ensure the found indexes 
+    # are common markers
+    count = 0
+    for i in range (len(indexes_query)):
+        if(query['variants/REF'][indexes_query[i]] != reference['variants/REF'][indexes_reference[i]] or 
+           query['variants/ALT'][indexes_query[i]][0] != reference['variants/ALT'][indexes_reference[i]][0]):
+            count += 1
+    
+    # Ensure the found indexes are common markers
+    assert count == len(indexes_query) == len(indexes_reference)
+    
+    if file_format == '.npy':
+        
+        # Define output name to .npy file with query and reference indexes
+        output_name_query = f'{os.path.basename(query_path)[:-4]}_indexes.npy'
+        output_name_reference = f'{os.path.basename(reference_path)[:-4]}_indexes.npy'
+        
+        # Define entire output path to query and reference indexes
+        output_path_query = output_folder + output_name_query
+        output_path_reference = output_folder + output_name_reference
+        
+        # Save the snps data in .npy format
+        logger.debug(f'Saving data in .npy format in {output_path_query}.')
+        np.save(output_path_query, indexes_query)
+        logger.debug(f'Saving data in .npy format in {output_path_reference}.')
+        np.save(output_path_reference, indexes_reference)
 
-## Ensure the indexes were correctly found
-count = 0
-for i in range (len(indexes1)):
-    if(data1['variants/REF'][indexes1[i]] != data2['variants/REF'][indexes2[i]] or 
-       data1['variants/ALT'][indexes1[i]][0] != data2['variants/ALT'][indexes2[i]][0]):
-        count += 1
+    elif file_format == '.h5':
 
-assert count == 0, 'All the indexes found do not correspond to common SNPs. Check the script.'
+        # Define output name to .npy file with query and reference indexes
+        output_name_query = f'{os.path.basename(query_path)[:-4]}_indexes.h5'
+        output_name_reference = f'{os.path.basename(reference_path)[:-4]}_indexes.h5'
+        
+        # Define entire output path to query and reference indexes
+        output_path_query = output_folder + output_name_query
+        output_path_reference = output_folder + output_name_reference
+        
+        # Save the snps data in .h5 format
+        logger.debug(f'Saving data in .h5 format in {output_path_query}.')
+        h5f = h5py.File(output_path_query, 'w')
+        h5f.create_dataset(name=output_path_query, data=indexes_query)
+        logger.debug(f'Saving data in .h5 format in {output_path_reference}.')
+        h5f = h5py.File(output_path_reference, 'w')
+        h5f.create_dataset(name=output_path_reference, data=indexes_reference)

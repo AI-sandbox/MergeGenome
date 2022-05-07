@@ -1,5 +1,5 @@
 ################################################################################
-# Convert VCF file to .npy
+# Convert VCF file to .npy or .h5
 ################################################################################
 
 import os
@@ -23,7 +23,7 @@ def store_allele_data_in_npy_or_h5(input_path: str, output_folder: str, data_for
         data_format (str): specify the format of the data for the analysis. 
             * 'separted': split maternal and paternal strands into separate samples. 
             * 'averaged': combine maternal and  paternal strands by averaging them.
-        file_format: format of the file to store the allele data.
+        file_format (str): format of the file to store the allele data.
             * '.npy': store data in numpy format.
             * '.h5': store data in h5py format.
         logger (logging.Logger): debug/information tracker.
@@ -63,7 +63,7 @@ def store_allele_data_in_npy_or_h5(input_path: str, output_folder: str, data_for
         # Define output name to .npy file
         output_name = f'{os.path.basename(input_path)[:-4]}_{data_format}.npy'
         
-        # Define entire outputput path
+        # Define entire output path
         output_path = output_folder + output_name
         
         # Save the snps data in .npy format
@@ -75,13 +75,13 @@ def store_allele_data_in_npy_or_h5(input_path: str, output_folder: str, data_for
         # Define output name to .npy file
         output_name = f'{os.path.basename(input_path)[:-4]}_{data_format}.h5'
         
-        # Define entire outputput path
+        # Define entire output path
         output_path = output_folder + output_name
         
         # Save the snps data in .h5 format
         logger.debug(f'Saving data in .h5 format in {output_path}.')
-        h5f = h5py.File(output_path + output_file, 'w')
-        h5f.create_dataset(name=output_folder + output_name, data=snps)
+        h5f = h5py.File(output_path, 'w')
+        h5f.create_dataset(name=output_path, data=snps)
     
     
     

@@ -26,8 +26,10 @@ This repository also includes the implementation of other common tasks related t
 
 9. **[SNP means plot](readmes/README_9_evaluate_with_snp_means_plot.md)**
 
-10. **[PCA plots](readmes/README_10_evaluate_with_pca_plots.md)**
+10. **[Principal Component Analysis plots](readmes/README_10_evaluate_with_pca_plots.md)**
 
 # Other preprocessing steps
 
 11. **[Store allele data (NPY or H5)](readmes/README_11_store_allele_data.md)**
+
+12. **[Store indexes common markers](readmes/README_12_store_indexes_common_markers.md)**
