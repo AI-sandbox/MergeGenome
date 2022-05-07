@@ -1,5 +1,6 @@
 ################################################################################
-# Useful functions for PCA, UMAP and tSNE plots
+# Useful functions to plot a scatter plot with SNP means
+# or 2D data from Principal Component Analysis (PCA)
 ################################################################################
 
 import numpy as np
@@ -9,7 +10,7 @@ from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
 
 
-def plot_snp_means(all_query_snps: np.array, all_reference_snps: np.array, plot_dict: Dict, output_folder: str):
+def plot_snp_means(all_query_snps: np.array, all_reference_snps: np.array, plot_dict: Dict, output_folder: str) -> None:
     """
     Plot a scatter plot with the SNP means of the sorted 
     common markers between two datasets.
@@ -42,131 +43,156 @@ def plot_snp_means(all_query_snps: np.array, all_reference_snps: np.array, plot_
     plt.xticks(ticks = [0, .2, .4, .6, .8, 1.], fontsize = plot_dict['FONTSIZE']-3)
     plt.yticks(ticks = [0, .2, .4, .6, .8, 1.], fontsize = plot_dict['FONTSIZE']-3)
     
-    # Save figure in output path
-    plt.savefig(f'{output_path}snp_means_{plot_dict["x_axis_name"]}_and_{plot_dict["y_axis_name"]}', bbox_inches='tight')
+    # Save figure in output folder
+    plt.savefig(f'{output_folder}snp_means_{plot_dict["x_axis_name"]}_and_{plot_dict["y_axis_name"]}', bbox_inches='tight')
 
 
-def PCA_2D_trained_and_projected_on_dataset(snps, plot_dict, dataset_name, color, output_path):
-    '''
-    Objective: make PCA plot trained and projected on snps.
-    Input:
-        - snps: SNPs data.
-        - plot_dict: dictionary containing plot parameters.
-        - dataset_name: name given to dataset and that will appear in the title.
-        - color: of the data points.
-        - output_path: path to output that will save the plots.
-    '''
-
-    ## Standardize the SNPs data to have 0 mean and 1 std
-    snps_scaled = StandardScaler().fit_transform(snps)
+def PCA_trained_and_projected_on_query(all_query_snps: np.array, plot_dict: Dict, output_folder: str) -> None:
+    """
+    Train and project Principal Component Analysis (PCA) on 
+    the query SNPs data and plot a scatter plot with the 
+    2D points. First, data is standardized to have 0 mean
+    and 1 standard devision (std).
     
-    ## Define PCA object with 2 components
+    Args:
+        all_query_snps (List[str]): concatenation of SNPs in the query.
+        plot_dict: dictionary with the configuration parameters of the plot.
+        output_folder (str): folder to save the output.
+        
+    Returns:
+        (None)
+    
+    """
+
+    # Standardize the SNPs data to have 0 mean and 1 std
+    snps_scaled = StandardScaler().fit_transform(all_query_snps)
+    
+    # Define PCA with two components
     pca = PCA(n_components=2)
     
-    ## Fit and transform on snps
+    # Fit and transform PCA
     princ_comp = pca.fit_transform(snps_scaled)
 
-    ## Define plot figure
+    # Define plot figure
     plt.figure(figsize=(plot_dict['FIG_WIDTH'], plot_dict['FIG_HEIGHT']))
     plt.rcParams['axes.facecolor'] = 'white'
     plt.rcParams['figure.facecolor'] = 'white'
     
-    plt.scatter(princ_comp[:,0], princ_comp[:,1], s=plot_dict['s'], alpha=plot_dict['alpha'], c=color, label=dataset_name)
+    # Plot the 2D PCA points
+    plt.scatter(princ_comp[:,0], princ_comp[:,1], s=plot_dict['s'], alpha=plot_dict['alpha'], c=plot_dict["color_query"], label="Query")
     
-    plt.title("{} PCA".format(dataset_name), fontsize = plot_dict['FONTSIZE'])
+    plt.title("PCA", fontsize = plot_dict['FONTSIZE'])
     plt.xlabel('\nPrincipal Component 1', fontsize = plot_dict['FONTSIZE'])
     plt.ylabel('\nPrincipal Component 2', fontsize = plot_dict['FONTSIZE'])
     plt.legend(loc='upper right', prop={'size': plot_dict['FONTSIZE']})
 
-    ## Save figure in output path
-    plt.savefig(output_path+'trained_and_projected_on_{}'.format(dataset_name.replace(' ', '_')),  bbox_inches='tight')
+    # Save figure in output folder
+    plt.savefig(f'{output_folder}trained_and_projected_on_query', bbox_inches='tight')
     
     
-def PCA_2D_trained_on_dataset1_projected_on_both(all_query_snps, all_reference_snps, plot_dict, dataset1_name, dataset2_name, color1, color2, output_path):
-    '''
-    Objective: make PCA plot trained on all_query_snps and projected on both all_query_snps and all_reference_snps.
-    Input:
-        - all_query_snps: SNPs data of dataset 1.
-        - all_reference_snps: SNPs data of dataset 2.
-        - plot_dict: dictionary containing plot parameters.
-        - dataset1_name: name given to dataset 1 and that will appear in the title.
-        - dataset2_name: name given to dataset 2 and that will appear in the title.
-        - color1: of the data points of dataset 1.
-        - color2: of the data points of dataset 1.
-        - output_path: path to output that will save the plots.
-    '''
+def PCA_trained_on_query_projected_on_both(all_query_snps: np.array, all_reference_snps: np.array, plot_dict: Dict, output_folder: str) -> None:
+    """
+    Train Principal Component Analysis (PCA) on 
+    the query SNPs data, project on both the query and the 
+    reference and plot a scatter plot with the 2D points. First, data 
+    is standardized to have 0 mean and 1 standard devision (std) 
+    (based on the query).
     
-    ## Standardize the SNPs data to have 0 mean and 1 std
-    snps_scaled1 = StandardScaler().fit_transform(all_query_snps)
-    snps_scaled2 = StandardScaler().fit_transform(all_reference_snps)
-
-    ## Define PCA object with 2 components
+    Args:
+        all_query_snps (List[str]): concatenation of common markers in the query.
+        all_reference_snps (List[str]): concatenation of common markers in the reference.
+        plot_dict: dictionary with the configuration parameters of the plot.
+        output_folder (str): folder to save the output.
+        
+    Returns:
+        (None)
+    
+    """
+    
+    # Standardize SNPs data to have 0 mean and 1 std
+    standardizer = StandardScaler().fit(all_query_snps)
+    
+    # Transform
+    snps_reference = StandardScaler().transform(all_query_snps)
+    snps_reference = StandardScaler().transform(all_reference_snps)
+    
+    # Define PCA with two components
     pca = PCA(n_components=2)
 
-    ## Fit on all_query_snps
-    pca = pca.fit(snps_scaled1)
+    # Fit PCA on the query
+    pca = pca.fit(snps_query)
 
-    ## Projecte on both all_query_snps and all_reference_snps
-    princ_comp1 = pca.transform(snps_scaled1)
-    princ_comp2 = pca.transform(snps_scaled2)
+    # Project PCA on both the query and the reference
+    princ_query = pca.transform(snps_query)
+    princ_reference = pca.transform(snps_reference)
 
-    ## Define plot figure
+    # Define plot figure
     plt.figure(figsize=(plot_dict['FIG_WIDTH'], plot_dict['FIG_HEIGHT']))
     plt.rcParams['axes.facecolor'] = 'white'
     plt.rcParams['figure.facecolor'] = 'white'
     
-    plt.scatter(princ_comp1[:,0], princ_comp1[:,1], s=plot_dict['s'], alpha=plot_dict['alpha'], c=color1, label=dataset1_name)
-    plt.scatter(princ_comp2[:,0], princ_comp2[:,1], s=plot_dict['s'], alpha=plot_dict['alpha'], c=color2, label=dataset2_name)
+    # Plot the query 2D PCA points
+    plt.scatter(princ_query[:,0], princ_query[:,1], s=plot_dict['s'], alpha=plot_dict['alpha'], c=plot_dict["color_query"], label="query")
     
-    plt.title("Trained on {} projected on {} and {} PCA".format(dataset1_name, dataset1_name, dataset2_name), fontsize = plot_dict['FONTSIZE'])
+    # Plot the reference 2D PCA points
+    plt.scatter(princ_reference[:,0], princ_reference[:,1], s=plot_dict['s'], alpha=plot_dict['alpha'], c=plot_dict["color_reference"], label="reference")
+    
+    plt.title("PCA trained on the query projected on both", fontsize = plot_dict['FONTSIZE'])
     plt.xlabel('\nPrincipal Component 1', fontsize = plot_dict['FONTSIZE'])
     plt.ylabel('\nPrincipal Component 2', fontsize = plot_dict['FONTSIZE'])
     plt.legend(loc='upper right', prop={'size': plot_dict['FONTSIZE']})
 
-    ## Save figure in output path
-    plt.savefig(output_path+'trained_on_{}_projected_on_{}_and_{}'.format(dataset1_name.replace(' ', '_'), dataset1_name.replace(' ', '_'), 
-                                                                          dataset2_name.replace(' ', '_'), bbox_inches='tight'))
-
-
-def PCA_2D_trained_and_projected_on_both(all_query_snps, all_reference_snps, plot_dict, dataset1_name, dataset2_name, color1, color2, output_path):
-    '''
-    Objective: make PCA plot trained and projected on concatenation of all_query_snps and all_reference_snps.
-    Input:
-        - all_query_snps: SNPs data of dataset 1.
-        - all_reference_snps: SNPs data of dataset 2.
-        - plot_dict: dictionary containing plot parameters.
-        - dataset1_name: name given to dataset 1 and that will appear in the title.
-        - dataset2_name: name given to dataset 2 and that will appear in the title.
-        - color1: of the data points of dataset 1.
-        - color2: of the data points of dataset 1.
-        - output_path: path to output that will save the plots.
-    '''
+    # Save figure in output folder
+    plt.savefig(f'{output_folder}trained_on_query_projected_on_both', bbox_inches='tight')
     
-    ## Concatenate the SNPs data
+
+def PCA_trained_and_projected_on_both(all_query_snps: np.array, all_reference_snps: np.array, plot_dict: Dict, output_folder: str) -> None:
+    """
+    Train Principal Component Analysis (PCA) on 
+    the query and reference SNPs data and plot a scatter plot with the 2D points. 
+    First, data is standardized to have 0 mean and 1 standard devision (std).
+    
+    Args:
+        all_query_snps (List[str]): concatenation of common markers in the query.
+        all_reference_snps (List[str]): concatenation of common markers in the reference.
+        plot_dict: dictionary with the configuration parameters of the plot.
+        output_folder (str): folder to save the output.
+        
+    Returns:
+        (None)
+    
+    """
+    
+    # Concatenate SNPs data
     concat = np.concatenate((all_query_snps, all_reference_snps), axis=0, out=None)
 
-    ## Standardize the SNPs data to have 0 mean and 1 std
+    # Standardize SNPs data to have 0 mean and 1 std
     concat_scaled = StandardScaler().fit_transform(concat)
 
-    ## Define PCA object with 2 components
+    # Define PCA with two components
     pca = PCA(n_components=2)
 
-    ## Fit and transform the PCA model on the SNPs of both datasets
+    # Fit and transform PCA model on both the query and the reference
     pca = pca.fit(concat_scaled)
     princ_comp_concat = pca.transform(concat_scaled)
 
-    ## Define plot figure
+    # Define plot figure
     plt.figure(figsize=(plot_dict['FIG_WIDTH'], plot_dict['FIG_HEIGHT']))
     plt.rcParams['axes.facecolor'] = 'white'
     plt.rcParams['figure.facecolor'] = 'white'
     
-    plt.scatter(princ_comp_concat[:all_query_snps.shape[0],0], princ_comp_concat[:all_query_snps.shape[0],1], s=plot_dict['s'], alpha=plot_dict['alpha'], c=color1, label=dataset1_name)
-    plt.scatter(princ_comp_concat[all_query_snps.shape[0]:,0], princ_comp_concat[all_query_snps.shape[0]:,1], s=plot_dict['s'], alpha=plot_dict['alpha'], c=color2, label=dataset2_name)
+    # Plot the query 2D PCA points
+    plt.scatter(princ_comp_concat[:all_query_snps.shape[0],0], princ_comp_concat[:all_query_snps.shape[0],1], s=plot_dict['s'], 
+                alpha=plot_dict['alpha'], c=plot_dict["color_query"], label="query")
     
-    plt.title("Trained and projected on {} and {} PCA".format(dataset1_name, dataset2_name), fontsize = plot_dict['FONTSIZE'])
+    # Plot the reference 2D PCA points
+    plt.scatter(princ_comp_concat[all_query_snps.shape[0]:,0], princ_comp_concat[all_query_snps.shape[0]:,1], s=plot_dict['s'], 
+                alpha=plot_dict['alpha'], c=color2, label="reference")
+    
+    plt.title("PCA trained and projecred on both the query the reference", fontsize = plot_dict['FONTSIZE'])
     plt.xlabel('\nPrincipal Component 1', fontsize = plot_dict['FONTSIZE'])
     plt.ylabel('\nPrincipal Component 2', fontsize = plot_dict['FONTSIZE'])
     plt.legend(loc='upper right', prop={'size': plot_dict['FONTSIZE']})
 
-    ## Save figure in output path
-    plt.savefig(output_path+'trained_and_projected_on_{}_and_{}'.format(dataset1_name.replace(' ', '_'), dataset2_name.replace(' ', '_'), bbox_inches='tight'))
+    # Save figure in output folder
+    plt.savefig(f'{output_folder}trained_and_projected_on_both', bbox_inches='tight')

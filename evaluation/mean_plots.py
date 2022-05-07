@@ -1,5 +1,5 @@
 ################################################################################
-# Plot the SNP means of the common markers between the reference and 
+# Plots the SNP means of the common markers between the reference and 
 # the query datasets
 ################################################################################
 

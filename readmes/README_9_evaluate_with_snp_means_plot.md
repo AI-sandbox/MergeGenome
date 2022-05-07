@@ -21,7 +21,7 @@ Input flags include:
 * -w, --figure-width INT, Figure width of the plot (optional). Default=26.
 * -i, --figure-height INT, Figure height of the plot (optional). Default=15.
 * -s, --size-points INT, Size of the points in the plot (optional). Default=0.1.
-* -c, --color-points INT, Color of the points in the plot (optional). Default=#306998.
+* -c, --color-points STR, Color of the points in the plot (optional). Default=#306998.
 * -d, --debug PATH, Path to file to store info/debug messages (optional).
 
 **Examples**
