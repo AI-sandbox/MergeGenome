@@ -4,7 +4,7 @@ This repository includes a Python implementation of the MergeGenome toolkit, whi
 
 This repository also includes the implementation of other common tasks related to merging genomic sequences, such as identifying the common markers (i.e. SNPs with identical CHROM, POS, REF, and ALT fields) between two datasets and subsetting the available data to those common markers.
 
-# Steps
+# Preprocessing Steps
 
 1. **[Partition data into a separate VCF file per chromosome](readmes/README_1_partition_into_separate_files.md)**
 
@@ -22,14 +22,16 @@ This repository also includes the implementation of other common tasks related t
 
 8. **[Merge VCF files](readmes/README_8_merge_vcf_files.md)**
 
-# Evaluation
+# Merging Evaluation
 
 9. **[SNP means plot](readmes/README_9_evaluate_with_snp_means_plot.md)**
 
 10. **[Principal Component Analysis plots](readmes/README_10_evaluate_with_pca_plots.md)**
 
-# Other preprocessing steps
+# Another util commands
 
 11. **[Store allele data (NPY or H5)](readmes/README_11_store_allele_data.md)**
 
 12. **[Store indexes common markers](readmes/README_12_store_indexes_common_markers.md)**
+
+13. **[Remove SNPs different means](readmes/README_13_remove_snps_different_means.md)**

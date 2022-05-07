@@ -15,6 +15,7 @@ from modules.subset import subset_common_markers
 from evaluation.mean_plots import plot_snp_means
 from evaluation.mean_plots import plot_pca
 from scripts.store_allele_data import store_allele_data_in_npy_or_h5, store_common_indexes
+from scripts.remove_snps_different_means import remove_snps_with_different_means
 
 # Define parser to read from command line
 parser = argparse.ArgumentParser(usage=parser_msg())
@@ -102,6 +103,15 @@ partition_parser.add_argument('-q', '--query', required=True, nargs="*", help='P
 partition_parser.add_argument('-r', '--reference', required=False, nargs="*", help='Paths to reference .vcf files with data for each chromosome.')
 partition_parser.add_argument('-o', '--output-folder', required=True, help='Path to output folder to store the modified .vcf files.')
 partition_parser.add_argument('-f', '--file-format', required=True, choices=['.npy', '.h5'], help='Format of the output file.')
+partition_parser.add_argument('-d', '--debug', required=False, help='Path to file to store info/debug messages.')
+
+# Define subparser for remove-snps-different-means command
+partition_parser = subparsers.add_parser('store-indexes-common', help='Store indexes of common markers.')
+partition_parser.add_argument('-q', '--query', required=True, nargs="*", help='Paths to query .vcf files with data for each chromosome.')
+partition_parser.add_argument('-r', '--reference', required=False, nargs="*", help='Paths to reference .vcf files with data for each chromosome.')
+partition_parser.add_argument('-o', '--output-folder', required=True, help='Path to output folder to store the modified .vcf files.')
+partition_parser.add_argument('-t', '--threshold', required=False, default=0.1, help='All common SNPs with a mean absolute difference higher than the '\
+                              'threshold will be removed.')
 partition_parser.add_argument('-d', '--debug', required=False, help='Path to file to store info/debug messages.')
 
 # Parse the arguments
@@ -198,3 +208,11 @@ elif args.command == 'store-common-indexes':
     
     # Store indexes of common markers between the query and the reference in .npy or .h5
     store_indexes_common_markers(args.query, args.reference, args.output_folder, args.file_format, logger)
+    
+elif args.command == 'remove-snps-different-means':
+    
+    # Check the input arguments are correct
+    check_arguments(args.query+args.reference)
+    
+    # Store indexes of common markers between the query and the reference in .npy or .h5
+    remove_snps_with_different_means(args.query, args.reference, args.output_folder, args.threshold, logger)
