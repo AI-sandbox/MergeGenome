@@ -1,30 +1,32 @@
 ## Rename chromosome notation
 
-A necessary step prior to analyzing and preprocessing two VCF files with data from the same chromosome is to ensure the chromosome nomenclature in the variants/CHROM field is in the same format. Usually, the chromosome nomenclature is in one of two forms: *<chrom_number>* or *chr<chrom_number>*. By default, the rename command changes the format from *<chrom_number>* to *chr<chrom_number>* or (vice-versa). If the notation is in neither of these formats, it does nothing. To specify a different notation, use the `--rename-chr` flag to specify a notation mapping for all the chromosomes to modify, where the key is the old notation for the chromosome in particular and the value is the new notation.
+A prerequisite to preprocess and merge VCF files with data coming from the same chromosome is to ensure the chromosome nomenclature in the variants/CHROM field is in the exact same format between files. Usually, the chromosome nomenclature is in one of two forms: *<chrom_number>* or *chr<chrom_number>*, which might be different depending on the biobank.
+
+By default, the rename command from MergeGenome changes the variants/CHROM field nomenclature from *<chrom_number>* to *chr<chrom_number>* or vice-versa. If the notation is in neither of these formats, the rename command will do nothing, except if a specific notation mapping is specified through `--rename-map`. The previous flag can be used to specify a dictionary with the notation mapping, where the keys are the old notations and the values are the new notations. The dictionary should contain a key-value pair for each chromosome notation that wants to be modified. Note that if the input file contains data for more than one chromosome, the number of key-value pairs in the dictionary should be equal to or smaller than the number of chromosomes in the dataset.
 
 ## Usage
 
 ```
-$ python3 MergeGenome.py rename -f <file_path> -o <output_folder>
+$ python3 MergeGenome.py rename -q <query_file> -o <output_folder>
 ```
 
 Input flags include:
 
-* -f, --file PATH, Path to .vcf file with data for a particular chromosome (required).
-* -o, --output-folder PATH, Path to output folder to store the modified VCF file (required). Note: make sure a '/' appears at the end of the output folder.
-* -m, --rename-map DICT, Dictionary with mapping from actual to new chromosome notation (optional).
-* -d, --debug PATH, Path to file to store info/debug messages (optional).
+* -q, --query PATH, Path to input .vcf file with data for a single or multiple chromosomes (required).
+* -o, --output-folder PATH, Path to output folder to store partitioned .vcf files (required). Note: make sure a '/' appears at the end of the output folder.
+* -m, --rename-map DICT, Mapping from actual to new chromosome notation (optional).
+* -d, --debug PATH, Path to .log/.txt file to store info/debug messages (optional).
 
 **Examples**
 
 1. Change chromosome notation from *<chrom_number>* to *chr<chrom_number>* (or vice-versa):
 
 ```
-$ python3 MergeGenome.py rename -f query.vcf -o ./output/
+$ python3 MergeGenome.py rename -q query_allchr.vcf -o ./output/
 ```
 
 2. Change chromosome notation from "1" to "chr_1", and from "2" to "chr_2". Also save debug info in log file:
 
 ```
-$ python3 MergeGenome.py rename -f query.vcf -o ./output/ -m '{"1":"chr_1", "2":"chr_2"}' -d rename.log
+$ python3 MergeGenome.py rename -q query.vcf -o ./output/ -m '{"1":"chr_1", "2":"chr_2"}' -d rename.log
 ```

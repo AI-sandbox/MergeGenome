@@ -1,5 +1,5 @@
 ################################################################################
-# Function to partition the input file in a separate file per chromosome.
+# Partitions the input file in a separate file per chromosome.
 # Optionally, changes the chromosome notation. By default, it renames the 
 # chromosome notation from '<chr_number>' to 'chr<chr_number>' or from
 # 'chr<chr_number>' to '<chr_number>'.
@@ -16,13 +16,14 @@ def partition_by_chromosome(query_path: str, output_folder: str, rename_chr: boo
                             rename_map: dict, logger: logging.Logger) -> None:
     """    
     Partitions the input .vcf query file in a separate .vcf file per chromosome.
-    If rename_chr=True, the chromosome notation is renamed. By default, it is
-    renamed from '<chr_number>' to 'chr<chr_number>' or from 'chr<chr_number>' 
-    to '<chr_number>'. If rename_map is provided, the change in the notation
-    is from keys (actual notation) to values (new notation).
+    If rename_chr=True, the chromosome notation is renamed. By default, the 
+    chromosome notation is renamed from '<chr_number>' to 'chr<chr_number>' or 
+    from 'chr<chr_number>' to '<chr_number>'. If rename_map is provided, the 
+    change in the notation is from keys (actual notation) to values (new 
+    notation).
     
     Args:
-        query_path (str): path to query .vcf file.
+        query_path (str): path to query .vcf file with data for multiple chromosomes.
         output_folder (str): path to output folder to store separate .vcf files.
         rename_chr (bool): to rename (or not) chromosome notation.
         rename_map (str): mapping from actual to new chromosome notation.
@@ -57,7 +58,7 @@ def partition_by_chromosome(query_path: str, output_folder: str, rename_chr: boo
         # If rename_chr = False, the chromosome notation will remain the same
         # If rename_chr = True and the chromosome notation is in neither
         # '<chr_number>' or 'chr<chr_number>' formats, the chromosome notation 
-        # will remain the same except if rename_map is provided
+        # will remain the same, except if rename_map is provided
         new_chrom = obtain_renamed_chrom(rename_chr, chrom, rename_map)
         
         if new_chrom != chrom:
@@ -68,11 +69,12 @@ def partition_by_chromosome(query_path: str, output_folder: str, rename_chr: boo
             query_chrom = rename_chrom_field(query_chrom, chrom, new_chrom)
         
         # Define output name to .vcf file for the chromosome in particular
-        # The .vcf file ends with the new chromosome notation
+        # The .vcf file has the same base name as the input file, but 
+        # ending with the new chromosome notation '<new_chrom>.vcf'
         # Example: query_chr1.vcf
         output_name = f'{os.path.basename(query_path)[:-4]}_{new_chrom}.vcf'
         
-        # Write query for the chromosome in particular in .vcf file
+        # Write query data for the chromosome in particular in .vcf file
         # with name output_name inside folder output_folder
         logger.debug(f'Writing .vcf data for chromosome {new_chrom} in {output_folder}{output_name}.')
         #write_vcf_file(query_chrom, output_folder, output_name)

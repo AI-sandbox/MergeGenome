@@ -45,20 +45,22 @@ def define_parser() -> argparse.ArgumentParser:
     
     # Define subparser for 'partition' command
     partition_parser = subparsers.add_parser('partition', help='To partition .vcf data in a separate .vcf file per chromosome.')
-    partition_parser.add_argument('-q', '--query', required=True, help='Path to input .vcf file.')
+    partition_parser.add_argument('-q', '--query', required=True, 
+                                  help='Path to input .vcf file with data for multiple chromosomes.')
     partition_parser.add_argument('-o', '--output-folder', required=True, help='Path to output folder to store separate .vcf files.')
     partition_parser.add_argument('-r', '--rename-chr', action='store_true', help='To rename chromosome notation.')
     partition_parser.add_argument('-m', '--rename-map', required=False, help='Mapping from actual to new chromosome notation.')
     partition_parser.add_argument('-d', '--debug', required=False, help='Path to .log/.txt file to store info/debug messages.')
     
     # Define subparser for 'rename' command
-    partition_parser = subparsers.add_parser('rename', help='To rename chromosome notation.')
-    partition_parser.add_argument('-f', '--file', required=True, help='Path to .vcf file with data for a particular chromosome.')
+    partition_parser = subparsers.add_parser('rename', help='To rename chromosome notation (variants/CHROM field).')
+    partition_parser.add_argument('-q', '--query', required=True, 
+                                  help='Path to input .vcf file with data for a single or multiple chromosomes.')
     partition_parser.add_argument('-o', '--output-folder', required=True, 
-                                  help='Path to output folder to store the modified .vcf file.')
+                                  help='Path to output folder to store the .vcf file with renamed chromosome nomenclature.')
     partition_parser.add_argument('-m', '--rename-map', required=False, 
-                                  help='Dictionary with mapping from actual to new chromosome notation.')
-    partition_parser.add_argument('-d', '--debug', required=False, help='Path to .log file to store info/debug messages.')
+                                  help='Mapping from actual to new chromosome notation.')
+    partition_parser.add_argument('-d', '--debug', required=False, help='Path to .log/.txt file to store info/debug messages.')
     
     # Define subparser for 'clean' command
     partition_parser = subparsers.add_parser('clean', help='To clean genomic sequences.')
@@ -83,7 +85,7 @@ def define_parser() -> argparse.ArgumentParser:
                                   help='Dictionary with mapping from old to new missing notation for the query.')
     partition_parser.add_argument('-w', '--rename-map-reference', required=False, 
                                   help='Dictionary with mapping from old to new missing notation for the reference.')
-    partition_parser.add_argument('-d', '--debug', required=False, help='Path to .log file to store info/debug messages.')
+    partition_parser.add_argument('-d', '--debug', required=False, help='Path to .log/.txt file to store info/debug messages.')
 
     # Define subparser for 'subset' command
     partition_parser = subparsers.add_parser('subset', help='To subset the data to the common markers.')
@@ -93,7 +95,7 @@ def define_parser() -> argparse.ArgumentParser:
                                   help='Paths to reference .vcf files with data for each chromosome.')
     partition_parser.add_argument('-o', '--output-folder', required=True, 
                                   help='Path to output folder to store the modified .vcf files.')
-    partition_parser.add_argument('-d', '--debug', required=False, help='Path to .log file to store info/debug messages.')
+    partition_parser.add_argument('-d', '--debug', required=False, help='Path to .log/.txt file to store info/debug messages.')
 
     # Define subparser for 'plot-snp-means' command
     partition_parser = subparsers.add_parser('plot-snp-means', 
@@ -113,7 +115,7 @@ def define_parser() -> argparse.ArgumentParser:
     partition_parser.add_argument('-i', '--figure-height', required=False, default=15, help='Figure height of the plot.')
     partition_parser.add_argument('-s', '--size-points', required=False, default=0.1, help='Size of the points in the plot.')
     partition_parser.add_argument('-c', '--color-points', required=False, default='#306998', help='Color of the points in the plot.')
-    partition_parser.add_argument('-d', '--debug', required=False, help='Path to .log file to store info/debug messages.')
+    partition_parser.add_argument('-d', '--debug', required=False, help='Path to .log/.txt file to store info/debug messages.')
 
     # Define subparser for 'plot-pca' command
     partition_parser = subparsers.add_parser('plot-pca', help='To plot the PCA of the SNPs data.')
@@ -132,7 +134,7 @@ def define_parser() -> argparse.ArgumentParser:
                                   help='Color of query points in the plot.')
     partition_parser.add_argument('-cr', '--color-points-reference', required=False, default='#EBD0A1', 
                                   help='Color of reference points in the plot.')
-    partition_parser.add_argument('-d', '--debug', required=False, help='Path to .log file to store info/debug messages.')
+    partition_parser.add_argument('-d', '--debug', required=False, help='Path to .log/.txt file to store info/debug messages.')
 
     # Define subparser for 'store-allele' command
     partition_parser = subparsers.add_parser('store-allele', help='To store formatted allele data in .npy or .h5 format.')
@@ -143,7 +145,7 @@ def define_parser() -> argparse.ArgumentParser:
                                   help='Separate or average maternal and paternal strands.')
     partition_parser.add_argument('-f', '--file-format', required=True, choices=['.npy', '.h5'], 
                                   help='Format of the output file.')
-    partition_parser.add_argument('-d', '--debug', required=False, help='Path to .log file to store info/debug messages.')
+    partition_parser.add_argument('-d', '--debug', required=False, help='Path to .log/.txt file to store info/debug messages.')
 
     # Define subparser for 'store-indexes-common' command
     partition_parser = subparsers.add_parser('store-indexes-common', help='Store indexes of common markers.')
@@ -154,7 +156,7 @@ def define_parser() -> argparse.ArgumentParser:
     partition_parser.add_argument('-o', '--output-folder', required=True, 
                                   help='Path to output folder to store the modified .vcf files.')
     partition_parser.add_argument('-f', '--file-format', required=True, choices=['.npy', '.h5'], help='Format of the output file.')
-    partition_parser.add_argument('-d', '--debug', required=False, help='Path to .log file to store info/debug messages.')
+    partition_parser.add_argument('-d', '--debug', required=False, help='Path to .log/.txt file to store info/debug messages.')
 
     # Define subparser for 'remove-snps-different-means' command
     partition_parser = subparsers.add_parser('remove-snps-different-means', help='Store indexes of common markers.')
@@ -166,7 +168,7 @@ def define_parser() -> argparse.ArgumentParser:
                                   help='Path to output folder to store the modified .vcf files.')
     partition_parser.add_argument('-t', '--threshold', required=False, default=0.1, 
                                   help='All common SNPs with a mean absolute difference higher than the threshold will be removed.')
-    partition_parser.add_argument('-d', '--debug', required=False, help='Path to .log file to store info/debug messages.')
+    partition_parser.add_argument('-d', '--debug', required=False, help='Path to .log/.txt file to store info/debug messages.')
     
     return parser
 
@@ -216,5 +218,6 @@ def check_arguments(args: argparse.Namespace) -> None:
     if args.command == 'rename':
         # Check the query path exists and is a .vcf file
         check_paths([args.query])
+
     
     

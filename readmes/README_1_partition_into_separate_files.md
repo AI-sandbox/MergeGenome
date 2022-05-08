@@ -2,11 +2,9 @@
 
 The first preprocessing step is to partition the data into manageable independent VCF files (one file per chromosome), in an effort to fasten data retrieval, smooth the management of raw data, and exploit parallel execution. Otherwise, accessing and manipulating large-scale multidimensional biological data might be excessively costly, both in terms of execution time and memory consumption.
 
-Before writing the partitioned VCF files, the chromosome notation in the variants/CHROM field can optionally be modified. The chromosome notation of the reference and the query datasets should be the same prior to merging. Standardizing the chromosome notation at this step is preferable to doing it in an added step for efficiency purposes. To rename the chromosome notation, you can use the `--rename-chr` flag. If the `--rename-chr` flag is called, the variants/CHROM format will change from *<chrom_number>* to *chr<chrom_number>* or (vice-versa) by default. If the notation of a chromosome is in neither of these formats, its notation will remain the same. To specify a different notation mapping, you can use the `--rename-map` flag and define a dictionary where the keys are the old chromosome names and the values are the new chromosome names.
+Before writing the partitioned VCF files, the chromosome notation in the variants/CHROM field can optionally be modified. The chromosome notation of the reference and the query datasets should be the same prior to merging. Standardizing the chromosome notation at this step is preferable to doing it in an added step for efficiency purposes. To rename the chromosome notation, you can use the `--rename-chr` flag. If the `--rename-chr` flag is called, the variants/CHROM format will change from *<chrom_number>* to *chr<chrom_number>* or vice-versa by default. If the notation of a chromosome is in neither of these formats, its notation will remain the same. To specify a different notation mapping, you can use the `--rename-map` flag and define a dictionary where the keys are the old chromosome names and the values are the new chromosome names.
 
 ## Usage
-
-To partition .vcf data in a separate .vcf file per chromosome:
 
 ```
 $ python3 MergeGenome.py partition -q <query_file> -o <output_folder>
@@ -14,7 +12,7 @@ $ python3 MergeGenome.py partition -q <query_file> -o <output_folder>
 
 Input flags include:
 
-* -q, --query PATH, Path to input .vcf file (required).
+* -q, --query PATH, Path to input .vcf file with data for multiple chromosomes (required).
 * -o, --output-folder PATH, Path to output folder to store partitioned .vcf files (required). Note: make sure a '/' appears at the end of the output folder.
 * -r, --rename-chr, To rename chromosome notation (optional).
 * -m, --rename-map DICT, Mapping from actual to new chromosome notation (optional).

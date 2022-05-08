@@ -41,7 +41,7 @@ if args.command == 'partition':
     
 elif args.command == 'rename':    
     
-    # Rename chromosome notation
+    # Rename chromosome nomenclature
     rename_chromosome(args.query, args.output_folder, args.rename_map, logger)
     
 elif args.command == 'clean':
