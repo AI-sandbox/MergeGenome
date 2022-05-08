@@ -4,7 +4,7 @@
 ################################################################################
 
 import numpy as np
-from typing import Dict
+from typing import Dict, List
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt

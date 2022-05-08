@@ -13,9 +13,6 @@ import random
 from typing import List
 import logging
 
-from utils.track import track
-
-
 def obtain_chromosomes(vcf_data: dict) -> List:
     """
     Obtains the name of the chromosomes with available data.

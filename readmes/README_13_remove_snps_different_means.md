@@ -1,4 +1,4 @@
-## Remove SNPs different means
+## Remove SNPs with different means
 
 Another approach to overcome data heterogeneity is to remove the SNPs with very different means between the query and the reference.
 

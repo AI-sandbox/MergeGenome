@@ -28,10 +28,10 @@ This repository also includes the implementation of other common tasks related t
 
 10. **[Principal Component Analysis plots](readmes/README_10_evaluate_with_pca_plots.md)**
 
-# Another util commands
+# Other util commands
 
 11. **[Store allele data (NPY or H5)](readmes/README_11_store_allele_data.md)**
 
 12. **[Store indexes common markers](readmes/README_12_store_indexes_common_markers.md)**
 
-13. **[Remove SNPs different means](readmes/README_13_remove_snps_different_means.md)**
+13. **[Remove SNPs with different means](readmes/README_13_remove_snps_different_means.md)**

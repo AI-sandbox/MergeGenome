@@ -6,7 +6,6 @@
 import os
 import logging
 from typing import List
-sys.path.append('/home/users/miriambt/my_work/dog-gen-to-phen/preprocessing')
 
 from utils.io import read_vcf_file, write_vcf_file
 from utils.vcf_utils import obtain_chromosomes

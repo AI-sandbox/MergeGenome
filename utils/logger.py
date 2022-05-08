@@ -11,7 +11,7 @@ def get_logger(name: str, log_path: str) -> logging.Logger:
     
     Args:
         name (str): class, file, function of the logger.
-        log_path (str): path to log file.
+        log_path (str): path to .log or .txt file.
         
     Returns:
         logger (logging.Logger): debug/information tracker.
@@ -43,20 +43,3 @@ def get_logger(name: str, log_path: str) -> logging.Logger:
     logger.addHandler(ch)
 
     return logger
-
-
-def parser_msg() -> str:
-    """
-    Specifies the custom usage of the parser.
-    
-    Returns
-        (str)
-    
-    """
-    return '''MergeGenome.py
-        partition
-            [-f, --file: path to input .vcf file)
-            [-o, --output-folder: path to output folder]
-            [-r, --rename-chr: rename (or not) chromosome notation]
-            [-d, --debug: path to file storing info/debug messages]
-        '''

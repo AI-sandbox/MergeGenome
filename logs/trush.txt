@@ -1,0 +1,5 @@
+[2022-05-08 11:04:45,818]-[DEBUG]: Reading the provided genomic file.
+[2022-05-08 11:04:52,004]-[DEBUG]: Separating maternal and paternal strands.
+[2022-05-08 11:04:52,005]-[INFO]: There are 185465 SNPs and 379 samples in total.
+[2022-05-08 11:04:52,006]-[INFO]: There are 185465 SNPs and 758 samples in total after "separated" reshaping.
+[2022-05-08 11:04:52,006]-[DEBUG]: Saving data in .npy format in /scratch/users/miriambt/data/dogs/formatted_data/4th_dataset/mergedwhole_embark_filtered_samples_379_separated.npy.
