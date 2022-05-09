@@ -65,7 +65,7 @@ def rename_chromosome(query_path: str, output_folder: str, rename_map: dict,
     
     if counter == 0:
         # If no modification was made...
-        logger.debug('No change applied to variants/CHROM field.'\
+        logger.debug('None change applied to variants/CHROM field.'\
                      'Consider specifying a mapping with --rename-map.')
     else:
         # Define output name to .vcf file with renamed data

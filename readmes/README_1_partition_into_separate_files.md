@@ -20,9 +20,8 @@ Input flags include:
 
 **Output**
 
-* One .vcf file for each chromosome in <query_file>.
-
-* If --debug, a .log or .txt file will be created with information regarding the dimensions of the data (number of samples and number of SNPs), the amount of chromosomes available and their dimension and, when applicable, the changes in the chromosome notation.
+* One .vcf file for each chromosome in <query_file>. Each new .vcf file will receive the same base name as the input file, but ending with the chromosome name of the new file in particular.
+* If --debug, a .log or .txt file with information regarding the dimensions of the data (number of samples and number of SNPs), the amount of chromosomes available and their corresponding dimensions and, when applicable, the changes in the chromosome notation.
 
 **Examples**
 
