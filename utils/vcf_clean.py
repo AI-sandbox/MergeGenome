@@ -55,7 +55,7 @@ def remove_snps(vcf_data: dict, indexes: List) -> dict:
     return vcf_data
 
 
-def search_and_remove_ambiguous_snps(vcf_data: dict, logger: logging.Logger) -> dict:
+def remove_ambiguous_snps(vcf_data: dict, logger: logging.Logger) -> dict:
     """
     Searches and removes non-ambiguous SNPs from vcf data.
     
@@ -160,7 +160,7 @@ def correct_flips(vcf_data: dict, indexes: List) -> dict:
     return vcf_data
 
 
-def search_and_correct_flips_by_pos(reference: dict, query: dict, logger: logging.Logger) -> dict:
+def correct_flips_by_pos(reference: dict, query: dict, logger: logging.Logger) -> dict:
     """
     Searches for possible SNP flips in the reference and alternate, for the SNPs that 
     are at the same position between the two datasets (reference and query). 
@@ -172,11 +172,12 @@ def search_and_correct_flips_by_pos(reference: dict, query: dict, logger: loggin
     Also, the 0's are changed by 1's and viceversa for the those SNPs with a flip.
         
     Args:
-        query (dict): query with corrected SNP flips.
+        query (dict): query data.
+        reference (dict): reference data.
         logger (logging.Logger): debug/information tracker.
     
     Returns:
-        (dict)
+        query (dict): query with corrected SNP flips.
     
     """
     
@@ -223,13 +224,13 @@ def search_and_correct_flips_by_pos(reference: dict, query: dict, logger: loggin
     return query
 
 
-def search_and_remove_mismatches_by_pos(reference: dict, query: dict, logger: logging.Logger) -> (dict, dict):
+def remove_mismatches_by_pos(reference: dict, query: dict, logger: logging.Logger) -> (dict, dict):
     """
     Searches and remove mismatches between reference and query. Note: there is a mismatch 
     when there is a difference in the reference (REF) or alternate (ALT) between SNPs at 
     the same position in two datasets (reference and query). Note: it is recommended to
     first correct the SNP flips prior to removing SNP mismatches. You can correct the SNP 
-    flips with search_and_correct_flips_by_pos.
+    flips with correct_flips_by_pos.
     
     Args:
         reference (dict): reference without SNPs with mismatches.
@@ -291,7 +292,7 @@ def search_and_remove_mismatches_by_pos(reference: dict, query: dict, logger: lo
     return reference, query
     
 
-def search_and_keep_common_markers_single_chr(reference: dict, query: dict, logger: logging.Logger) -> (dict, dict, List, List):
+def keep_common_markers_single_chr(reference: dict, query: dict, logger: logging.Logger) -> (dict, dict, List, List):
     """
     Searches and keeps common markers between two datasets (reference and query).
     Note: common markers are SNPs with same chromosome (CHROM), position (POS), reference (REF), 
@@ -351,7 +352,7 @@ def search_and_keep_common_markers_single_chr(reference: dict, query: dict, logg
     return reference, query, idxs_reference, idxs_query
 
 
-def search_and_keep_common_markers_several_chr(reference: dict, query: dict, logger: logging.Logger):
+def keep_common_markers_several_chr(reference: dict, query: dict, logger: logging.Logger):
     """
     Searches and keeps common markers between two datasets (reference and query).
     Note: common markers are SNPs with same chromosome (CHROM), position (POS), reference (REF), 
@@ -419,7 +420,7 @@ def search_and_keep_common_markers_several_chr(reference: dict, query: dict, log
     return reference, query, idxs_reference, idxs_query
 
 
-def search_and_remove_snps_different_means(reference: dict, query: dict, threshold: float, logger: logging.Logger) -> (dict, dict):
+def remove_snps_different_means(reference: dict, query: dict, threshold: float, logger: logging.Logger) -> (dict, dict):
     """
     Searches and removes common SNPs between reference and query with a mean 
     absolute difference > threshold. Note: common SNPs are SNPs with same chromosome (CHROM), 
@@ -454,7 +455,7 @@ def search_and_remove_snps_different_means(reference: dict, query: dict, thresho
     snps_2 = combine_chrom_strands(snps_2)
     
     # Search indexes of common markers
-    _, _, idxs_reference, idxs_query = search_and_keep_common_markers_single_chr(reference.copy(), query.copy(), track_name)
+    _, _, idxs_reference, idxs_query = keep_common_markers_single_chr(reference.copy(), query.copy(), track_name)
     
     # Select SNPs data of common markers
     snps_1 = snps_1[:, idxs_reference]

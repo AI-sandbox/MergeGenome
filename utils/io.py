@@ -4,23 +4,37 @@
 
 import os
 import allel
+import logging
 import pandas as pd
 from typing import Dict
 
 
-def read_vcf_file(input_path: str) -> dict:
+def read_vcf_file(input_path: str, logger: logging.Logger) -> dict:
     """
     Reads data .vcf file.
     
     Args:
         input_path (str): path to .vcf file.
+        logger (logging.Logger): debug/information tracker.
+        
     Returns:
-        (Dict): dictionary with the content of .vcf file.
+        data (Dict): dictionary with the content of .vcf file. If the input_path
+        is None, then returns None.
 
     """
-
-    # Read the .vcf file using skikit-allel
-    return allel.read_vcf(input_path)
+    
+    if input_path is not None:
+        # Read the .vcf file using skikit-allel
+        data = allel.read_vcf(input_path)
+        
+        # Obtain dimensions of the data
+        # That is, the amount of samples and of SNPs
+        logger.info(f'There are {len(data["variants/ID"])} SNPs and {len(data["samples"])} '\
+                    f'samples in {input_path}.')
+    else:
+        data = None
+    
+    return data
 
 
 def write_vcf_file(vcf_data: Dict, output_path: str, output_name: str) -> None:

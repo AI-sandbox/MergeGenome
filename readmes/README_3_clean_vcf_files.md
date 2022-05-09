@@ -1,47 +1,54 @@
 ## Clean VCF files
 
-There are multiple preprocessing steps which are important to clean genomic data prior to merging. MergeGenome includes options for solving the most important ones: remove genomic sequences by sample ID, remove ambiguous SNPs, correct SNP flips, remove SNP mismatches, and rename missing values:
+It is highly recommended to clean genomic sequences to ensure data robustness and consistency between sources. MergeGenome includes options for the most relevant and common .vcf transformations, including the removal of undesired samples, the detection and removal of ambiguous SNPs, the detection and correction of SNP flips, the detection and removal of SNP mismatches, and finally, the renaming of missing values to make them compatible with other softwares. The removal of undesired samples, the detection and removal of ambiguous SNPs and the renaming of missing values apply to a single .vcf - query or reference - file, while the detection and correction of SNP flips and the detection and removal of SNP mismatches operate on a query and a reference file with data from a particular chromosome.
 
-**Remove genomic sequences by sample ID**
+Below, is a short description and motivation for each of the cleaning steps supported by MergeGenome:
 
-In many cases, it is desirable to remove some genomic sequences before proceeding any further (e.g. because genomic sequences from unusual breeds or species may add bias when using them for training an imputation model for infering missing allele data). In some other cases, there is a list of specific genomics sequences that just want to be excluded from the analysis.
+**Remove samples**
+
+In many cases, it is desirable to remove a subset of DNA sequences before proceeding any further. For instance, DNA sequences from unusual breeds or species may add bias to any model built on top of that. MergeGenome `--remove-sample-ID-query` and `--remove-sample-ID-reference` flags remove a list of DNA samples from the respective query and reference .vcf files.
 
 **Remove ambiguous SNPs**
 
-A/T, T/A, C/G, and G/C pairs are strand-ambiguous because they are components are complementary, and it can be challenging to determine the DNA strand given the lack of consensus on how DNA sequences are read.
+A/T, T/A, C/G, and G/C pairs are strand-ambiguous because their components are complementary, being a challenge to determine the DNA strand. MergeGenome `--remove-ambiguous-snps-query` and `--remove-ambiguous-snps-reference` flags detect and remove ambiguous SNPs from the respective query and reference .vcf files.
 
 **Correct SNP flips** 
 
-An SNP flip happens when the REF (reference) and ALT (alternate) fields are swapped between SNPs at the same position. MergeGenome corrects SNP flips by swapping the REF by the ALT (and vice-versa) in the query, and also the 0's by the 1's (and vice-versa).
+An SNP flip happens when the REF (reference) and ALT (alternate) fields are swapped between SNPs at the same chromosome and position of the query and reference .vcf files. MergeGenome `--correct-snp-flips corrects` SNP flips by swapping the variants/REF and the variants/ALT of detected  SNP flips in the query, taking as true values the reference. Consequently, the zeros and ones in the variant/CHROM field in the query are also swapped. An example of an SNP flip could be an SNP that in the query has variants/REF='A' and variants/ALT='C', but in the reference has variants/REF='C' and variants/ALT='A'. In this case, the nomenclature in the query would be changed to be equal to that of the reference.
 
 **Remove SNP mismatches**
 
-There is a mismatch between SNPs at the same position whenever the REF or ALT fields do not coincide. Such SNPs are erroneous features in, at least, one dataset. Note that if the SNP flips are not corrected before removing SNP mismatches, the former will be lost. Hence, MergeGenome corrects the SNP flips before removing the SNP mismatches.
+There is a mismatch between SNPs at the same chromosome and the position of the query and reference .vcf files whenever the variants/REF or variants/ALT fields do not coincide. Such SNPs are erroneous features in, at least, one of the two datasets. MergeGenome `--remove-mismatching-snps` flag detects and removed mismatching SNPs from the query and reference .vcf files. Not correcting the SNP flips before removing the SNP mismatches implies losing all SNPs with a flip. That is why, if `--remove-mismatching-snps` and `--correct-snp-flips` are True, MergeGenome will always correct the SNP flips before removing the SNP mismatches.
 
 **Rename missing values**
 
-Some widely used software packages such as Beagle can give the following error: *"Caused by: java.lang.IllegalArgumentException: ERROR: invalid allele [-1]"* if missing allele values are encoded as -1. Changing the missing nomenclature to a dot "." should solve this issue. MergeGenome allows renaming missing values notation from the actual value (key) to the new value (value) with a dictionary.
+If missing allele values in the variants/CHROM field are badly encoded (e.g. with a -1), some widely used software packages such as Beagle can give the following error: *"Caused by: java.lang.IllegalArgumentException: ERROR: invalid allele [-1]"*. Changing the missing nomenclature to a dot "." usually solves this issue. MergeGenome `--rename-map-query` and `--rename-map-reference` rename missing values notation through a key-value pair, where the key is the actual missing value nomenclature and new is the new name adopted by any missing value in the variants/CHROM field.
 
 ## Usage
 
 ```
-$ python3 MergeGenome.py clean -r <reference_file_1>...<reference_file_n> -q <query_file_1>...<query_file_n> -o <output_folder>
+$ python3 MergeGenome.py clean -q <query_file_1>...<query_file_n> -r <reference_file_1>...<reference_file_n> -o <output_folder>
 ```
 
 Input flags include:
 
-* -q, --query LIST, Path to query .vcf files with data for each chromosome (required).
-* -r, --reference LIST, Paths to reference .vcf files with data for each chromosome (optional).
-* -o, --output-folder PATH, Path to output folder to store the modified VCF files (required). Note: make sure a '/' appears at the end of the output folder.
+* -q, --query LIST, Path to query .vcf files with data for for a single chromosome each (required).
+* -r, --reference LIST, Paths to reference .vcf files with data for for a single chromosome each (optional).
+* -o, --output-folder PATH, Path to output folder (required). Note: make sure a '/' appears at the end of the output folder.
 * -s, --remove-sample-ID-query LIST, Sample IDs or substring of sample IDs to remove from the query (optional).
 * -s, --remove-sample-ID-reference LIST, Sample IDs or substring of sample IDs to remove from the reference (optional).
-* -a, --remove-ambiguous-snps-query, Remove (or not) ambiguous SNPs from the query (optional).
-* -b, --remove-ambiguous-snps-reference, Remove (or not) ambiguous SNPs from the reference (optional).
-* -f, --correct-snp-flips, Correct (or not) SNP in the query with respect to the reference (optional).
-* -m, --remove-mismatching-snps, Remove (or not) mismatching SNPs (optional).
-* -v, --rename-map-query, Dictionary with mapping from old to new missing notation in the reference (optional).
-* -w, --rename-map-reference, Dictionary with mapping from old to new missing notation in the query (optional).
+* -a, --remove-ambiguous-snps-query, To remove (or not) ambiguous SNPs from the query (optional).
+* -b, --remove-ambiguous-snps-reference, To remove (or not) ambiguous SNPs from the reference (optional).
+* -f, --correct-snp-flips, To correct (or not) SNP flips in the query with respect to the reference (optional).
+* -m, --remove-mismatching-snps, To remove (or not) mismatching SNPs (optional).
+* -v, --rename-map-query, Mapping from old to new missing values notation for the query (optional).
+* -w, --rename-map-reference, Mapping from old to new missing values notation for the reference (optional).
 * -d, --debug PATH, Path to file to store info/debug messages (optional).
+
+**Output**
+
+* One .vcf file for each <query_file> and <reference_file> with all transformations. Each new .vcf file will receive the same base name as the input file, but ending with '_cleaned.vcf'.
+* If --debug, a .log or .txt file with information regarding the dimensions of the data (number of samples and number of SNPs), the chromosome in each file, and the amount of samples or SNPs affected in each of the transformations.
 
 **Examples**
 

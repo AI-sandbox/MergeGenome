@@ -9,7 +9,7 @@ from typing import List
 
 from utils.io import read_vcf_file, write_vcf_file
 from utils.vcf_utils import obtain_chromosomes
-from utils.vcf_clean import search_and_remove_snps_different_means
+from utils.vcf_clean import remove_snps_different_means
 
 
 def remove_snps_with_different_means(query_paths: List[str], reference_paths: List[str], output_folder: str, 
@@ -52,7 +52,7 @@ def remove_snps_with_different_means(query_paths: List[str], reference_paths: Li
         
         # Remove all SNPs with a mean absolute difference higher than the threshold
         track('Removing all SNPs with a mean absolute difference higher than {}'.format(dataset1_name), track_path)
-        query, reference = search_and_remove_snps_different_means(query, reference, threshold, logger)
+        query, reference = remove_snps_different_means(query, reference, threshold, logger)
 
         logger.info(f'There are {len(query["variants/ID"])} SNPs and {len(query["samples"])} samples in total in the reference '\
                    f'after removing SNPs with a mean absolute difference higher than {threshold}')

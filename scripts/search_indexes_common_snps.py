@@ -11,7 +11,7 @@ import h5py
 import numpy as np
 
 from utils.io import read_vcf_file
-from utils.vcf_clean import search_and_keep_common_markers_several_chr
+from utils.vcf_clean import keep_common_markers_several_chr
 
 
 def store_indexes_common_markers(query_path: str, reference_path: str, output_folder: str, file_format: str) -> None:
@@ -42,7 +42,7 @@ def store_indexes_common_markers(query_path: str, reference_path: str, output_fo
     logger.info(f'There are {len(query["variants/ID"])} SNPs and {len(query["samples"])} samples in total in the query.')
 
     # Obtain indexes of the common markers between the query and the referece
-    _, _, indexes_query, indexes_reference = search_and_keep_common_markers_several_chr(query, reference, logger)
+    _, _, indexes_query, indexes_reference = keep_common_markers_several_chr(query, reference, logger)
 
     # Define counter of common markers to ensure the found indexes 
     # are common markers

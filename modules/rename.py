@@ -24,7 +24,7 @@ def rename_chromosome(query_path: str, output_folder: str, rename_map: dict,
     Args:
         query_path (str): path to query .vcf file with data for a single or 
         multiple chromosomes.
-        output_folder (str): path to output folder to store separate .vcf files.
+        output_folder (str): path to output folder.
         rename_map (str): mapping from actual to new chromosome notation.
         logger (logging.Logger): debug/information tracker.
     
@@ -36,10 +36,7 @@ def rename_chromosome(query_path: str, output_folder: str, rename_map: dict,
     # Read the query .vcf file using scikit-allel
     # with data from a single or multiple chromosomes
     logger.debug(f'Reading file {query_path}.')
-    query = read_vcf_file(query_path)
-    
-    # Obtain the dimensions of the query
-    logger.info(f'There are {len(query["variants/ID"])} SNPs and {len(query["samples"])} samples in total.')
+    query = read_vcf_file(query_path, logger)
     
     # Obtain the name of the chromosomes with available data
     chroms = obtain_chromosomes(query)

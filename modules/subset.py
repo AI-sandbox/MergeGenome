@@ -9,7 +9,7 @@ from typing import List
 
 from utils.io import read_vcf_file, write_vcf_file
 from utils.vcf_utils import obtain_chromosomes
-from utils.vcf_clean import search_and_keep_common_markers_single_chr
+from utils.vcf_clean import keep_common_markers_single_chr
 
 
 def subset_common_markers(reference_paths: List[str], query_paths: List[str], output_folder: str, logger: logging.Logger) -> None:
@@ -50,7 +50,7 @@ def subset_common_markers(reference_paths: List[str], query_paths: List[str], ou
         
         ## Keep common SNPs of the first and the second datasets, if present in the third dataset
         # The SNPs that are in the first or second dataset but not in the third dataset are removed
-        reference, query, _, _ = search_and_keep_common_markers_single_chr(reference, query, logger)
+        reference, query, _, _ = keep_common_markers_single_chr(reference, query, logger)
         
         logger.info(f'There are {len(reference["variants/ID"])} SNPs and {len(reference["samples"])} samples in total in the reference '\
                     'after subtetting to common markers.')

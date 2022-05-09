@@ -39,7 +39,7 @@ if args.command == 'partition':
     partition_by_chromosome(args.query, args.output_folder, args.rename_chr, args.rename_map, logger)
     
 elif args.command == 'rename':    
-    # Rename chromosome nomenclature
+    # Rename nomenclature in variants/CHROM field
     rename_chromosome(args.query, args.output_folder, args.rename_map, logger)
     
 elif args.command == 'clean':

@@ -13,6 +13,7 @@ import random
 from typing import List
 import logging
 
+
 def obtain_chromosomes(vcf_data: dict) -> List:
     """
     Obtains the name of the chromosomes with available data.
@@ -57,16 +58,10 @@ def obtain_renamed_chrom(rename_chr: bool, actual_chrom: str, rename_map: dict) 
     new_chrom = actual_chrom
     
     if rename_chr:
-        
         if (rename_map is not None):
-            
-            # Extract dict from str
-            rename_map = eval(rename_map)
-            
             if actual_chrom in rename_map.keys():
-                # Change through mapping
+                # Change through mapping from '<key>' to '<value>'
                 new_chrom = rename_map[actual_chrom]
-        
         else:
             if actual_chrom.startswith('chr'):
                 if actual_chrom[3:].isdigit():

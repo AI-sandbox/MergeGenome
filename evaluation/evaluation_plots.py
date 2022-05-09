@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 
 from utils.io import read_vcf_file
 from utils.vcf_utils import combine_chrom_strands
-from utils.vcf_clean import search_and_keep_common_markers_single_chr
+from utils.vcf_clean import keep_common_markers_single_chr
 from utils.plot_utils import plot_snp_means, PCA_trained_and_projected_on_query, PCA_trained_on_query_projected_on_both, PCA_trained_and_projected_on_both
 
 def plot_snp_means(query_paths: List[str], reference_paths: List[str], plot_dict: Dict, output_folder: str, logger: logging.Logger) -> None:
