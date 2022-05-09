@@ -218,6 +218,11 @@ def check_arguments(args: argparse.Namespace) -> None:
     if args.command == 'rename':
         # Check the query path exists and is a .vcf file
         check_paths([args.query])
-
+        
+    elif args.command == 'clean':
+        # Check the input arguments are correct
+    #check_arguments(args.query)
+    #if args.reference is not None:
+    #    check_arguments(args.reference)
     
     

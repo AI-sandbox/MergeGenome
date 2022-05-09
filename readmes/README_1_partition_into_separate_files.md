@@ -18,6 +18,12 @@ Input flags include:
 * -m, --rename-map DICT, Mapping from actual to new chromosome notation (optional).
 * -d, --debug PATH, Path to .log/.txt file to store info/debug messages (optional).
 
+**Output**
+
+* One .vcf file for each chromosome in <query_file>.
+
+* If --debug, a .log or .txt file will be created with information regarding the dimensions of the data (number of samples and number of SNPs), the amount of chromosomes available and their dimension and, when applicable, the changes in the chromosome notation.
+
 **Examples**
 
 1. Partition .vcf data in a separate .vcf file per chromosome:

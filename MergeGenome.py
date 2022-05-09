@@ -34,23 +34,15 @@ check_arguments(args)
 logger = get_logger(__name__, args.debug)
 
 if args.command == 'partition':
-    
     # Partition .vcf data in a separate .vcf file per chromosome and,
     # if rename-chr is set to True, rename chromosome nomenclature
     partition_by_chromosome(args.query, args.output_folder, args.rename_chr, args.rename_map, logger)
     
 elif args.command == 'rename':    
-    
     # Rename chromosome nomenclature
     rename_chromosome(args.query, args.output_folder, args.rename_map, logger)
     
 elif args.command == 'clean':
-    
-    # Check the input arguments are correct
-    #check_arguments(args.query)
-    #if args.reference is not None:
-    #    check_arguments(args.reference)
-    
     # Clean genomic data
     clean_genomic_data(args.query, args.reference, args.output_folder, args.remove_sample_ID_query, args.remove_sample_ID_reference,
                        args.remove_ambiguous_snps_query, args.remove_ambiguous_snps_reference,
