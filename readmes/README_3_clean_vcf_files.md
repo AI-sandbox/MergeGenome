@@ -36,7 +36,7 @@ Input flags include:
 * -r, --reference LIST, Paths to reference .vcf files with data for for a single chromosome each (optional).
 * -o, --output-folder PATH, Path to output folder (required). Note: make sure a '/' appears at the end of the output folder.
 * -s, --remove-sample-ID-query LIST, Sample IDs or substring of sample IDs to remove from the query (optional).
-* -s, --remove-sample-ID-reference LIST, Sample IDs or substring of sample IDs to remove from the reference (optional).
+* -t, --remove-sample-ID-reference LIST, Sample IDs or substring of sample IDs to remove from the reference (optional).
 * -a, --remove-ambiguous-snps-query, To remove (or not) ambiguous SNPs from the query (optional).
 * -b, --remove-ambiguous-snps-reference, To remove (or not) ambiguous SNPs from the reference (optional).
 * -f, --correct-snp-flips, To correct (or not) SNP flips in the query with respect to the reference (optional).
@@ -47,7 +47,7 @@ Input flags include:
 
 **Output**
 
-* One .vcf file for each <query_file> and <reference_file> with all transformations. Each new .vcf file will receive the same base name as the input file, but ending with '_cleaned.vcf'.
+* One .vcf file with transformed data for each input query and reference files. Each new .vcf file will receive the same base name as the input file, but ending with '_cleaned.vcf'.
 * If --debug, a .log or .txt file with information regarding the dimensions of the data (number of samples and number of SNPs), the chromosome in each file, and the amount of samples or SNPs affected in each of the transformations.
 
 **Examples**
