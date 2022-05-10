@@ -30,8 +30,10 @@ This repository also includes the implementation of other common tasks related t
 
 # Other util commands
 
-11. **[Store allele data (NPY or H5)](readmes/README_11_store_allele_data.md)**
+11. **[Store allele data (from VCF to NPY or H5)](readmes/README_11_store_allele_data_npy_h5.md)**
 
 12. **[Store indexes common markers](readmes/README_12_store_indexes_common_markers.md)**
 
 13. **[Remove SNPs with different means](readmes/README_13_remove_snps_different_means.md)**
+
+14. **[Store allele data (from NPY to VCF)](readmes/README_14_store_allele_data_vcf.md)**

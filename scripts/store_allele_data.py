@@ -7,11 +7,11 @@ import logging
 from typing import List
 import h5py
 import numpy as np
-from utils.io import read_vcf_file
+from utils.io import read_vcf_file, read_npy_file
 from utils.vcf_utils import combine_chrom_strands
 
-
-def store_allele_data_in_npy_or_h5(input_path: str, output_folder: str, data_format: str, file_format: str, logger: logging.Logger) -> None:
+def store_allele_data_in_npy_or_h5(input_path: str, output_folder: str, data_format: str, file_format: str, 
+                                   logger: logging.Logger) -> None:
     
     """
     Separates or averages the maternal and paternal strands and 
@@ -35,17 +35,16 @@ def store_allele_data_in_npy_or_h5(input_path: str, output_folder: str, data_for
     
     # Read the .vcf file using scikit-allel
     logger.debug('Reading the provided genomic file.')
-    data = read_vcf_file(input_path)
-        
+    data = read_vcf_file(input_path, logger)    
+    
     # Obtain SNPs data
     snps = data['calldata/GT']
         
     # Obtain the dimensions of the data
-    logger.debug('Separating maternal and paternal strands.')
     num_snps, num_samples, num_strands = snps.shape
-    logger.info(f'There are {num_snps} SNPs and {num_samples} samples in total.')
     
     # Convert SNPs from MxNx2 to Mx2N shape
+    logger.debug('Separating maternal and paternal strands.')
     snps = snps.reshape(num_snps, num_samples*2).T
     num_samples, num_snps = snps.shape
     
@@ -82,6 +81,72 @@ def store_allele_data_in_npy_or_h5(input_path: str, output_folder: str, data_for
         logger.debug(f'Saving data in .h5 format in {output_path}.')
         h5f = h5py.File(output_path, 'w')
         h5f.create_dataset(name=output_path, data=snps)
+        
+        
+def store_allele_data_in_vcf(vcf_path: str, npy_path: str, output_folder: str, binary_indexes_path: np.array,
+                             logger: logging.Logger) -> None:
+    
+    """
+    Reads .npy with separated maternal and paternal strands and 
+    stores the allel data in calldata/GT from a given VCF file.
+    If --binary_indexes, removed SNPs with a 0 at that position. Stores the result
+    in VCF file.
+    
+    Args:
+        vcf_path (str): path to .vcf file.
+        npy_path (str): path to .npy file.
+        output_folder (str): folder to save the output.
+        binary_indexes (np.array): path to binary indexes where 1 indicates the 
+        SNP is correct and 0 otherwise. Incorrects SNPs will be removed from output
+        VCF file.
+        logger (logging.Logger): debug/information tracker.
+    
+    Returns:
+        (None)
+    
+    """
+    
+    # Read the .vcf file using scikit-allel
+    logger.debug('Reading the provided genomic file.')
+    data = read_vcf_file(vcf_path, logger)
+    
+    # Obtain SNPs data
+    snps = data['calldata/GT']
+        
+    # Obtain the dimensions of the data
+    num_snps, num_samples, num_strands = snps.shape
+    
+    # Read the .npy data with Mx2N shape
+    snps_flattened = read_npy_file(npy_path, logger)
+    
+    # Obtain array of all ones that will be filled with .npy data
+    new_snps = np.ones((num_snps, num_samples, 2))
+    
+    # Store .npy allele data in calldata/GT VCF allele data
+    # Even strands go to position 0 in the 3rd dimension and
+    # odd strands go to position 1 in the 3rd dimension
+    snps[:,:,0] = snps_flattened[::2,:].T
+    snps[:,:,1] = snps_flattened[1::2,:].T
+    
+    # Read the .npy with the binary indexes
+    binary_indexes = read_npy_file(binary_indexes_path, logger)
+    
+    if binary_indexes is not None:
+        # Convert 1 to True and 0 to False
+        binary_indexes = binary_indexes.astype(bool)
+        
+        # Keep correct SNPs and remove incorrect ones
+        data_filtered = select_snps(data, binary_indexes)
+        
+    # Define output name to .vcf file with .npy allele data
+    # The .vcf file has the same base name as the input file, but 
+    # ending with '_from_npy.vcf'
+    output_name = f'{os.path.basename(vcf_path)[:-4]}_from_npy.vcf'
+    
+    # Write query data with .npy allele data in .vcf file
+    # with name output_name inside folder output_folder
+    logger.debug(f'Writing .vcf data with .npy allele data in {output_folder}{output_name}.')
+    # write_vcf_file(data_filtered, output_folder, output_name)
     
     
     

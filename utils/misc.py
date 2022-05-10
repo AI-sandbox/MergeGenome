@@ -164,6 +164,15 @@ def define_parser() -> argparse.ArgumentParser:
                                   help='All common SNPs with a mean absolute difference higher than the threshold will be removed.')
     partition_parser.add_argument('-d', '--debug', required=False, help='Path to .log/.txt file to store info/debug messages.')
     
+    # Define subparser for 'store-vcf' command
+    partition_parser = subparsers.add_parser('store-vcf', help='To store separated allele data in .vcf.')
+    partition_parser.add_argument('-q', '--vcf-query', required=True, help='Path to input .vcf file.')
+    partition_parser.add_argument('-n', '--npy-query', required=True, help='Path to input .npy file.')
+    partition_parser.add_argument('-o', '--output-folder', required=True, help='Path to output folder.')
+    partition_parser.add_argument('-b', '--binary-indexes', required=False, 
+                                  help='Path to binary indexes, where 1 means the SNP is correct and 0 that it is to be removed.')
+    partition_parser.add_argument('-d', '--debug', required=False, help='Path to .log/.txt file to store info/debug messages.')
+    
     return parser
 
 

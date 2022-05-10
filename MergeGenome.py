@@ -17,7 +17,7 @@ from modules.subset import subset_common_markers
 
 from evaluation.evaluation_plots import plot_snp_means, plot_pca
 
-from scripts.store_allele_data import store_allele_data_in_npy_or_h5
+from scripts.store_allele_data import store_allele_data_in_npy_or_h5, store_allele_data_in_vcf
 from scripts.search_indexes_common_snps import store_indexes_common_markers
 from scripts.remove_snps_different_means import remove_snps_with_different_means
 
@@ -116,4 +116,9 @@ elif args.command == 'remove-snps-different-means':
     # Store indexes of common markers between the query and the reference in .npy or .h5
     remove_snps_with_different_means(args.query, args.reference, args.output_folder, args.threshold, logger)
 
+elif args.command == 'store-vcf':
+    
+    # Store .npy file with separated maternal and paternal strands back in .vcf file 
+    # and, optionally, remove undesired SNPs
+    store_allele_data_in_vcf(args.vcf_query, args.npy_query, args.output_folder, args.binary_indexes, logger)
     

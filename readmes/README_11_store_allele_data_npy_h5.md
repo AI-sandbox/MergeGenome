@@ -1,4 +1,4 @@
-## Store allele data (NPY or H5)
+## Store allele data (from VCF to NPY or H5)
 
 Allele data in calldata/GT is usually stored as a three-dimensional matrix, where the first dimension corresponds to the number of SNPs, the second dimension to the number of samples and the third dimension to the number of strands. As for the latter dimension, most genomic datasets store allele data for the two strands that constitute DNA sequences: the maternal strand and the paternal strand.
 
@@ -14,7 +14,7 @@ $ python3 MergeGenome.py store-allele -q <query_file> -o <output_folder>
 
 Input flags include:
 
-* -q, --query LIST, Path to query .vcf files with data for each chromosome (required).
+* -q, --query PATH, Path to query .vcf file (required).
 * -o, --output-folder PATH, Path to output folder to store the modified VCF files (required). Note: make sure a '/' appears at the end of the output folder.
 * -s, --data-format STRING, Separate or average maternal and paternal strands (required). **separated:** split maternal and paternal strands into separate samples. **averaged:** combine maternal and  paternal strands by averaging them.
 * -f, --file-format, Format of the output file (required).  **.npy:** store data in numpy format. **.h5:** store data in h5py format.

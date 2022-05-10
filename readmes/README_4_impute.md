@@ -38,7 +38,7 @@ For more information, you can read the [documentation](https://faculty.washingto
 
 **Example**
 
-1. Impute target panel given the reference panel, for chromosome files from 1 to 38:
+1. Impute target panel given the reference panel, for files with chromosomes from 1 to 38:
 
 ```
 for chr in {1..38};
