@@ -88,14 +88,14 @@ def define_parser() -> argparse.ArgumentParser:
     partition_parser.add_argument('-d', '--debug', required=False, help='Path to .log/.txt file to store info/debug messages.')
 
     # Define subparser for 'subset' command
-    partition_parser = subparsers.add_parser('subset', help='To subset the data to the common markers.')
+    partition_parser = subparsers.add_parser('subset', help='To subset the SNPs to the common markers.')
     partition_parser.add_argument('-q', '--query', required=True, nargs="*", 
-                                  help='Paths to query .vcf files with data for each chromosome.')
+                                  help='Paths to query .vcf files with data for a single chromosome each.')
     partition_parser.add_argument('-r', '--reference', required=True, nargs="*", 
-                                  help='Paths to reference .vcf files with data for each chromosome.')
+                                  help='Paths to reference .vcf files with data for a single chromosome each.')
     partition_parser.add_argument('-o', '--output-folder', required=True, help='Path to output folder.')
     partition_parser.add_argument('-d', '--debug', required=False, help='Path to .log/.txt file to store info/debug messages.')
-
+    
     # Define subparser for 'plot-snp-means' command
     partition_parser = subparsers.add_parser('plot-snp-means', 
                                              help='To plot the SNP means for the common markers between the query and the reference.')
@@ -262,7 +262,15 @@ def check_arguments(args: argparse.Namespace) -> None:
         if args.rename_map_reference is not None:
             # Convert args.rename_map_reference str to dict
             args.rename_map_reference = eval(args.rename_map_reference)
-            
+    
+    elif args.command == 'subset':
+        # Check all the query and reference paths exist and are a .vcf file
+        check_paths(args.query+args.reference)
+        
+        # Check amount of query and reference paths is the same
+        assert len(args.query) == len(args.reference), f'The amount of query and reference paths does not coincide '\
+        f'{len(args.query)} != {len(args.reference)}.'
+                
     
 def check_chromosome(query: Dict, reference: Dict):
     """

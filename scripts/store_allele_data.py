@@ -147,12 +147,4 @@ def store_allele_data_in_vcf(vcf_path: str, npy_path: str, output_folder: str, b
     # with name output_name inside folder output_folder
     logger.debug(f'Writing .vcf data with .npy allele data in {output_folder}{output_name}.')
     # write_vcf_file(data_filtered, output_folder, output_name)
-    
-    
-    
-    
-    
-    
-    
-    
 

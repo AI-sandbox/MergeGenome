@@ -1,10 +1,11 @@
 ################################################################################
-# Clean genomic sequences by:
-# * Removing undesired samples by sample ID
-# * Removing ambiguous SNPs
-# * Correcting SNP flips
-# * Removing SNP mismatches
-# * Renaming missing values (from key = old_value to value = new_value in mapping)
+# Cleans genomic sequences by:
+# * Removing undesired samples by sample ID.
+# * Removing ambiguous SNPs.
+# * Correcting SNP flips.
+# * Removing SNP mismatches.
+# * Renaming missing values (from key = old_value to value = new_value 
+# in mapping).
 ################################################################################
 
 import os
@@ -14,7 +15,7 @@ from itertools import zip_longest
 
 from utils.io import read_vcf_file, write_vcf_file
 from utils.misc import check_chromosome
-from utils.vcf_utils import obtain_chromosomes, filter_samples, rename_missings
+from utils.vcf_utils import filter_samples, rename_missings
 from utils.vcf_clean import remove_ambiguous_snps, correct_flips_by_pos, remove_mismatches_by_pos
 
 
@@ -28,9 +29,9 @@ def clean_genomic_data(query_paths: List[str], reference_paths: List[str], outpu
     by applying the preprocessing steps specified.
     
     Args:
-        query_paths (List[str]): paths to query .vcf files with data for a single chromosome to clean.
+        query_paths (List[str]): paths to query .vcf files with data for a single chromosome each.
         reference_paths (List[str]): paths to reference .vcf files with data for a single chromosome 
-        to clean.
+        each.
         output_folder (str): path to output folder.
         remove_sample_ID_query (List[str]): sample IDs or substring of samples IDs to remove from 
         the query.
@@ -52,12 +53,15 @@ def clean_genomic_data(query_paths: List[str], reference_paths: List[str], outpu
     """
     
     for query_path, reference_path in zip_longest(query_paths, reference_paths, fillvalue='None'):
-        
+        # For each query and reference paths...
         # Read the query .vcf file using scikit-allel
         # with data from a single chromosome
         logger.debug(f'Reading query file {query_path}.')
         query = read_vcf_file(query_path, logger)
         
+        # Read the reference .vcf file using scikit-allel
+        # with data from a single chromosome
+        # If reference_path = None, reference will also be None
         logger.debug(f'Reading reference file {reference_path}.')
         reference = read_vcf_file(reference_path, logger)
         

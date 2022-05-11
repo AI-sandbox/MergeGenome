@@ -51,11 +51,8 @@ elif args.command == 'clean':
     
 elif args.command == 'subset':
     
-    # Check the input arguments are correct
-    #check_arguments(args.query + args.reference)
-    
     # Subset genomic data
-    subset_common_markers(args.reference, args.query, args.output_folder, logger)
+    subset_common_markers(args.query, args.reference, args.output_folder, logger)
     
 elif args.command == 'plot-snp-means':
     
