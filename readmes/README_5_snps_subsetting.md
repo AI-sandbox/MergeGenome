@@ -1,4 +1,4 @@
-## Subset SNPs to another dataset
+## Subset SNPs to common markers with another dataset
 
 There are multiple statistical challenges of high dimensional data. The fact that not all variants are equally important sometimes leads to select the most relevant features for further analysis and discard the often uninformative features. In case of having a third "subsetted" reference dataset with a pre-selection of important features or SNPs, it is usually beneficiat to subset the high-dimensional data to those relevant SNPs.
 

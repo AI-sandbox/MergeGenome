@@ -14,7 +14,7 @@ This repository also includes the implementation of other common tasks related t
 
 4. **[Impute](readmes/README_4_impute.md)**
 
-5. **[Subset SNPs to another dataset](readmes/README_5_snps_subsetting.md)**
+5. **[Subset SNPs to common markers with another dataset](readmes/README_5_snps_subsetting.md)**
 
 6. **[Detect and fix mismatches](readmes/README_6_detect_and_fix_mismatches.md)**
 

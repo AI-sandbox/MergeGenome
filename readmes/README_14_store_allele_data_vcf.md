@@ -5,7 +5,7 @@ TODO
 ## Usage
 
 ```
-$ python3 MergeGenome.py store-vcf -q <query_file> -o <output_folder>
+$ python3 MergeGenome.py store-vcf -q <query_vcf_file> --n <query_npy_file> o <output_folder>
 ```
 
 Input flags include:

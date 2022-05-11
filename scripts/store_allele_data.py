@@ -7,7 +7,7 @@ import logging
 from typing import List
 import h5py
 import numpy as np
-from utils.io import read_vcf_file, read_npy_file
+from utils.io import read_vcf_file, read_npy_file, write_vcf_file
 from utils.vcf_utils import combine_chrom_strands
 
 def store_allele_data_in_npy_or_h5(input_path: str, output_folder: str, data_format: str, file_format: str, 
@@ -136,7 +136,7 @@ def store_allele_data_in_vcf(vcf_path: str, npy_path: str, output_folder: str, b
         binary_indexes = binary_indexes.astype(bool)
         
         # Keep correct SNPs and remove incorrect ones
-        data_filtered = select_snps(data, binary_indexes)
+        data = select_snps(data, binary_indexes)
         
     # Define output name to .vcf file with .npy allele data
     # The .vcf file has the same base name as the input file, but 
@@ -146,5 +146,5 @@ def store_allele_data_in_vcf(vcf_path: str, npy_path: str, output_folder: str, b
     # Write query data with .npy allele data in .vcf file
     # with name output_name inside folder output_folder
     logger.debug(f'Writing .vcf data with .npy allele data in {output_folder}{output_name}.')
-    # write_vcf_file(data_filtered, output_folder, output_name)
+    write_vcf_file(data, output_folder, output_name)
 

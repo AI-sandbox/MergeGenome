@@ -50,7 +50,6 @@ elif args.command == 'clean':
                        args.rename_map_reference, logger)
     
 elif args.command == 'subset':
-    
     # Subset genomic data
     subset_common_markers(args.query, args.reference, args.output_folder, logger)
     
