@@ -135,7 +135,7 @@ def write_vcf_file(vcf_data: Dict, output_path: str, output_name: str) -> None:
         f.write("##fileformat=VCFv4.1\n")
         f.write('##FORMAT=<ID=GT,Number=1,Type=String,Description="Phased Genotype">\n')
         for chrom in df["CHROM"].unique():
-            f.write(f"##contig=<ID={chr}>\n")        
+            f.write(f"##contig=<ID={chrom}>\n")
         f.write("#"+"\t".join(df.columns)+"\n") # Mandatory header
     
     # Genotype data

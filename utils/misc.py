@@ -134,7 +134,7 @@ def define_parser() -> argparse.ArgumentParser:
     partition_parser.add_argument('-d', '--debug', required=False, help='Path to .log/.txt file to store info/debug messages.')
 
     # Define subparser for 'store-allele' command
-    partition_parser = subparsers.add_parser('store-allele', help='To store formatted allele data in .npy or .h5 format.')
+    partition_parser = subparsers.add_parser('store-npy', help='To store formatted allele data in .npy or .h5 format.')
     partition_parser.add_argument('-q', '--query', required=True, help='Path to input .vcf file.')
     partition_parser.add_argument('-o', '--output-folder', required=True, help='Path to output folder.')
     partition_parser.add_argument('-s', '--data-format', required=True, choices=['separated', 'averaged'], 

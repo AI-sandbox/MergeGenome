@@ -88,7 +88,7 @@ elif args.command == 'plot-pca':
     # Plot the SNP means for the query and the reference
     plot_pca(args.query, args.reference, args.train_both, plot_dict, args.output_folder, logger)
     
-elif args.command == 'store-allele':
+elif args.command == 'store-npy':
     
     # Check the input arguments are correct
     #check_arguments([args.query])
