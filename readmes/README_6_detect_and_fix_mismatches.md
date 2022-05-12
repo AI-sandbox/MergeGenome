@@ -6,4 +6,4 @@ The [DataFix](https://github.com/AI-sandbox/Datafix) tool encompasses filtering 
 
 ## Usage
 
-The input query and reference files to DataFix need to be two-dimensional matrixes saved in .npy or .h5 formats. The MergeGenome toolkit `--store-npy` command can be used to extract the allele data in the calldata/GT field from any given .vcf file, convert the format from three-dimensional to two-dimensional by either separating or averaging the maternal and paternal strands, and finally, store the result in .npy or .h5 format.
+The input query and reference files to DataFix need to be two-dimensional matrixes saved in .npy or .h5 formats. The MergeGenome toolkit [store-npy](https://github.com/AI-sandbox/merge-vcf-files/blob/main/readmes/README_11_store_allele_data_npy_h5.md) command can be used to extract the allele data in the calldata/GT field from any given .vcf file, convert the format from three-dimensional to two-dimensional by either separating or averaging the maternal and paternal strands, and finally, store the result in .npy or .h5 format.
