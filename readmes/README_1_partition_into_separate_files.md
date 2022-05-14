@@ -23,7 +23,7 @@ Input flags include:
 * One .vcf file for each chromosome in <query_file>. Each new .vcf file will receive the same base name as the input file, but ending with the chromosome name of the new file in particular.
 * If --debug, a .log or .txt file with information regarding the dimensions of the data (number of samples and number of SNPs), the amount of chromosomes available and their corresponding dimensions and, when applicable, the changes in the chromosome notation.
 
-**Examples**
+`Examples`
 
 1. Partition .vcf data in a separate .vcf file per chromosome:
 

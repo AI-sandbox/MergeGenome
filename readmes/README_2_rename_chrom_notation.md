@@ -22,7 +22,7 @@ Input flags include:
 * A .vcf file with renamed chromosome notation. The new .vcf file will receive the same base name as the input file, but ending with '_renamed.vcf'.
 * If --debug, a .log or .txt file with information regarding the dimensions of the data (number of samples and number of SNPs), the amount of chromosomes available and the changes in the chromosome notation.
 
-**Examples**
+`Examples`
 
 1. Change chromosome notation from *<chrom_number>* to *chr<chrom_number>* (or vice-versa):
 

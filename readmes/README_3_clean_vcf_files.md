@@ -50,7 +50,7 @@ Input flags include:
 * One .vcf file with transformed data for each input query and reference files. Each new .vcf file will receive the same base name as the input file, but ending with '_cleaned.vcf'.
 * If --debug, a .log or .txt file with information regarding the dimensions of the data (number of samples and number of SNPs), the chromosome in each file, and the amount of samples or SNPs affected in each of the transformations.
 
-**Examples**
+`Examples`
 
 1. Remove genomic sequences by sample ID from the query:
 

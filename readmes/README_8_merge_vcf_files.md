@@ -1,12 +1,12 @@
 ## Merge VCF files
 
-If the .vcf files contain information about different samples (i.e., there is no overlap between sample IDs in all of the .vcf files), to create one single .vcf file with information for a particular chromosome, the merge function from bcftools should be used.
+The horizontal combination through BCFTools `merge` consists in combining multiple VCF files containing the same information about different samples (i.e. there is no overlap between sample IDs in all of the VCF files). Thus, the `merge` command can be used to obtain a single VCF file with the merged samples from the query and the reference.
 
-The result of this process is a single VCF file with the merged samples from the query and the reference for all chromosomes.
+It is the user's responsibility to ensure that the sample names are consistent across all files. Unless the option `—-force-samples` is specified, the application will exit with an error. It is worth noting that only records from different files can be merged, never from the same file. Look into BCFtools `concat` for vertical merging.
 
 ## Usage
 
-To use merge from bcftools:
+To use `merge` from bcftools:
 
 ```
 bgzip -ci <query_allchr.vcf> > <query_allchr.vcf.gz>
@@ -23,7 +23,9 @@ done
 bcftools merge --file-list file.list -O z -o <merged_file>
 ```
 
-**Example**
+For more information, you can read the [documentation](https://samtools.github.io/bcftools/bcftools.html#merge).
+
+`Example`
 
 ```
 bgzip -ci query_allchr.vcf > query_allchr.vcf.gz

@@ -18,7 +18,7 @@ Input flags include:
 * -f, --file-format, Format of the output file (required).  **.npy:** store data in numpy format. **.h5:** store data in h5py format.
 * -d, --debug PATH, Path to file to store info/debug messages (optional).
 
-**Examples**
+`Examples`
 
 1. Store indexes of common markers between the query and the reference in .npy format:
 

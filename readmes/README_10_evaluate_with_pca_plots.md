@@ -26,7 +26,7 @@ Input flags include:
 * -cr, --color-points-reference STR, Color of reference points in the plot (optional). Default=#EBD0A1.
 * -d, --debug PATH, Path to file to store info/debug messages (optional).
 
-**Examples**
+`Examples`
 
 1. Plot PCA on query data:
 

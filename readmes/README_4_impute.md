@@ -36,7 +36,7 @@ Input flags include:
 
 For more information, you can read the [documentation](https://faculty.washington.edu/browning/beagle/beagle_5.3_07Feb22.pdf).
 
-**Example**
+`Example`
 
 1. Impute target panel given the reference panel, for files with chromosomes from 1 to 38:
 

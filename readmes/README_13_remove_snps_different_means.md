@@ -18,7 +18,7 @@ Input flags include:
 * -t, --threshold FLOAT, All common SNPs with a mean absolute difference higher than the threshold will be removed (optional).
 * -d, --debug PATH, Path to file to store info/debug messages (optional).
 
-**Example**
+`Example`
 
 1. Remove all the common SNPs with a mean absolute difference higher than 0.1:
 

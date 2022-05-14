@@ -22,7 +22,7 @@ Input flags include:
 * One .vcf file with subsetted SNPs for each input query and reference files. Each new .vcf file will receive the same base name as the input file, but ending with '_subsetted.vcf'.
 * If --debug, a .log or .txt file with information regarding the dimensions of the data (number of samples and number of SNPs), the chromosome in each file, and the amount of samples and SNPs after filtering to the common markers.
 
-**Example**
+`Example`
 
 1. Find and subset to the common markers between the reference and the query files:
 

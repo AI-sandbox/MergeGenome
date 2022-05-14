@@ -24,7 +24,7 @@ Input flags include:
 * -c, --color-points STR, Color of the points in the plot (optional). Default=#306998.
 * -d, --debug PATH, Path to file to store info/debug messages (optional).
 
-**Examples**
+`Examples`
 
 1. Plot the SNP means between the common markers in the first chromosome in the query and reference datasets:
 
