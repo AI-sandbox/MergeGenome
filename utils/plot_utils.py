@@ -48,7 +48,7 @@ def snp_means_plot(query_snps: np.array, reference_snps: np.array,
     plt.scatter(mean_reference, mean_query, s=plot_dict['s'], color=plot_dict['color'])
     
     # Define plot title, x and y axis
-    plt.title('SNP means\n')
+    plt.title('SNP means')
     plt.xlabel(f'\nSNP mean in {plot_dict["x_axis_name"]}')
     plt.ylabel(f'\nSNP mean in {plot_dict["y_axis_name"]}')
     plt.xticks(ticks = [0, .2, .4, .6, .8, 1.])
