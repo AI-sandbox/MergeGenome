@@ -8,7 +8,7 @@ import sys
 import argparse
 
 from utils.logger import get_logger
-from utils.misc import define_parser, check_arguments
+from utils.misc import define_parser, check_arguments, define_plot_configuration
 
 from modules.partition import partition_by_chromosome
 from modules.rename import rename_chromosome
@@ -44,46 +44,31 @@ elif args.command == 'rename':
     
 elif args.command == 'clean':
     # Clean genomic data
-    clean_genomic_data(args.query, args.reference, args.output_folder, args.remove_sample_ID_query, args.remove_sample_ID_reference,
-                       args.remove_ambiguous_snps_query, args.remove_ambiguous_snps_reference,
-                       args.correct_snp_flips, args.remove_mismatching_snps, args.rename_map_query, 
+    clean_genomic_data(args.query, args.reference, args.output_folder, args.remove_sample_ID_query, 
+                       args.remove_sample_ID_reference, args.remove_ambiguous_snps_query, 
+                       args.remove_ambiguous_snps_reference, args.correct_snp_flips, 
+                       args.remove_mismatching_snps, args.rename_map_query, 
                        args.rename_map_reference, logger)
-    
+
 elif args.command == 'subset':
     # Subset genomic data
     subset_common_markers(args.query, args.reference, args.output_folder, logger)
     
 elif args.command == 'plot-snp-means':
-    
-    # Check the input arguments are correct
-    #check_arguments(args.query + args.reference)
-    
-    # Define plot configuration
-    plot_dict = {"x_axis_name" : args.x_axis_name, 
-                 "y_axis_name": args.y_axis_name, 
-                 "FONTSIZE" : args.fontsize, 
-                 "FIG_WIDTH": args.figure_width,
-                 "FIG_HEIGHT": args.figure_height, 
-                 "s": args.size_points,
-                 "color": args.color_points}
+    # Define plot configuration for this command
+    plot_dict = define_plot_configuration(args)
     
     # Plot the SNP means for the query and the reference
     plot_snp_means(args.query, args.reference, plot_dict, args.output_folder, logger)
     
 elif args.command == 'plot-pca':
-    
     # Check the input arguments are correct
     #check_arguments(args.query)
     #if args.reference is not None:
     #    check_arguments(args.reference)
     
-    # Define plot configuration
-    plot_dict = {"FONTSIZE" : args.fontsize, 
-                 "FIG_WIDTH": args.figure_width,
-                 "FIG_HEIGHT": args.figure_height, 
-                 "s": args.size_points,
-                 "color_query": args.color_points_query,
-                 "color_reference": args.color_points_reference}
+    # Define plot configuration for this command
+    plot_dict = define_plot_configuration(args)
     
     # Plot the SNP means for the query and the reference
     plot_pca(args.query, args.reference, args.train_both, plot_dict, args.output_folder, logger)

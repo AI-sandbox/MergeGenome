@@ -1,10 +1,10 @@
-########################################
+################################################################################
 # Performs small preprocessing to .vcf data: 
-#   - Removing ambiguous SNPs in a .vcf file
-#   - Correcting SNP flips between SNPs in two .vcf files
-#   - Removing SNP mismatches between SNPs in two .vcf files
-#   - etc.
-########################################
+# * Removes ambiguous SNPs in a .vcf file.
+# * Corrects SNP flips between SNPs in two .vcf files
+# * Remove SNP mismatches between SNPs in two .vcf files.
+# * etc.
+################################################################################
 
 import numpy as np
 import logging
@@ -410,7 +410,7 @@ def keep_common_markers_several_chr(reference: dict, query: dict, logger: loggin
                 i += 1
                 j += 1
                 
-    track('{} common markers in total'.format(len(idxs_reference)), track_name)
+    logger.info(f'--> {len(idxs_reference)} common markers in total')
     
     # Keep the SNPs that are common markers
     # The SNPs that differe in position, reference or alternate are removed

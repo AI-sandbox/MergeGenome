@@ -98,21 +98,21 @@ def define_parser() -> argparse.ArgumentParser:
     
     # Define subparser for 'plot-snp-means' command
     partition_parser = subparsers.add_parser('plot-snp-means', 
-                                             help='To plot the SNP means for the common markers between the query and the reference.')
+                                             help='To plot the SNP means of the common markers between the query and the reference.')
     partition_parser.add_argument('-q', '--query', required=True, nargs="*", 
-                                  help='Paths to query .vcf files with data for each chromosome.')
+                                  help='Paths to query .vcf files with data for a single chromosome each.')
     partition_parser.add_argument('-r', '--reference', required=True, nargs="*", 
-                                  help='Paths to reference .vcf files with data for each chromosome.')
+                                  help='Paths to reference .vcf files with data for a single chromosome each.')
     partition_parser.add_argument('-o', '--output-folder', required=True, help='Path to output folder.')
     partition_parser.add_argument('-x', '--x-axis-name', required=False, default="query", 
-                                  help='Name given to the query dataset that will appear in the x-axis.')
+                                  help='Name given to query dataset (x-axis).')
     partition_parser.add_argument('-y', '--y-axis-name', required=False, default="reference", 
-                                  help='Name given to the reference dataset that will apprear in the y-axis.')
-    partition_parser.add_argument('-f', '--fontsize', required=False, default=25, help='Fontsize in the plot.')
-    partition_parser.add_argument('-w', '--figure-width', required=False, default=26, help='Figure width of the plot.')
-    partition_parser.add_argument('-i', '--figure-height', required=False, default=15, help='Figure height of the plot.')
-    partition_parser.add_argument('-s', '--size-points', required=False, default=0.1, help='Size of the points in the plot.')
-    partition_parser.add_argument('-c', '--color-points', required=False, default='#306998', help='Color of the points in the plot.')
+                                  help='Name given to reference dataset y-axis).')
+    partition_parser.add_argument('-f', '--fontsize', required=False, default=25, help='Fontsize of all text in plot.')
+    partition_parser.add_argument('-w', '--figure-width', required=False, default=26, help='Figure width of plot.')
+    partition_parser.add_argument('-i', '--figure-height', required=False, default=15, help='Figure height of plot.')
+    partition_parser.add_argument('-s', '--size-points', required=False, default=0.1, help='Size of the points in plot.')
+    partition_parser.add_argument('-c', '--color-points', required=False, default='#306998', help='Color of points in plot.')
     partition_parser.add_argument('-d', '--debug', required=False, help='Path to .log/.txt file to store info/debug messages.')
 
     # Define subparser for 'plot-pca' command
@@ -270,17 +270,28 @@ def check_arguments(args: argparse.Namespace) -> None:
         # Check amount of query and reference paths is the same
         assert len(args.query) == len(args.reference), f'The amount of query and reference paths does not coincide '\
         f'{len(args.query)} != {len(args.reference)}.'
+        
+    elif args.command == 'plot-snp-means':
+        # Check all the query and reference paths exist and are a .vcf file
+        check_paths(args.query+args.reference)
+        
+        # Check amount of query and reference paths is the same
+        assert len(args.query) == len(args.reference), f'The amount of query and reference paths does not coincide '\
+        f'{len(args.query)} != {len(args.reference)}.'
                 
     
-def check_chromosome(query: Dict, reference: Dict):
+def check_chromosome(query: Dict, reference: Dict, single: bool = True):
     """
-    Ensures the query and the reference contain data for a single
+    By default, ensures the query and the reference contain data for a single
     chromosome and that such chromosome is the same in both datasets.
-    Returns the chromosome in particular.
+    Returns the chromosome/s in particular. If single = False, ensures the
+    query and the reference contain the same ordered set of chromosomes. 
+    
     
     Args:
         query (Dict): query data.
         reference (Dict): reference data.
+        single (bool): to ensure data comes from a single chromosome.
     
     Returns:
         chrom (str): chromosome in the query and the reference.
@@ -294,19 +305,58 @@ def check_chromosome(query: Dict, reference: Dict):
         # If the reference is not None...
         # Obtain list with chromosomes in the reference
         chroms_reference = obtain_chromosomes(reference)
+        
+        if single:
+            # Ensure the query and the reference contain data for a single chromosome
+            assert len(chroms_query) == 1, 'The query contains data for more than one chromosome.'\
+            'Use partition command to obtain a separate VCF file per chromosome.'
+            assert len(chroms_reference) == 1, 'The reference contains data for more than one chromosome.'\
+            'Use partition command to obtain a separate VCF file per chromosome.'
 
-        # Ensure the query and the reference contain data for a single chromosome
-        assert len(chroms_query) == 1, 'The query contains data for more than one chromosome.'\
-        'Use partition command to obtain a separate VCF file per chromosome.'
-        assert len(chroms_reference) == 1, 'The reference contains data for more than one chromosome.'\
-        'Use partition command to obtain a separate VCF file per chromosome.'
+        # Ensure the chromosomes is/are the same (in the same order)
+        for chrom_query, chrom_reference in zip(chroms_query, chroms_reference):
+            assert chrom_query == chrom_reference, f'The query contains data for chromosome {chroms_query[0]}.'\
+            f'while the query contains data for chromosome {chroms_reference[0]}, when they must be the same.'\
+            'Check the input files.'
+    
+    if single: return chroms_query[0]
+    else: return chroms_query
 
-        # Ensure the chromosome is the saame
-        assert chroms_query[0] == chroms_reference[0], f'The query contains data for chromosome {chroms_query[0]}.'\
-        f'while the query contains data for chromosome {chroms_reference[0]}, when they must be the same.'\
-        'Check the input files.'
+
+def define_plot_configuration(args: argparse.Namespace) -> Dict:
+    """
+    Defines plot hyperparams for plot-snp-means or plot-pca
+    commands.
     
-    return chroms_query[0]
+    Args:
+        args (argparse.Namespace): parser with all arguments
+        information.
     
+    Returns:
+        plot_dict (Dict): dictionary with plot configurations.
     
+    """
+    
+    if args.command == 'plot-snp-means':
+        # Define plot configurations for
+        # 'plot-pca' commanad...
+        plot_dict = {"x_axis_name" : args.x_axis_name, 
+                     "y_axis_name": args.y_axis_name, 
+                     "fontsize" : args.fontsize, 
+                     "fig_width": args.figure_width,
+                     "fig_height": args.figure_height, 
+                     "s": args.size_points,
+                     "color": args.color_points}
+    
+    elif args.command == 'plot-pca':
+        # Define plot configurations for
+        # 'plot-pca' commanad...
+        plot_dict = {"fontsize" : args.fontsize, 
+                     "fig_width": args.figure_width,
+                     "fig_height": args.figure_height, 
+                     "s": args.size_points,
+                     "color_query": args.color_points_query,
+                     "color_reference": args.color_points_reference}
+    
+    return plot_dict   
     

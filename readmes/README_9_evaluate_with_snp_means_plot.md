@@ -1,4 +1,4 @@
-## SNP means plot
+## Plot SNP means (comparison)
 
 One way to evaluate the quality of the merged dataset is to compare the SNP means between the samples coming from the query and the samples coming from the reference. It is common that there are some small inherent differences in the SNP value distributions between two datasets due to them having non-identical populational or breed representations. However, in order to consider the data is homogeneous, the distribution of zeros and ones between all common markers should be similar. Accordingly, if most SNPs have similar means between datasets, this indicates that the samples were properly merged. Contrareously, if multiple SNPs diverge from the line y = x (where x is the mean of a SNP in the reference and y is the mean of the same SNP in the query), this indicates that the genomic data was not properly phased, there are sequencing inconsistencies or the imputation went wrong. It is common that when imputing SNP the most frequent allele is overrepresented.
 

@@ -13,16 +13,18 @@ from utils.misc import check_chromosome
 from utils.vcf_clean import keep_common_markers_single_chr
 
 
-def subset_common_markers(query_paths: List[str], reference_paths: List[str], output_folder: str, 
-                          logger: logging.Logger) -> None:
+def subset_common_markers(query_paths: List[str], reference_paths: List[str], 
+                          output_folder: str, logger: logging.Logger) -> None:
 
     """
-    Filters the reference and the query to only contain the common markers (i.e.
-    SNPs at the same CHROM, POS, REF and ALT) between both datasets.
+    Filters the reference and the query to only contain the common markers 
+    (i.e., SNPs at the same CHROM, POS, REF and ALT) between both datasets.
     
     Args:
-        query_paths (List[str]): paths to reference .vcf files with data for a single chromosome each.
-        reference_paths (List[str]): paths to query .vcf files with data for a single chromosome each.
+        query_paths (List[str]): paths to reference .vcf files with data for a 
+        single chromosome each.
+        reference_paths (List[str]): paths to query .vcf files with data for a 
+        single chromosome each.
         output_folder (str): path to output folder.
         logger (logging.Logger): debug/information tracker.
         
@@ -46,9 +48,9 @@ def subset_common_markers(query_paths: List[str], reference_paths: List[str], ou
         # Ensure the reference and the query contain data for the same chromosome
         # and obtain the chromosome in particular
         chrom = check_chromosome(query, reference)
-        logger.debug(f'Searching common markers in chromosome {chrom}...')
     
         # Filter the reference and the query to only contain the common markers
+        logger.debug(f'Searching common markers in chromosome {chrom}...')
         reference, query, _, _ = keep_common_markers_single_chr(reference, query, logger)
         
         logger.info(f'There are {len(query["variants/ID"])} SNPs and {len(query["samples"])} '\

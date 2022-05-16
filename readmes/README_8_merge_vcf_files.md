@@ -23,7 +23,7 @@ done
 bcftools merge --file-list file.list -O z -o <merged_file>
 ```
 
-For more information, you can read the [documentation](https://samtools.github.io/bcftools/bcftools.html#merge).
+For more information, read the [documentation](https://samtools.github.io/bcftools/bcftools.html#merge).
 
 `Example`
 

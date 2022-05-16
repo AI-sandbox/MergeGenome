@@ -1,4 +1,4 @@
-## Principal Component Analysis plots
+## Plot Principal Component Analysis (PCA)
 
 The Principal Component Analysis (PCA) dimensionality reduction technique can be used in bioinformatics to identify outlier samples, where a sample is a DNA squence. For instance, when dealing with dog DNA sequences, samples from village or mixed dogs might be consistently different than from purebred dogs. Also, a sample might be very unsimilar to the rest because it sequencing went wrong. Either way, outlier samples might mislead any future analysis, so it is important to identify them and treat them properly.
 

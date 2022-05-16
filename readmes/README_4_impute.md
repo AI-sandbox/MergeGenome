@@ -34,7 +34,7 @@ Input flags include:
 
 * vcf.gz: bgzip-compressed VCF file that contains phased, non-missing genotypes for all non-reference samples. The output vcf.gz file can be uncompressed with the unix gunzip utility.
 
-For more information, you can read the [documentation](https://faculty.washington.edu/browning/beagle/beagle_5.3_07Feb22.pdf).
+For more information, read the [documentation](https://faculty.washington.edu/browning/beagle/beagle_5.3_07Feb22.pdf).
 
 `Example`
 

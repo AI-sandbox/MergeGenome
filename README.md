@@ -24,9 +24,9 @@ This repository also includes the implementation of other common tasks related t
 
 # Merging Evaluation
 
-9. **[SNP means plot](readmes/README_9_evaluate_with_snp_means_plot.md)**
+9. **[Plot SNP means (comparison)](readmes/README_9_evaluate_with_snp_means_plot.md)**
 
-10. **[Principal Component Analysis plots](readmes/README_10_evaluate_with_pca_plots.md)**
+10. **[Plot Principal Component Analysis (PCA)](readmes/README_10_evaluate_with_pca_plots.md)**
 
 # Other util commands
 
