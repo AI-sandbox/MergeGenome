@@ -279,6 +279,12 @@ def check_arguments(args: argparse.Namespace) -> None:
         assert len(args.query) == len(args.reference), f'The amount of query and reference paths does not coincide '\
         f'{len(args.query)} != {len(args.reference)}.'
                 
+    #elif args.command == 'plot-snp-means':
+    # Check the input arguments are correct
+    #check_arguments(args.query)
+    #if args.reference is not None:
+    #    check_arguments(args.reference)
+    
     
 def check_chromosome(query: Dict, reference: Dict, single: bool = True):
     """

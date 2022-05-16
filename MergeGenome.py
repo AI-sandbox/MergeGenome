@@ -62,43 +62,34 @@ elif args.command == 'plot-snp-means':
     plot_snp_means(args.query, args.reference, plot_dict, args.output_folder, logger)
     
 elif args.command == 'plot-pca':
-    # Check the input arguments are correct
-    #check_arguments(args.query)
-    #if args.reference is not None:
-    #    check_arguments(args.reference)
-    
     # Define plot configuration for this command
     plot_dict = define_plot_configuration(args)
     
     # Plot the SNP means for the query and the reference
     plot_pca(args.query, args.reference, args.train_both, plot_dict, args.output_folder, logger)
-    
-elif args.command == 'store-npy':
-    
+        
+elif args.command == 'remove-snps-different-means':
     # Check the input arguments are correct
-    #check_arguments([args.query])
+    #check_arguments(args.query+args.reference)
     
-    # Store averaged or separated maternal and paternal strands in .npy or .h5
-    store_allele_data_in_npy_or_h5(args.query, args.output_folder, args.data_format, args.file_format, logger)
-    
+    # Store indexes of common markers between the query and the reference in .npy or .h5
+    remove_snps_with_different_means(args.query, args.reference, args.output_folder, args.threshold, logger)
+        
 elif args.command == 'store-common-indexes':
-    
     # Check the input arguments are correct
     #check_arguments([args.query]+[args.reference])
     
     # Store indexes of common markers between the query and the reference in .npy or .h5
     store_indexes_common_markers(args.query, args.reference, args.output_folder, args.file_format, logger)
     
-elif args.command == 'remove-snps-different-means':
-    
+elif args.command == 'store-npy':
     # Check the input arguments are correct
-    #check_arguments(args.query+args.reference)
+    #check_arguments([args.query])
     
-    # Store indexes of common markers between the query and the reference in .npy or .h5
-    remove_snps_with_different_means(args.query, args.reference, args.output_folder, args.threshold, logger)
-
+    # Store averaged or separated maternal and paternal strands in .npy or .h5
+    store_allele_data_in_npy_or_h5(args.query, args.output_folder, args.data_format, args.file_format, logger)
+    
 elif args.command == 'store-vcf':
-    
     # Store .npy file with separated maternal and paternal strands back in .vcf file 
     # and, optionally, remove undesired SNPs
     store_allele_data_in_vcf(args.vcf_query, args.npy_query, args.output_folder, args.binary_indexes, logger)

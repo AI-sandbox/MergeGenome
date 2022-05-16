@@ -24,16 +24,18 @@ This repository also includes the implementation of other common tasks related t
 
 # Merging Evaluation
 
-9. **[Plot SNP means (comparison)](readmes/README_9_evaluate_with_snp_means_plot.md)**
+9. **[Data Homogenization: Discriminator Performance](readmes/README_9_evaluate_with_discriminator.md)**
 
-10. **[Plot Principal Component Analysis (PCA)](readmes/README_10_evaluate_with_pca_plots.md)**
+10. **[Plot SNP means (comparison)](readmes/README_10_evaluate_with_snp_means_plot.md)**
+
+11. **[Plot Principal Component Analysis (PCA)](readmes/README_11_evaluate_with_pca_plots.md)**
 
 # Other util commands
 
-11. **[Store allele data (from VCF to NPY or H5)](readmes/README_11_store_allele_data_npy_h5.md)**
+12. **[Remove SNPs with different means](readmes/README_12_remove_snps_different_means.md)**
 
-12. **[Store indexes common markers](readmes/README_12_store_indexes_common_markers.md)**
+13. **[Store indexes common markers](readmes/README_13_store_indexes_common_markers.md)**
 
-13. **[Remove SNPs with different means](readmes/README_13_remove_snps_different_means.md)**
+14. **[Store allele data (from VCF to NPY or H5)](readmes/README_14_store_allele_data_npy_h5.md)**
 
-14. **[Store allele data (from NPY to VCF)](readmes/README_14_store_allele_data_vcf.md)**
+15. **[Store allele data (from NPY to VCF)](readmes/README_15_store_allele_data_vcf.md)**

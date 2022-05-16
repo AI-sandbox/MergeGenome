@@ -1,0 +1,9 @@
+## Data Homogenization: Discriminator Performance
+
+There are several techniques to evaluate the merged dataset. In this section, we discuss a quantitative evaluation technique consisting of using the accuracy of a classifier that tries to determine which is the source of the samples to measure the homogeneity of the merged dataset. The higher the accuracy of the discriminator, the lower the homogeneity of the data. To certainly affirm that the data is homogeneous, the accuracy of the discriminator should be close to 0.5, meaning that the discriminator is behaving similarly to a random choice model.
+
+The [DataFix](https://github.com/AI-sandbox/Datafix) tool can be used for that purpose. More precisely, the `evaluate` task from DataFix can be used to account for how different the SNPs data from both datasets are. In case the performance of the discriminator is high (i.e., considerably above 0.5), DataFix `detect_and_fix_mismatch` task is highly recommended. For a more detailed description of the latter command, read [here](readmes/README_6_detect_and_fix_mismatches.md).
+
+## Usage
+
+The input query and reference files to DataFix need to be two-dimensional matrixes saved in .npy or .h5 formats. The MergeGenome toolkit [store-npy](https://github.com/AI-sandbox/merge-vcf-files/blob/main/readmes/README_14_store_allele_data_npy_h5.md) command can be used to extract the allele data in the calldata/GT field from any given .vcf file, convert the format from three-dimensional to two-dimensional by either separating or averaging the maternal and paternal strands, and finally, store the result in .npy or .h5 format.
