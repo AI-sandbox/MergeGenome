@@ -25,7 +25,7 @@ from utils.plot_utils import (snp_means_plot, PCA_trained_and_projected_on_query
 def plot_snp_means(query_paths: List[str], reference_paths: List[str], plot_dict: Dict, 
                    output_folder: str, logger: logging.Logger) -> None:
     """
-    Plots the SNP means of all the common markers between the reference and the query 
+    Plots the SNP means of all the common markers between the query and the reference 
     datasets. If data for more than one .vcf file is provided, the data for all 
     chromosomes will be concatenated and displayed in the plot. First, the common 
     markers (i.e., SNPs at the same CHROM, POS, REF, and ALT) are found and the rest 

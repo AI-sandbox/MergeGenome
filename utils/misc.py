@@ -100,14 +100,14 @@ def define_parser() -> argparse.ArgumentParser:
     partition_parser = subparsers.add_parser('plot-snp-means', 
                                              help='To plot the SNP means of the common markers between the query and the reference.')
     partition_parser.add_argument('-q', '--query', required=True, nargs="*", 
-                                  help='Paths to query .vcf files with data for a single chromosome each.')
+                                  help='Paths to query .vcf files with data for a single or multiple chromosomes each.')
     partition_parser.add_argument('-r', '--reference', required=True, nargs="*", 
-                                  help='Paths to reference .vcf files with data for a single chromosome each.')
+                                  help='Paths to reference .vcf files with data for a single or multiple chromosomes each.')
     partition_parser.add_argument('-o', '--output-folder', required=True, help='Path to output folder.')
-    partition_parser.add_argument('-x', '--x-axis-name', required=False, default="query", 
-                                  help='Name given to query dataset (x-axis).')
-    partition_parser.add_argument('-y', '--y-axis-name', required=False, default="reference", 
-                                  help='Name given to reference dataset y-axis).')
+    partition_parser.add_argument('-x', '--x-axis-name', required=False, default="reference", 
+                                  help='Name given to reference dataset (x-axis).')
+    partition_parser.add_argument('-y', '--y-axis-name', required=False, default="query", 
+                                  help='Name given to query dataset (y-axis).')
     partition_parser.add_argument('-f', '--fontsize', required=False, default=25, help='Fontsize of all text in plot.')
     partition_parser.add_argument('-w', '--figure-width', required=False, default=26, help='Figure width of plot.')
     partition_parser.add_argument('-i', '--figure-height', required=False, default=15, help='Figure height of plot.')

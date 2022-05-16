@@ -2,7 +2,7 @@
 
 There are several techniques to evaluate the merged dataset. In this section, we discuss a quantitative evaluation technique consisting of using the accuracy of a classifier that tries to determine which is the source of the samples to measure the homogeneity of the merged dataset. The higher the accuracy of the discriminator, the lower the homogeneity of the data. To certainly affirm that the data is homogeneous, the accuracy of the discriminator should be close to 0.5, meaning that the discriminator is behaving similarly to a random choice model.
 
-The [DataFix](https://github.com/AI-sandbox/Datafix) tool can be used for that purpose. More precisely, the `evaluate` task from DataFix can be used to account for how different the SNPs data from both datasets are. In case the performance of the discriminator is high (i.e., considerably above 0.5), DataFix `detect_and_fix_mismatch` task is highly recommended. For a more detailed description of the latter command, read [here](readmes/README_6_detect_and_fix_mismatches.md).
+The [DataFix](https://github.com/AI-sandbox/Datafix) tool can be used for that purpose. More precisely, the `evaluate` task from DataFix can be used to account for how different the SNPs data from both datasets are. In case the performance of the discriminator is high (i.e., considerably above 0.5), DataFix `detect_and_fix_mismatch` task is highly recommended. For a more detailed description of the latter task, read the [documentation](readmes/README_6_detect_and_fix_mismatches.md).
 
 ## Usage
 

@@ -15,7 +15,7 @@ Input flags include:
 * -q, --query LIST, Path to query .vcf files with data for for a single chromosome each (required).
 * -r, --reference LIST, Paths to reference .vcf files with data for for a single chromosome each (optional).
 * -o, --output-folder PATH, Path to output folder (required). Note: make sure a '/' appears at the end of the output folder.
-* -d, --debug PATH, Path to file to store info/debug messages (optional).
+* -d, --debug PATH, Path to .log/.txt file to store info/debug messages (optional).
 
 **Output**
 

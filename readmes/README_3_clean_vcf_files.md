@@ -43,7 +43,7 @@ Input flags include:
 * -m, --remove-mismatching-snps, To remove (or not) mismatching SNPs (optional).
 * -v, --rename-map-query, Mapping from old to new missing values notation for the query (optional).
 * -w, --rename-map-reference, Mapping from old to new missing values notation for the reference (optional).
-* -d, --debug PATH, Path to file to store info/debug messages (optional).
+* -d, --debug PATH, Path to .log/.txt file to store info/debug messages (optional).
 
 **Output**
 

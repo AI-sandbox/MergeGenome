@@ -45,7 +45,7 @@ def snp_means_plot(query_snps: np.array, reference_snps: np.array,
     plt.rcParams.update({'font.size': plot_dict['fontsize']})
     
     # Plot SNP means
-    plt.scatter(mean_query, mean_reference, s=plot_dict['s'], color=plot_dict['color'])
+    plt.scatter(mean_reference, mean_query, s=plot_dict['s'], color=plot_dict['color'])
     
     # Define plot title, x and y axis
     plt.title('SNP means')

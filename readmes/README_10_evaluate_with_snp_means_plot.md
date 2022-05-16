@@ -1,34 +1,37 @@
 ## Plot SNP means (comparison)
 
-There are several straightforward techniques to evaluate the quality of a merged dataset.
+There are several straightforward techniques to qualitatively evaluate the merged dataset. One of them is to compare the SNP means between samples coming from one source or the other. If the data is homogeneous, the SNP means should be similar. Namely, the SNP means from the query should fall within a small bandwidth from the SNP means from the reference. Under any other circumstances, the data might contain inconsistent SNPs. There are several possible causes of diverging SNPs, such as a bad imputation or a sequencing error.
 
-One of them is to quantitatively measure the accuracy of the discriminator
+MergeGenome plot-snp-means command produces a scatter plot showing the SNP means for all the common markers between the provided query and reference .vcf files. The provided .vcf files can contain data for a single or multiple chromosomes. Either way, the chromosomes need to be appear in the same order.
 
-compare the SNP means between the samples coming from one source or the other. If the
+Figure 1 shows an output example of MergeGenome plot-snp-means command. We can observe numerous diverging SNPs close to 0.0 and 1.0 in the vertical axis. There are also a few diverging SNPs on the top-right. Probably, the former come from a bad imputation in which the most frequent allele is overrepresented, while the latter come from a sequencing error.
 
-It is common that there are some small inherent differences in the SNP value distributions between two datasets due to them having non-identical populational or breed representations. However, in order to consider the data is homogeneous, the distribution of zeros and ones between all common markers should be similar. Accordingly, if most SNPs have similar means between datasets, this indicates that the samples were properly merged. Contrareously, if multiple SNPs diverge from the line y = x (where x is the mean of a SNP in the reference and y is the mean of the same SNP in the query), this indicates that the genomic data was not properly phased, there are sequencing inconsistencies or the imputation went wrong. It is common that when imputing SNP the most frequent allele is overrepresented.
-
-The plot-means command from MergeGenome plots a scatter plot with the SNP means between all common markers between the given datasets, as long as they contain data for the same chromosomes.
+![Figure 1. SNP means comparison](my_work/dog-gen-to-phen/merge-vcf-files/figures/snp_means_query_and_reference.png)
 
 ## Usage
 
 ```
-$ python3 MergeGenome.py plot-snp-means -r <reference_file_1>...<reference_file_n> -q <query_file_1>...<query_file_n> -o <output_folder>
+$ python3 MergeGenome.py plot-snp-means -q <query_file_1>...<query_file_n> -r <reference_file_1>...<reference_file_n> -o <output_folder>
 ```
 
 Input flags include:
 
-* -q, --query LIST, Path to query .vcf files with data for each chromosome (required).
-* -r, --reference LIST, Paths to reference .vcf files with data for each chromosome (required).
-* -o, --output-folder PATH, Path to output folder to store the modified VCF files (required). Note: make sure a '/' appears at the end of the output folder.
-* -x, --x-axis-name STR, Name given to the query dataset that will appear in the x-axis (optional). Default=query.
-* -y, --y-axis-name STR, Name given to the query dataset that will appear in the y-axis (optional). Default=reference.
-* -f, --fontsize INT, Fontsize in the plot (optional). Default=25.
-* -w, --figure-width INT, Figure width of the plot (optional). Default=26.
-* -i, --figure-height INT, Figure height of the plot (optional). Default=15.
-* -s, --size-points INT, Size of the points in the plot (optional). Default=0.1.
-* -c, --color-points STR, Color of the points in the plot (optional). Default=#306998.
-* -d, --debug PATH, Path to file to store info/debug messages (optional).
+* -q, --query LIST, Paths to query .vcf files with data for a single or multiple chromosomes each (required).
+* -r, --reference LIST, Paths to reference .vcf files with data for a single or multiple chromosomes each (required).
+* -o, --output-folder PATH, Path to output folder. (required). Note: make sure a '/' appears at the end of the output folder.
+* -x, --x-axis-name STR, Name given to reference dataset (x-axis) (optional). Default=reference.
+* -y, --y-axis-name STR, Name given to query dataset (y-axis) (optional). Default=query.
+* -f, --fontsize INT, Fontsize of all text in plot (optional). Default=25.
+* -w, --figure-width INT, Figure width of plot (optional). Default=26.
+* -i, --figure-height INT, Figure height of plot (optional). Default=15.
+* -s, --size-points INT, Size of the points in plot (optional). Default=0.1.
+* -c, --color-points STR, Color of points in plot (optional). Default=#306998.
+* -d, --debug PATH, Path to .log/.txt file to store info/debug messages (optional).
+
+**Output**
+
+* A .png image with the SNP means of all the common markers between the reference and the query datasets. The .png image will have the name snp_means_{x_axis_name}_{y_axis_name}.pn
+* If --debug, a .log or .txt file with information regarding the dimensions of the data (number of samples and number of SNPs), the chromosomes in each file, and the amount of common markers found.
 
 `Examples`
 
@@ -38,8 +41,8 @@ Input flags include:
 $ python3 MergeGenome.py plot-snp-means -q query_chr1.vcf -r reference_chr1.vcf -o ./output/
 ```
 
-2. Plot the SNP means between the common markers of all the chromosomes in the query and reference datasets, setting the fontsize to 15 and the figure size to (16, 9). Also save debug info in log file:
+2. Plot the SNP means between the common markers of all the chromosomes in the query and reference datasets. Change plot configurations and save debug info in log file:
 
 ```
-$ python3 MergeGenome.py plot-snp-means -q query_chr*.vcf -r reference_chr*.vcf -o ./output/ -f 15 -w 16 -i 9 -d
+$ python3 MergeGenome.py plot-snp-means -q query_chr*.vcf -r reference_chr*.vcf -o ./output/ -q "Imputed Query" -r "Reference" -f 15 -w 16 -i 9 -d
 ```
