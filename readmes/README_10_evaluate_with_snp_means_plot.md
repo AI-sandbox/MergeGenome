@@ -6,7 +6,7 @@ MergeGenome plot-snp-means command produces a scatter plot showing the SNP means
 
 Figure 1 shows an output example of MergeGenome plot-snp-means command. We can observe numerous diverging SNPs close to 0.0 and 1.0 in the vertical axis. There are also a few diverging SNPs on the top-right. Probably, the former come from a bad imputation in which the most frequent allele is overrepresented, while the latter come from a sequencing error.
 
-![Figure 1. SNP means comparison](my_work/dog-gen-to-phen/merge-vcf-files/figures/snp_means_query_and_reference.png)
+![Figure 1. SNP means comparison](https://github.com/AI-sandbox/merge-vcf-files/blob/main/figures/snp_means_reference_and_query.png)
 
 ## Usage
 
