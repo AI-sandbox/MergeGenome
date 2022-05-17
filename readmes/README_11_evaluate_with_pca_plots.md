@@ -10,10 +10,10 @@ Figure 2 shows an output example of MergeGenome plot-pca command, in which the P
 
 <div class="row">
   <div class="column">
-    <img src="https://github.com/AI-sandbox/merge-vcf-files/blob/main/figures/trained_both_projected_both.png" style="width:100%">
+    <img src="https://github.com/AI-sandbox/merge-vcf-files/blob/main/figures/trained_both_projected_both.png" style="width:45%">
   </div>
   <div class="column">
-    <img src="https://github.com/AI-sandbox/merge-vcf-files/blob/main/figures/trained_both_projected_both_after_preprocessing.png" style="width:100%">
+    <img src="https://github.com/AI-sandbox/merge-vcf-files/blob/main/figures/trained_both_projected_both_after_preprocessing.png" style="width:45%">
   </div>
 </div>
 
