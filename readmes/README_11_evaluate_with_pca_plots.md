@@ -11,6 +11,8 @@ Figure 2 shows an output example of MergeGenome plot-pca command, in which the P
 <p float="left">
   <img src="https://github.com/AI-sandbox/merge-vcf-files/blob/main/figures/trained_both_projected_both.png" width="49%" />
   <img src="https://github.com/AI-sandbox/merge-vcf-files/blob/main/figures/trained_both_projected_both_after_preprocessing.png" width="49%" />
+  <figcaption width="49%">a)</figcaption>
+  <figcaption width="49%">b)</figcaption>
 </p>
 
 
