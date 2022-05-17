@@ -8,7 +8,7 @@ Figure 1 shows an output example of MergeGenome plot-snp-means command. We can o
 
 ![Figure 1. SNP means comparison](https://github.com/AI-sandbox/merge-vcf-files/blob/main/figures/snp_means_reference_and_query.png)
 
-*Figure 1. SNP means comparison for the common markers betwee a query and a reference datasets.*
+*Figure 1*. SNP means comparison for the common markers between a query and a reference datasets.
 
 ## Usage
 

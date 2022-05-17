@@ -6,15 +6,13 @@ PCA can also be used as a tool to visualize how samples are distributed. Usually
 
 MergeGenome plot-pca command produces a scatter plot with the two first PCA components. The provided .vcf files can contain data for a single or multiple chromosomes. Either way, the chromosomes need to appear in the same order. If only data from the query is provided, the PCA is trained and projected on the query SNPs. If both data from the query and the reference are provided, the PCA is trained and projected on the common markers (i.e., SNPs at the same CHROM, POS, REF, and ALT) between both datasets, except when `--train_query` is called, then the data is only trained on the query and projected on both datasets.
 
-Figure 2 shows an output example of MergeGenome plot-pca command, in which the PCA has been trained on the common markers from the query and projected on both the query and the reference datasets. We can observe that the PCA points from the query do not fall into the same space as the PCA points from the reference, suggesting the data have different distributions between sources. However, after preprocessing with MergeGenome, the differences in the DNA sequences between both sources is no longer noticaeble, as shown in Figure 3. This is just an example of why it is necessary to properly preprocess genomic sequences prior to merging.
+Figure 2.a) shows an output example of MergeGenome plot-pca command, in which the PCA has been trained on the common markers from the query and projected on both the query and the reference datasets. We can observe that the PCA points from the query do not fall into the same space as the PCA points from the reference, suggesting the data have different distributions between sources. However, after preprocessing with MergeGenome, the differences in the DNA sequences between both sources is no longer noticaeble, as shown in Figure 3. This is just an example of why it is necessary to properly preprocess genomic sequences prior to merging.
 
-<p float="left">
-  <img src="https://github.com/AI-sandbox/merge-vcf-files/blob/main/figures/trained_both_projected_both.png" width="49%" />
-  <img src="https://github.com/AI-sandbox/merge-vcf-files/blob/main/figures/trained_both_projected_both_after_preprocessing.png" width="49%" />
-  <figcaption width="49%">a) No preprocessing</figcaption>
-  <figcaption left="50%">b) MergeGenome preprocessing</figcaption>
-</p>
+a) No preprocessing           |  b) MergeGenome Preprocessing
+:-------------------------:|:-------------------------:
+![](https://github.com/AI-sandbox/merge-vcf-files/blob/main/figures/trained_both_projected_both.png)  |  ![](https://github.com/AI-sandbox/merge-vcf-files/blob/main/figures/trained_both_projected_both_after_preprocessing.png)
 
+*Figure 2*. PCA w/wo MergeGenome preprocessing.
 
 ## Usage
 
