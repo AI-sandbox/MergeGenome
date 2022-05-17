@@ -69,10 +69,7 @@ elif args.command == 'plot-pca':
     plot_pca(args.query, args.reference, args.train_query, plot_dict, args.output_folder, logger)
 
 elif args.command == 'remove-snps-different-means':
-    # Check the input arguments are correct
-    #check_arguments(args.query+args.reference)
-    
-    # Store indexes of common markers between the query and the reference in .npy or .h5
+    # Remove the common markers with a mean absolute difference higher than a threshold
     remove_snps_with_different_means(args.query, args.reference, args.output_folder, args.threshold, logger)
         
 elif args.command == 'store-common-indexes':

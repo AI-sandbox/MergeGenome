@@ -108,13 +108,13 @@ def define_parser() -> argparse.ArgumentParser:
                                   help='Name given to reference dataset (x-axis).')
     partition_parser.add_argument('-y', '--y-axis-name', required=False, default="query", 
                                   help='Name given to query dataset (y-axis).')
-    partition_parser.add_argument('-f', '--fontsize', required=False, default=25, help='Fontsize of all text in plot.')
-    partition_parser.add_argument('-w', '--figure-width', required=False, default=26, help='Figure width of plot.')
-    partition_parser.add_argument('-i', '--figure-height', required=False, default=15, help='Figure height of plot.')
-    partition_parser.add_argument('-s', '--size-points', required=False, default=0.1, help='Size of points in plot.')
+    partition_parser.add_argument('-f', '--fontsize', required=False, type=float, default=25, help='Fontsize of all text in plot.')
+    partition_parser.add_argument('-w', '--figure-width', required=False, type=float, default=26, help='Figure width of plot.')
+    partition_parser.add_argument('-i', '--figure-height', required=False, type=float, default=15, help='Figure height of plot.')
+    partition_parser.add_argument('-s', '--size-points', required=False, type=float, default=0.1, help='Size of points in plot.')
     partition_parser.add_argument('-c', '--color-points', required=False, default='#306998', help='Color of points in plot.')
     partition_parser.add_argument('-d', '--debug', required=False, help='Path to .log/.txt file to store info/debug messages.')
-
+    
     # Define subparser for 'plot-pca' command
     partition_parser = subparsers.add_parser('plot-pca', help='To plot the PCA of the provided data.')
     partition_parser.add_argument('-q', '--query', required=True, nargs="*", 
@@ -124,17 +124,29 @@ def define_parser() -> argparse.ArgumentParser:
     partition_parser.add_argument('-o', '--output-folder', required=True, help='Path to output folder.')
     partition_parser.add_argument('-t', '--train-query', action='store_true', 
                                   help='To train the PCA the PCA only on the query instead of on both datasets.')
-    partition_parser.add_argument('-f', '--fontsize', required=False, default=25, help='Fontsize of all text in plot.')
-    partition_parser.add_argument('-w', '--figure-width', required=False, default=26, help='Figure width of plot.')
-    partition_parser.add_argument('-i', '--figure-height', required=False, default=15, help='Figure height of plot.')
-    partition_parser.add_argument('-s', '--size-points', required=False, default=15, help='Size of points in plot.')
-    partition_parser.add_argument('-a', '--alpha', required=False, default=0.7, help='Transparency of points in plot.')
+    partition_parser.add_argument('-f', '--fontsize', required=False, default=25, type=float, help='Fontsize of all text in plot.')
+    partition_parser.add_argument('-w', '--figure-width', required=False, default=26, type=float, help='Figure width of plot.')
+    partition_parser.add_argument('-i', '--figure-height', required=False, default=15, type=float, help='Figure height of plot.')
+    partition_parser.add_argument('-s', '--size-points', required=False, default=15, type=float, help='Size of points in plot.')
+    partition_parser.add_argument('-a', '--alpha', required=False, default=0.7, type=float, help='Transparency of points in plot.')
     partition_parser.add_argument('-cq', '--color-points-query', required=False, default='#EBD0A1', 
                                   help='Color of query points in plot.')
     partition_parser.add_argument('-cr', '--color-points-reference', required=False, default='#259988', 
                                   help='Color of reference points in plot.')
     partition_parser.add_argument('-d', '--debug', required=False, help='Path to .log/.txt file to store info/debug messages.')
 
+    # Define subparser for 'remove-snps-different-means' command
+    partition_parser = subparsers.add_parser('remove-snps-different-means', 
+                                             help='To remove common markers with a mean absolute difference higher than a threshold.')
+    partition_parser.add_argument('-q', '--query', required=True, nargs="*", 
+                                  help='Paths to query .vcf files with data for a single chromosome each.')
+    partition_parser.add_argument('-r', '--reference', required=False, nargs="*", 
+                                  help='paths to reference .vcf files with data for a single chromosome each.')
+    partition_parser.add_argument('-o', '--output-folder', required=True, help='Path to output folder.')
+    partition_parser.add_argument('-t', '--threshold', required=False, type=float, default=0.1, 
+                                  help='All common SNPs with a mean absolute difference higher than the threshold will be removed.')
+    partition_parser.add_argument('-d', '--debug', required=False, help='Path to .log/.txt file to store info/debug messages.')
+    
     # Define subparser for 'store-allele' command
     partition_parser = subparsers.add_parser('store-npy', help='To store formatted allele data in .npy or .h5 format.')
     partition_parser.add_argument('-q', '--query', required=True, help='Path to input .vcf file.')
@@ -153,17 +165,6 @@ def define_parser() -> argparse.ArgumentParser:
                                   help='Paths to reference .vcf files with data for each chromosome.')
     partition_parser.add_argument('-o', '--output-folder', required=True, help='Path to output folder.')
     partition_parser.add_argument('-f', '--file-format', required=True, choices=['.npy', '.h5'], help='Format of the output file.')
-    partition_parser.add_argument('-d', '--debug', required=False, help='Path to .log/.txt file to store info/debug messages.')
-
-    # Define subparser for 'remove-snps-different-means' command
-    partition_parser = subparsers.add_parser('remove-snps-different-means', help='Store indexes of common markers.')
-    partition_parser.add_argument('-q', '--query', required=True, nargs="*", 
-                                  help='Paths to query .vcf files with data for each chromosome.')
-    partition_parser.add_argument('-r', '--reference', required=False, nargs="*", 
-                                  help='Paths to reference .vcf files with data for each chromosome.')
-    partition_parser.add_argument('-o', '--output-folder', required=True, help='Path to output folder.')
-    partition_parser.add_argument('-t', '--threshold', required=False, default=0.1, 
-                                  help='All common SNPs with a mean absolute difference higher than the threshold will be removed.')
     partition_parser.add_argument('-d', '--debug', required=False, help='Path to .log/.txt file to store info/debug messages.')
     
     # Define subparser for 'store-vcf' command
@@ -297,6 +298,20 @@ def check_arguments(args: argparse.Namespace) -> None:
             # Check all the reference paths exist and are a .vcf file
             check_paths(args.reference)
     
+    elif args.command == 'remove-snps-different-means':
+        # Check all the query and reference paths exist and are a .vcf file
+        check_paths(args.query+args.reference)
+        
+        # Check amount of query and reference paths is the same
+        assert len(args.query) == len(args.reference), f'The amount of query and reference paths does not coincide '\
+        f'{len(args.query)} != {len(args.reference)}.'
+        
+        if args.threshold is not None:
+        
+            if args.threshold > 1.0 or args.threshold < 0.0:
+                raise argparse.ArgumentTypeError(f'--threshold is out of the [0.0, 1.0] range.')
+    
+
 def check_chromosome(query: Dict, reference: Dict, single: bool = True):
     """
     By default, ensures the query and the reference contain data for a single

@@ -23,10 +23,10 @@ Input flags include:
 * -o, --output-folder PATH, Path to output folder. (required). Note: make sure a '/' appears at the end of the output folder.
 * -x, --x-axis-name STR, Name given to reference dataset (x-axis) (optional). Default=reference.
 * -y, --y-axis-name STR, Name given to query dataset (y-axis) (optional). Default=query.
-* -f, --fontsize INT, Fontsize of all text in plot (optional). Default=25.
-* -w, --figure-width INT, Figure width of plot (optional). Default=26.
-* -i, --figure-height INT, Figure height of plot (optional). Default=15.
-* -s, --size-points INT, Size of points in plot (optional). Default=0.1.
+* -f, --fontsize FLOAT, Fontsize of all text in plot (optional). Default=25.
+* -w, --figure-width FLOAT, Figure width of plot (optional). Default=26.
+* -i, --figure-height FLOAT, Figure height of plot (optional). Default=15.
+* -s, --size-points FLOAT, Size of points in plot (optional). Default=0.1.
 * -c, --color-points STR, Color of points in plot (optional). Default=#306998.
 * -d, --debug PATH, Path to .log/.txt file to store info/debug messages (optional).
 

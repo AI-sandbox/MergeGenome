@@ -6,13 +6,13 @@ PCA can also be used as a tool to visualize how samples are distributed. Usually
 
 MergeGenome plot-pca command produces a scatter plot with the two first PCA components. The provided .vcf files can contain data for a single or multiple chromosomes. Either way, the chromosomes need to appear in the same order. If only data from the query is provided, the PCA is trained and projected on the query SNPs. If both data from the query and the reference are provided, the PCA is trained and projected on the common markers (i.e., SNPs at the same CHROM, POS, REF, and ALT) between both datasets, except when `--train_query` is called, then the data is only trained on the query and projected on both datasets.
 
-Figure 2.a) shows an output example of MergeGenome plot-pca command, in which the PCA has been trained on the common markers from the query and projected on both the query and the reference datasets. We can observe that the PCA points from the query do not fall into the same space as the PCA points from the reference, suggesting the data have different distributions between sources. However, after preprocessing with MergeGenome, the differences in the DNA sequences between both sources is no longer noticaeble, as shown in Figure 3. This is just an example of why it is necessary to properly preprocess genomic sequences prior to merging.
+Figure 2.a) shows an output example of MergeGenome plot-pca command, in which the PCA has been trained on the common markers from the query and projected on both the query and the reference datasets. We can observe that the PCA points from the query do not fall into the same space as the PCA points from the reference, suggesting the data have different distributions between sources. However, after preprocessing with MergeGenome, the differences in the DNA sequences between both sources is no longer noticaeble, as shown in Figure 2.b). This is just an example of why it is necessary to properly preprocess genomic sequences prior to merging.
 
 a) No preprocessing           |  b) MergeGenome Preprocessing
 :-------------------------:|:-------------------------:
 ![](https://github.com/AI-sandbox/merge-vcf-files/blob/main/figures/trained_both_projected_both.png)  |  ![](https://github.com/AI-sandbox/merge-vcf-files/blob/main/figures/trained_both_projected_both_after_preprocessing.png)
 
-*Figure 2*. PCA w/wo MergeGenome preprocessing.
+*Figure 2*. Effect of MergeGenome preprocessing on PCA applied to both the query and the reference datasets.
 
 ## Usage
 
@@ -26,10 +26,10 @@ Input flags include:
 * -r, --reference LIST, Paths to reference .vcf files with data for a single or multiple chromosomes each (optional).
 * -o, --output-folder PATH, Path to output folder. (required). Note: make sure a '/' appears at the end of the output folder.
 * -t, --train-query, To train the PCA the PCA only on the query instead of on both datasets (optional). Default=False.
-* -f, --fontsize INT, Fontsize of all text in plot (optional). Default=25.
-* -w, --figure-width INT, Figure width of plot (optional). Default=26.
-* -i, --figure-height INT, Figure height of plot (optional). Default=15.
-* -s, --size-points INT, Size of points in plot (optional). Default=15.
+* -f, --fontsize FLOAT, Fontsize of all text in plot (optional). Default=25.
+* -w, --figure-width FLOAT, Figure width of plot (optional). Default=26.
+* -i, --figure-height FLOAT, Figure height of plot (optional). Default=15.
+* -s, --size-points FLOAT, Size of points in plot (optional). Default=15.
 * -a, --alpha, FLOAT, Transparency of points in plot (optional). Default=0.7.
 * -cq, --color-points-query STR, Color of query points in the plot (optional). Default=#EBD0A1.
 * -cr, --color-points-reference STR, Color of reference points in the plot (optional). Default=#259988.
