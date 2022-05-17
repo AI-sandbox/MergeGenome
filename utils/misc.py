@@ -128,9 +128,10 @@ def define_parser() -> argparse.ArgumentParser:
     partition_parser.add_argument('-w', '--figure-width', required=False, default=26, help='Figure width of plot.')
     partition_parser.add_argument('-i', '--figure-height', required=False, default=15, help='Figure height of plot.')
     partition_parser.add_argument('-s', '--size-points', required=False, default=15, help='Size of points in plot.')
-    partition_parser.add_argument('-cq', '--color-points-query', required=False, default='#259988', 
+    partition_parser.add_argument('-a', '--alpha', required=False, default=0.7, help='Transparency of points in plot.')
+    partition_parser.add_argument('-cq', '--color-points-query', required=False, default='#EBD0A1', 
                                   help='Color of query points in plot.')
-    partition_parser.add_argument('-cr', '--color-points-reference', required=False, default='#EBD0A1', 
+    partition_parser.add_argument('-cr', '--color-points-reference', required=False, default='#259988', 
                                   help='Color of reference points in plot.')
     partition_parser.add_argument('-d', '--debug', required=False, help='Path to .log/.txt file to store info/debug messages.')
 
@@ -371,6 +372,7 @@ def define_plot_configuration(args: argparse.Namespace) -> Dict:
                      "fig_width": args.figure_width,
                      "fig_height": args.figure_height, 
                      "s": args.size_points,
+                     "alpha" : args.alpha,
                      "color_query": args.color_points_query,
                      "color_reference": args.color_points_reference}
     

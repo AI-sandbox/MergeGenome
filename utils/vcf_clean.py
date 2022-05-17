@@ -476,7 +476,8 @@ def remove_snps_different_means(reference: dict, query: dict, threshold: float, 
     idx_1_to_remove = np.array(idxs_reference)[abs(mean_1 - mean_2) > threshold]
     idx_2_to_remove = np.array(idxs_query)[abs(mean_1 - mean_2) > threshold]
     
-    assert len(idx_1_to_remove) == len(idx_2_to_remove) == sum(abs(mean_1 - mean_2) > threshold), 'The amount of indexes removed in each dataset is not the same. There has been an error.'
+    assert len(idx_1_to_remove) == len(idx_2_to_remove) == sum(abs(mean_1 - mean_2) > threshold),\
+    'The amount of indexes removed in each dataset is not the same. There has been an error.'
     
     track('Found {} SNPs with a mean absolute difference higher than {}'.format(sum(abs(mean_1 - mean_2) > threshold), threshold), track_name)
         
@@ -528,4 +529,4 @@ def count_snps_same_position(reference, query, dataset_name_1, dataset_name_2, l
             index1 += 1
             index2 += 1
     
-    track('--> {} SNPs found at the same position between {} and {} datasets'.format(n_coincidences, dataset_name_1, dataset_name_2), track_name)
+    logger.debug('--> {} SNPs found at the same position between the reference and the query')

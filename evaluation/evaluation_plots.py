@@ -69,7 +69,7 @@ def plot_snp_means(query_paths: List[str], reference_paths: List[str], plot_dict
         chrom = check_chromosome(query, reference, single=False)
         
         # Filter the reference and the query to only contain the common markers
-        if type(chrom) is not list: logger.debug(f'Searching common markers in chromosome {chrom}...')
+        if not isinstance(chrom, list): logger.debug(f'Searching common markers in chromosome {chrom}...')
         else: logger.debug(f'Searching common markers in all chromosomes...')
         reference, query, _, _ = keep_common_markers_several_chr(reference, query, logger)
         
@@ -109,7 +109,7 @@ def plot_snp_means(query_paths: List[str], reference_paths: List[str], plot_dict
     # Plot the SNP means for the common markers between the query and the reference
     snp_means_plot(all_query_snps, all_reference_snps, plot_dict, output_folder, logger)
 
-    
+
 def plot_pca(query_paths: List[str], reference_paths: List[str], train_query: bool, 
              PCA_plot_dict: Dict, output_folder: str, logger: logging.Logger) -> None:
     """
@@ -196,6 +196,9 @@ def plot_pca(query_paths: List[str], reference_paths: List[str], train_query: bo
                 all_reference_snps = np.concatenate((all_reference_snps, reference_snps), axis=1)
         
         i += 1
+        
+    logger.info(f'{all_query_snps.shape[1]} common SNPs in total between the query and the '\
+                'reference datasets.')
         
     # Plot PCA
     if reference_paths is None:

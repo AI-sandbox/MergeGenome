@@ -109,7 +109,7 @@ def PCA_trained_and_projected_on_query(query_snps: np.array, plot_dict: Dict, ou
 
     # Define output name to .png image with SNP means plot 
     # The .png image will have the name 'trained_query.png'
-    output_name = f'trained_query.png'
+    output_name = 'trained_query.png'
     
     # Save figure in output folder
     logger.debug(f'Saving plot with SNP means in {output_folder}{output_name}.')
@@ -160,11 +160,13 @@ def PCA_trained_on_query_projected_on_both(query_snps: np.array, reference_snps:
     plt.rcParams['figure.facecolor'] = 'white'
     plt.rcParams.update({'font.size': plot_dict['fontsize']})
     
-    # Plot the first two components for the query
-    plt.scatter(princ_query[:,0], princ_query[:,1], s=plot_dict['s'], c=plot_dict["color_query"], label="Query")
+    # Plot the reference 2D PCA points
+    plt.scatter(princ_reference[:,0], princ_reference[:,1], s=plot_dict['s'], 
+                alpha=plot_dict['alpha'], c=plot_dict["color_reference"], label="Reference")
     
-    # Plot the first two components for the reference
-    plt.scatter(princ_reference[:,0], princ_reference[:,1], s=plot_dict['s'], c=plot_dict["color_reference"], label="Reference")
+    # Plot the query 2D PCA points
+    plt.scatter(princ_query[:,0], princ_query[:,1], s=plot_dict['s'], 
+                alpha=plot_dict['alpha'], c=plot_dict["color_query"], label="Query")
     
     # Define plot title, x and y axis, and legend
     plt.title("PCA trained on the query")
@@ -174,7 +176,7 @@ def PCA_trained_on_query_projected_on_both(query_snps: np.array, reference_snps:
 
     # Define output name to .png image with SNP means plot 
     # The .png image will have the name 'trained_query_projected_both.png'
-    output_name = f'trained_query_projected_both.png'
+    output_name = 'trained_query_projected_both.png'
     
     # Save figure in output folder
     logger.debug(f'Saving plot with SNP means in {output_folder}{output_name}.')
@@ -220,13 +222,13 @@ def PCA_trained_and_projected_on_both(query_snps: np.array, reference_snps: np.a
     plt.rcParams['figure.facecolor'] = 'white'
     plt.rcParams.update({'font.size': plot_dict['fontsize']})
     
-    # Plot the query 2D PCA points
-    plt.scatter(princ_comp_concat[:query_snps.shape[0],0], princ_comp_concat[:query_snps.shape[0],1], 
-                s=plot_dict['s'], c=plot_dict["color_query"], label="Query")
-    
     # Plot the reference 2D PCA points
     plt.scatter(princ_comp_concat[query_snps.shape[0]:,0], princ_comp_concat[query_snps.shape[0]:,1], 
-                s=plot_dict['s'], c=plot_dict["color_reference"], label="Reference")
+                s=plot_dict['s'], alpha=plot_dict['alpha'], c=plot_dict["color_reference"], label="Reference")
+    
+    # Plot the query 2D PCA points
+    plt.scatter(princ_comp_concat[:query_snps.shape[0],0], princ_comp_concat[:query_snps.shape[0],1], 
+                s=plot_dict['s'], alpha=plot_dict['alpha'], c=plot_dict["color_query"], label="Query")
     
     # Define plot title, x and y axis, and legend
     plt.title("PCA trained on both the query and the reference")
@@ -236,7 +238,7 @@ def PCA_trained_and_projected_on_both(query_snps: np.array, reference_snps: np.a
 
     # Define output name to .png image with SNP means plot 
     # The .png image will have the name 'trained_both_projected_both.png'
-    output_name = f'trained_both_projected_both.png'
+    output_name = 'trained_both_projected_both.png'
     
     # Save figure in output folder
     logger.debug(f'Saving plot with SNP means in {output_folder}{output_name}.')
