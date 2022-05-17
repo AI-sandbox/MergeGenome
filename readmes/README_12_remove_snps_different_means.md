@@ -1,6 +1,8 @@
 ## Remove SNPs with different means
 
-The MergeGenome remove-snps-different-means command removes all the common markers (i.e., SNPs at the same CHROM, POS, REF, and ALT) between a query and reference datasets with a mean absolute difference higher than a threshold (by default, 0.1). The query and reference with the filtered SNPs are stored in a new VCF file.
+The MergeGenome remove-snps-different-means command removes all the common markers (i.e., SNPs at the same CHROM, POS, REF, and ALT) between a query and reference datasets that have a mean absolute difference higher than a threshold (by default, 0.1). It is a fast solution to identifying and removing outlier SNPs, which might harm any analysis built on top of corrupt features. The query and reference with the filtered SNPs are stored in a new VCF file.
+
+The provided .vcf files must contain data for the same singular chromosome, and the chromosomes need to appear in the same order.
 
 ## Usage
 
