@@ -8,13 +8,9 @@ MergeGenome plot-pca command produces a scatter plot with the two first PCA comp
 
 Figure 2 shows an output example of MergeGenome plot-pca command, in which the PCA has been trained on the common markers from the query and projected on both the query and the reference datasets. We can observe that the PCA points from the query do not fall into the same space as the PCA points from the reference, suggesting the data have different distributions between sources. However, after following MergeGenome preprocessing steps, the differences in the DNA sequences between both sources are not noticaeble, as can be seen in Figure 3. This observation supports the need for properly preprocessing genomic sequences prior to merging.
 
-![Figure 2. PCA trained on the query and projected on both the query and the reference](https://github.com/AI-sandbox/merge-vcf-files/blob/main/figures/trained_both_projected_both.png)
-
-*Figure 2. PCA trained on the common markers from the query and projected on both the query and the reference datasets.*
-
-![Figure 3. PCA trained on the query and projected on both the query and the reference after MergeGenome Preprocessing](https://github.com/AI-sandbox/merge-vcf-files/blob/main/figures/trained_both_projected_both_after_preprocessing.png)
-
-*Figure 3. PCA trained on the common markers from the query and projected on both the query and the reference datasets after following MergeGenome preprocessing steps.*
+No preprocessing           |  MergeGenome Preprocessing
+:-------------------------:|:-------------------------:
+![](https://github.com/AI-sandbox/merge-vcf-files/blob/main/figures/trained_both_projected_both.png)  |  ![](https://github.com/AI-sandbox/merge-vcf-files/blob/main/figures/trained_both_projected_both_after_preprocessing.png)
 
 ## Usage
 
