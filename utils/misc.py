@@ -111,26 +111,27 @@ def define_parser() -> argparse.ArgumentParser:
     partition_parser.add_argument('-f', '--fontsize', required=False, default=25, help='Fontsize of all text in plot.')
     partition_parser.add_argument('-w', '--figure-width', required=False, default=26, help='Figure width of plot.')
     partition_parser.add_argument('-i', '--figure-height', required=False, default=15, help='Figure height of plot.')
-    partition_parser.add_argument('-s', '--size-points', required=False, default=0.1, help='Size of the points in plot.')
+    partition_parser.add_argument('-s', '--size-points', required=False, default=0.1, help='Size of points in plot.')
     partition_parser.add_argument('-c', '--color-points', required=False, default='#306998', help='Color of points in plot.')
     partition_parser.add_argument('-d', '--debug', required=False, help='Path to .log/.txt file to store info/debug messages.')
 
     # Define subparser for 'plot-pca' command
-    partition_parser = subparsers.add_parser('plot-pca', help='To plot the PCA of the SNPs data.')
+    partition_parser = subparsers.add_parser('plot-pca', help='To plot the PCA of the provided data.')
     partition_parser.add_argument('-q', '--query', required=True, nargs="*", 
-                                  help='Paths to query .vcf files with data for each chromosome.')
-    partition_parser.add_argument('-r', '--reference', required=True, nargs="*", 
-                                  help='Paths to reference .vcf files with data for each chromosome.')
+                                  help='Paths to query .vcf files with data for a single or multiple chromosomes each.')
+    partition_parser.add_argument('-r', '--reference', required=False, nargs="*", 
+                                  help='Paths to reference .vcf files with data for a single or multiple chromosomes each.')
     partition_parser.add_argument('-o', '--output-folder', required=True, help='Path to output folder.')
-    partition_parser.add_argument('-t', '--train-both', action='store_true', help='Train on both the query and the reference.')
-    partition_parser.add_argument('-f', '--fontsize', required=False, default=25, help='Fontsize in the plot.')
-    partition_parser.add_argument('-w', '--figure-width', required=False, default=26, help='Figure width of the plot.')
-    partition_parser.add_argument('-i', '--figure-height', required=False, default=15, help='Figure height of the plot.')
-    partition_parser.add_argument('-s', '--size-points', required=False, default=0.1, help='Size of the points in the plot.')
+    partition_parser.add_argument('-t', '--train-query', action='store_true', 
+                                  help='To train the PCA the PCA only on the query instead of on both datasets.')
+    partition_parser.add_argument('-f', '--fontsize', required=False, default=25, help='Fontsize of all text in plot.')
+    partition_parser.add_argument('-w', '--figure-width', required=False, default=26, help='Figure width of plot.')
+    partition_parser.add_argument('-i', '--figure-height', required=False, default=15, help='Figure height of plot.')
+    partition_parser.add_argument('-s', '--size-points', required=False, default=15, help='Size of points in plot.')
     partition_parser.add_argument('-cq', '--color-points-query', required=False, default='#259988', 
-                                  help='Color of query points in the plot.')
+                                  help='Color of query points in plot.')
     partition_parser.add_argument('-cr', '--color-points-reference', required=False, default='#EBD0A1', 
-                                  help='Color of reference points in the plot.')
+                                  help='Color of reference points in plot.')
     partition_parser.add_argument('-d', '--debug', required=False, help='Path to .log/.txt file to store info/debug messages.')
 
     # Define subparser for 'store-allele' command
@@ -279,12 +280,21 @@ def check_arguments(args: argparse.Namespace) -> None:
         assert len(args.query) == len(args.reference), f'The amount of query and reference paths does not coincide '\
         f'{len(args.query)} != {len(args.reference)}.'
                 
-    #elif args.command == 'plot-snp-means':
-    # Check the input arguments are correct
-    #check_arguments(args.query)
-    #if args.reference is not None:
-    #    check_arguments(args.reference)
-    
+    elif args.command == 'plot-snp-means':
+        # Check all the query paths exist and are a .vcf file
+        check_paths(args.query)
+        
+        if args.reference == None:
+            # Put reference in list to be compatible with other scripts
+            args.reference = [None]
+            
+            # Ensure all tasks specified only work on the query
+            if train_both is not None:
+                raise argparse.ArgumentTypeError(f'--train_both is only supported when a '\
+                                                 'reference is provided.')
+        else:
+            # Check all the reference paths exist and are a .vcf file
+            check_paths(args.reference)
     
 def check_chromosome(query: Dict, reference: Dict, single: bool = True):
     """
@@ -322,10 +332,10 @@ def check_chromosome(query: Dict, reference: Dict, single: bool = True):
         # Ensure the chromosomes is/are the same (in the same order)
         for chrom_query, chrom_reference in zip(chroms_query, chroms_reference):
             assert chrom_query == chrom_reference, f'The query contains data for chromosome {chroms_query[0]}.'\
-            f'while the query contains data for chromosome {chroms_reference[0]}, when they must be the same.'\
+            f'while the reference contains data for chromosome {chroms_reference[0]}, when they must be the same.'\
             'Check the input files.'
     
-    if single: return chroms_query[0]
+    if len(chroms_query) == 1: return chroms_query[0]
     else: return chroms_query
 
 

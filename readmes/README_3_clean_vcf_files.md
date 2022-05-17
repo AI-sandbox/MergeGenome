@@ -22,7 +22,7 @@ There is a mismatch between SNPs at the same chromosome and the position of the 
 
 **Rename missing values**
 
-If missing allele values in the variants/CHROM field are badly encoded (e.g. with a -1), some widely used software packages such as Beagle can give the following error: *"Caused by: java.lang.IllegalArgumentException: ERROR: invalid allele [-1]"*. Changing the missing nomenclature to a dot "." usually solves this issue. MergeGenome `--rename-map-query` and `--rename-map-reference` rename missing values notation through a key-value pair, where the key is the actual missing value nomenclature and new is the new name adopted by any missing value in the variants/CHROM field.
+If missing allele values in the variants/CHROM field are badly encoded (e.g., with a -1), some widely used software packages such as Beagle can give the following error: *"Caused by: java.lang.IllegalArgumentException: ERROR: invalid allele [-1]"*. Changing the missing nomenclature to a dot "." usually solves this issue. MergeGenome `--rename-map-query` and `--rename-map-reference` rename missing values notation through a key-value pair, where the key is the actual missing value nomenclature and new is the new name adopted by any missing value in the variants/CHROM field.
 
 ## Usage
 

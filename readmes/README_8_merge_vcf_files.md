@@ -1,6 +1,6 @@
 ## Merge VCF files
 
-The horizontal combination through BCFTools `merge` consists in combining multiple VCF files containing the same information about different samples (i.e. there is no overlap between sample IDs in all of the VCF files). Thus, the `merge` command can be used to obtain a single VCF file with the merged samples from the query and the reference.
+The horizontal combination through BCFTools `merge` consists in combining multiple VCF files containing the same information about different samples (i.e., there is no overlap between sample IDs in all of the VCF files). Thus, the `merge` command can be used to obtain a single VCF file with the merged samples from the query and the reference.
 
 It is the user's responsibility to ensure that the sample names are consistent across all files. Unless the option `—-force-samples` is specified, the application will exit with an error. It is worth noting that only records from different files can be merged, never from the same file. Look into BCFtools `concat` for vertical merging.
 

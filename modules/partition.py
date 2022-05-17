@@ -74,4 +74,4 @@ def partition_by_chromosome(query_path: str, output_folder: str, rename_chr: boo
         # Write query data for the chromosome in particular in .vcf file
         # with name output_name inside folder output_folder
         logger.debug(f'Writing .vcf data for chromosome {new_chrom} in {output_folder}{output_name}.')
-        #write_vcf_file(query_chrom, output_folder, output_name)
+        write_vcf_file(query_chrom, output_folder, output_name)

@@ -1,6 +1,6 @@
 ## Concat VCF files
 
-The `concat` and `merge` commands from the BCFtools software can be used to combine VCF files vertically and horizontally, respectively. The vertical combination through `concat` consists in combining multiple VCF files containing different information about the same samples (i.e. the same sample IDs can be found in all VCF files). All source files must have the same sample columns appearing in the same order. The input files must be sorted by chromosome and position. While the `partition` command from MergeGenome partitions a single VCF file into a VCF file per chromosome, the BCFtools `concat` command can be used to concatenate the chromosome VCF files back into one VCF.
+The `concat` and `merge` commands from the BCFtools software can be used to combine VCF files vertically and horizontally, respectively. The vertical combination through `concat` consists in combining multiple VCF files containing different information about the same samples (i.e., the same sample IDs can be found in all VCF files). All source files must have the same sample columns appearing in the same order. The input files must be sorted by chromosome and position. While the `partition` command from MergeGenome partitions a single VCF file into a VCF file per chromosome, the BCFtools `concat` command can be used to concatenate the chromosome VCF files back into one VCF.
 
 ## Usage
 

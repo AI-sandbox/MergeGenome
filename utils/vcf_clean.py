@@ -9,6 +9,7 @@
 import numpy as np
 import logging
 from typing import List
+import re
 from utils.vcf_utils import combine_chrom_strands
 
 
@@ -384,9 +385,15 @@ def keep_common_markers_several_chr(reference: dict, query: dict, logger: loggin
     idxs_query = []
 
     while i < len(reference['variants/POS']) and j < len(query['variants/POS']):
-        if int(reference['variants/CHROM'][i][3:]) < int(query['variants/CHROM'][j][3:]):
+        # Obtain chromosome number
+        if reference['variants/CHROM'][i].isdigit(): chrom_ref = reference['variants/CHROM'][i]
+        else: chrom_ref = int(re.search(r'\d+', reference['variants/CHROM'][i]).group())
+        if query['variants/CHROM'][i].isdigit(): chrom_query = query['variants/CHROM'][i]
+        else: chrom_query = int(re.search(r'\d+', query['variants/CHROM'][i]).group())
+        
+        if chrom_ref < chrom_query:
             i += 1
-        elif int(reference['variants/CHROM'][i][3:]) > int(query['variants/CHROM'][j][3:]):
+        elif chrom_ref > chrom_query:
             j += 1
         elif reference['variants/POS'][i] < query['variants/POS'][j]:
             # If the position of the SNP in dataset 1 is smaller than the position of the SNP in dataset 2...
@@ -410,7 +417,7 @@ def keep_common_markers_several_chr(reference: dict, query: dict, logger: loggin
                 i += 1
                 j += 1
                 
-    logger.info(f'--> {len(idxs_reference)} common markers in total')
+    logger.info(f'--> {len(idxs_reference)} common markers in total.')
     
     # Keep the SNPs that are common markers
     # The SNPs that differe in position, reference or alternate are removed

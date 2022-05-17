@@ -1,6 +1,8 @@
 ################################################################################
-# Useful functions to plot a scatter plot with SNP means
-# or 2D data from Principal Component Analysis (PCA)
+# Useful functions to plot a scatter plot with: 
+# * SNP means comparison.
+# * First two components of Principal Component Analysis (PCA).
+# For the common markers between the query and reference.
 ################################################################################
 
 import numpy as np
@@ -64,16 +66,15 @@ def snp_means_plot(query_snps: np.array, reference_snps: np.array,
     plt.savefig(output_folder+output_name, bbox_inches='tight')
 
 
-def PCA_trained_and_projected_on_query(query_snps: np.array, plot_dict: Dict, 
-                                       output_folder: str) -> None:
+def PCA_trained_and_projected_on_query(query_snps: np.array, plot_dict: Dict, output_folder: str, 
+                                       logger: logging.Logger) -> None:
     """
-    Train and project Principal Component Analysis (PCA) on 
-    the query SNPs data and plot a scatter plot with the 
-    2D points. First, data is standardized to have 0 mean
-    and 1 standard devision (std).
+    Applies Principal Component Analysis (PCA) on the query and genenrates a 
+    scatter plot with the first two components. First, data is standardized to 
+    have 0 mean and 1 standard devision (std).
     
     Args:
-        query_snps (List[str]): concatenation of SNPs in the query.
+        query_snps (List[str]): concatenation of all SNPs in the query.
         plot_dict[Dict]: configuration parameters of the plot.
         output_folder (str): path to output folder.
         
@@ -82,7 +83,7 @@ def PCA_trained_and_projected_on_query(query_snps: np.array, plot_dict: Dict,
     
     """
 
-    # Standardize the SNPs data to have 0 mean and 1 std
+    # Standardize SNPs to have 0 mean and 1 std
     snps_scaled = StandardScaler().fit_transform(query_snps)
     
     # Define PCA with two components
@@ -92,34 +93,42 @@ def PCA_trained_and_projected_on_query(query_snps: np.array, plot_dict: Dict,
     princ_comp = pca.fit_transform(snps_scaled)
 
     # Define plot figure
-    plt.figure(figsize=(plot_dict['FIG_WIDTH'], plot_dict['FIG_HEIGHT']))
+    plt.figure(figsize=(plot_dict['fig_width'], plot_dict['fig_height']))
     plt.rcParams['axes.facecolor'] = 'white'
     plt.rcParams['figure.facecolor'] = 'white'
+    plt.rcParams.update({'font.size': plot_dict['fontsize']})
     
-    # Plot the 2D PCA points
-    plt.scatter(princ_comp[:,0], princ_comp[:,1], s=plot_dict['s'], alpha=plot_dict['alpha'], c=plot_dict["color_query"], label="Query")
+    # Plot the first two components
+    plt.scatter(princ_comp[:,0], princ_comp[:,1], s=plot_dict['s'], c=plot_dict["color_query"], label="Query")
     
-    plt.title("PCA", fontsize = plot_dict['FONTSIZE'])
-    plt.xlabel('\nPrincipal Component 1', fontsize = plot_dict['FONTSIZE'])
-    plt.ylabel('\nPrincipal Component 2', fontsize = plot_dict['FONTSIZE'])
-    plt.legend(loc='upper right', prop={'size': plot_dict['FONTSIZE']})
+    # Define plot title, x and y axis, and legend
+    plt.title("PCA")
+    plt.xlabel('\nPrincipal Component 1')
+    plt.ylabel('\nPrincipal Component 2')
+    plt.legend(loc='upper right')
 
+    # Define output name to .png image with SNP means plot 
+    # The .png image will have the name 'trained_query.png'
+    output_name = f'trained_query.png'
+    
     # Save figure in output folder
-    plt.savefig(f'{output_folder}trained_and_projected_on_query', bbox_inches='tight')
+    logger.debug(f'Saving plot with SNP means in {output_folder}{output_name}.')
+    plt.savefig(output_folder+output_name, bbox_inches='tight')
     
     
-def PCA_trained_on_query_projected_on_both(query_snps: np.array, reference_snps: np.array, 
-                                           plot_dict: Dict, output_folder: str) -> None:
+def PCA_trained_on_query_projected_on_both(query_snps: np.array, reference_snps: np.array, plot_dict: Dict,
+                                           output_folder: str, logger: logging.Logger) -> None:
     """
-    Train Principal Component Analysis (PCA) on 
-    the query SNPs data, project on both the query and the 
-    reference and plot a scatter plot with the 2D points. First, data 
-    is standardized to have 0 mean and 1 standard devision (std) 
-    (based on the query).
+    Applies Principal Component Analysis (PCA) on the query and obtains
+    the first two components of the projected query and reference. Genenrates a 
+    scatter plot with the first two components. First, data is standardized to 
+    have 0 mean and 1 standard devision (std) based on the query.
     
     Args:
-        query_snps (List[str]): concatenation of common markers in the query.
-        reference_snps (List[str]): concatenation of common markers in the reference.
+        query_snps (List[str]): concatenation of all SNPs in the query
+        that are also present in the reference.
+        reference_snps (List[str]): concatenation of all SNPs in the 
+        reference that are also present in the query.
         plot_dict[Dict]: configuration parameters of the plot.
         output_folder (str): path to output folder.
         
@@ -128,7 +137,7 @@ def PCA_trained_on_query_projected_on_both(query_snps: np.array, reference_snps:
     
     """
     
-    # Standardize SNPs data to have 0 mean and 1 std
+    # Standardize SNPs to have 0 mean and 1 std
     standardizer = StandardScaler().fit(query_snps)
     
     # Transform
@@ -146,35 +155,44 @@ def PCA_trained_on_query_projected_on_both(query_snps: np.array, reference_snps:
     princ_reference = pca.transform(snps_reference)
 
     # Define plot figure
-    plt.figure(figsize=(plot_dict['FIG_WIDTH'], plot_dict['FIG_HEIGHT']))
+    plt.figure(figsize=(plot_dict['fig_width'], plot_dict['fig_height']))
     plt.rcParams['axes.facecolor'] = 'white'
     plt.rcParams['figure.facecolor'] = 'white'
+    plt.rcParams.update({'font.size': plot_dict['fontsize']})
     
-    # Plot the query 2D PCA points
-    plt.scatter(princ_query[:,0], princ_query[:,1], s=plot_dict['s'], alpha=plot_dict['alpha'], c=plot_dict["color_query"], label="query")
+    # Plot the first two components for the query
+    plt.scatter(princ_query[:,0], princ_query[:,1], s=plot_dict['s'], c=plot_dict["color_query"], label="Query")
     
-    # Plot the reference 2D PCA points
-    plt.scatter(princ_reference[:,0], princ_reference[:,1], s=plot_dict['s'], alpha=plot_dict['alpha'], c=plot_dict["color_reference"], label="reference")
+    # Plot the first two components for the reference
+    plt.scatter(princ_reference[:,0], princ_reference[:,1], s=plot_dict['s'], c=plot_dict["color_reference"], label="Reference")
     
-    plt.title("PCA trained on the query projected on both", fontsize = plot_dict['FONTSIZE'])
-    plt.xlabel('\nPrincipal Component 1', fontsize = plot_dict['FONTSIZE'])
-    plt.ylabel('\nPrincipal Component 2', fontsize = plot_dict['FONTSIZE'])
-    plt.legend(loc='upper right', prop={'size': plot_dict['FONTSIZE']})
+    # Define plot title, x and y axis, and legend
+    plt.title("PCA trained on the query")
+    plt.xlabel('\nPrincipal Component 1')
+    plt.ylabel('\nPrincipal Component 2')
+    plt.legend(loc='upper right')
 
+    # Define output name to .png image with SNP means plot 
+    # The .png image will have the name 'trained_query_projected_both.png'
+    output_name = f'trained_query_projected_both.png'
+    
     # Save figure in output folder
-    plt.savefig(f'{output_folder}trained_on_query_projected_on_both', bbox_inches='tight')
+    logger.debug(f'Saving plot with SNP means in {output_folder}{output_name}.')
+    plt.savefig(output_folder+output_name, bbox_inches='tight')
     
 
-def PCA_trained_and_projected_on_both(query_snps: np.array, reference_snps: np.array, 
-                                      plot_dict: Dict, output_folder: str) -> None:
+def PCA_trained_and_projected_on_both(query_snps: np.array, reference_snps: np.array, plot_dict: Dict, 
+                                      output_folder: str, logger: logging.Logger) -> None:
     """
     Train Principal Component Analysis (PCA) on 
     the query and reference SNPs data and plot a scatter plot with the 2D points. 
     First, data is standardized to have 0 mean and 1 standard devision (std).
     
     Args:
-        query_snps (List[str]): concatenation of common markers in the query.
-        reference_snps (List[str]): concatenation of common markers in the reference.
+        query_snps (List[str]): concatenation of all SNPs in the query
+        that are also present in the reference.
+        reference_snps (List[str]): concatenation of all SNPs in the 
+        reference that are also present in the query.
         plot_dict[Dict]: configuration parameters of the plot.
         output_folder (str): path to output folder.
         
@@ -183,10 +201,10 @@ def PCA_trained_and_projected_on_both(query_snps: np.array, reference_snps: np.a
     
     """
     
-    # Concatenate SNPs data
+    # Concatenate SNPs from the query and the reference
     concat = np.concatenate((query_snps, reference_snps), axis=0, out=None)
 
-    # Standardize SNPs data to have 0 mean and 1 std
+    # Standardize SNPs to have 0 mean and 1 std
     concat_scaled = StandardScaler().fit_transform(concat)
 
     # Define PCA with two components
@@ -195,24 +213,31 @@ def PCA_trained_and_projected_on_both(query_snps: np.array, reference_snps: np.a
     # Fit and transform PCA model on both the query and the reference
     pca = pca.fit(concat_scaled)
     princ_comp_concat = pca.transform(concat_scaled)
-
+    
     # Define plot figure
-    plt.figure(figsize=(plot_dict['FIG_WIDTH'], plot_dict['FIG_HEIGHT']))
+    plt.figure(figsize=(plot_dict['fig_width'], plot_dict['fig_height']))
     plt.rcParams['axes.facecolor'] = 'white'
     plt.rcParams['figure.facecolor'] = 'white'
+    plt.rcParams.update({'font.size': plot_dict['fontsize']})
     
     # Plot the query 2D PCA points
-    plt.scatter(princ_comp_concat[:query_snps.shape[0],0], princ_comp_concat[:query_snps.shape[0],1], s=plot_dict['s'], 
-                alpha=plot_dict['alpha'], c=plot_dict["color_query"], label="query")
+    plt.scatter(princ_comp_concat[:query_snps.shape[0],0], princ_comp_concat[:query_snps.shape[0],1], 
+                s=plot_dict['s'], c=plot_dict["color_query"], label="Query")
     
     # Plot the reference 2D PCA points
-    plt.scatter(princ_comp_concat[query_snps.shape[0]:,0], princ_comp_concat[query_snps.shape[0]:,1], s=plot_dict['s'], 
-                alpha=plot_dict['alpha'], c=color2, label="reference")
+    plt.scatter(princ_comp_concat[query_snps.shape[0]:,0], princ_comp_concat[query_snps.shape[0]:,1], 
+                s=plot_dict['s'], c=plot_dict["color_reference"], label="Reference")
     
-    plt.title("PCA trained and projecred on both the query the reference", fontsize = plot_dict['FONTSIZE'])
-    plt.xlabel('\nPrincipal Component 1', fontsize = plot_dict['FONTSIZE'])
-    plt.ylabel('\nPrincipal Component 2', fontsize = plot_dict['FONTSIZE'])
-    plt.legend(loc='upper right', prop={'size': plot_dict['FONTSIZE']})
+    # Define plot title, x and y axis, and legend
+    plt.title("PCA trained on both the query and the reference")
+    plt.xlabel('\nPrincipal Component 1')
+    plt.ylabel('\nPrincipal Component 2')
+    plt.legend(loc='upper right')
 
+    # Define output name to .png image with SNP means plot 
+    # The .png image will have the name 'trained_both_projected_both.png'
+    output_name = f'trained_both_projected_both.png'
+    
     # Save figure in output folder
-    plt.savefig(f'{output_folder}trained_and_projected_on_both', bbox_inches='tight')
+    logger.debug(f'Saving plot with SNP means in {output_folder}{output_name}.')
+    plt.savefig(output_folder+output_name, bbox_inches='tight')

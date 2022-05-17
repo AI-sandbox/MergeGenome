@@ -1,30 +1,36 @@
 ## Plot Principal Component Analysis (PCA)
 
-The Principal Component Analysis (PCA) dimensionality reduction technique can be used in bioinformatics to identify outlier samples, where a sample is a DNA squence. For instance, when dealing with dog DNA sequences, samples from village or mixed dogs might be consistently different than from purebred dogs. Also, a sample might be very unsimilar to the rest because it sequencing went wrong. Either way, outlier samples might mislead any future analysis, so it is important to identify them and treat them properly.
+The Principal Component Analysis (PCA) dimensionality reduction technique can be used in bioinformatics to identify outlier DNA sequences (samples) in any given dataset. Outlier samples can exist for several reasons, including natural genetic differences. For instance, samples from a village or mixed dog might be consistently different from purebred dogs because of their different biological origins. Also, it could be that improbable (not plausible) data forms an outlier. Either way, outlier samples can mislead any analysis conducted on top of it. The most practical solution is to remove them.
 
-Two-dimensional PCA plots can also be used in genomics to to see how the samples are distributed, and evaluate the quality of a merged dataset. If the the query and reference points fall into the same space, it suggests that the merged dataset is homogeneous. At least, two components do not capture any significant variation between samples from one source or the other.
+PCA can also be used as a tool to visualize how samples are distributed. Usually, clusters for the different ancestries or species present in the data are generated. For humans, the population structure is commonly correlated with geography. Since the PCA captures the variance in the data, this technique is extremely useful to qualitatively determine if joined samples from different sources constitute a homogeneous dataset. Of course, it does not prove the quality of the merged dataset. It only confirms that the first two principal components are not enough to capture any significant variation between samples from one source or the other.
 
-The plot-pca command from MergeGenome plots a scatter plot after PCA. If only data from the query is provided, the PCA is trained and projected on all the SNPs data provided. If both data from the query and the reference are provided, the PCA is trained and projected on the common markers between both datasets. When train_both = False, then the data is trained on the query and projected on both the query and the reference.
+MergeGenome plot-pca command produces a scatter plot with the two first PCA components. The provided .vcf files can contain data for a single or multiple chromosomes. Either way, the chromosomes need to appear in the same order. If only data from the query is provided, the PCA is trained and projected on the query SNPs. If both data from the query and the reference are provided, the PCA is trained and projected on the common markers (i.e., SNPs at the same CHROM, POS, REF, and ALT) between both datasets, except when `--train_query` is called, then the data is only trained on the query and projected on both datasets.
+
+Figure 1 shows an output example of MergeGenome plot-pca command. We can observe 
+
+![Figure 1. SNP means comparison](https://github.com/AI-sandbox/merge-vcf-files/blob/main/figures/snp_means_reference_and_query.png)
+
+*Figure 1. SNP means comparison for the common markers betwee a query and a reference datasets.*
 
 ## Usage
 
 ```
-$ python3 MergeGenome.py plot-pca -q -q <query_file_1>...<query_file_n> -r <reference_file_1>...<reference_file_n> -o <output_folder>
+$ python3 MergeGenome.py plot-pca -q <query_file_1>...<query_file_n> -o <output_folder>
 ```
 
 Input flags include:
 
-* -q, --query LIST, Path to query .vcf files with data for each chromosome (required).
-* -r, --reference LIST, Paths to reference .vcf files with data for each chromosome (required).
-* -o, --output-folder PATH, Path to output folder to store the modified VCF files (required). Note: make sure a '/' appears at the end of the output folder.
-* -t, --train-both, Train on both the query and the reference (optional). Default=False.
-* -f, --fontsize INT, Fontsize in the plot (optional). Default=25.
-* -w, --figure-width INT, Figure width of the plot (optional). Default=26.
-* -i, --figure-height INT, Figure height of the plot (optional). Default=15.
-* -s, --size-points INT, Size of the points in the plot (optional). Default=0.1.
+* -q, --query LIST, Paths to query .vcf files with data for a single or multiple chromosomes each (optional).
+* -r, --reference LIST, Paths to reference .vcf files with data for a single or multiple chromosomes each (optional).
+* -o, --output-folder PATH, Path to output folder. (required). Note: make sure a '/' appears at the end of the output folder.
+* -t, --train-query, To train the PCA the PCA only on the query instead of on both datasets (optional). Default=False.
+* -f, --fontsize INT, Fontsize of all text in plot (optional). Default=25.
+* -w, --figure-width INT, Figure width of plot (optional). Default=26.
+* -i, --figure-height INT, Figure height of plot (optional). Default=15.
+* -s, --size-points INT, Size of points in plot (optional). Default=15.
 * -cq, --color-points-query STR, Color of query points in the plot (optional). Default=#259988.
 * -cr, --color-points-reference STR, Color of reference points in the plot (optional). Default=#EBD0A1.
-* -d, --debug PATH, Path to file to store info/debug messages (optional).
+* -d, --debug PATH, Path to .log/.txt file to store info/debug messages (optional).
 
 `Examples`
 
@@ -34,14 +40,14 @@ Input flags include:
 $ python3 MergeGenome.py plot-pca -q query_chr1.vcf -o ./output/
 ```
 
-2. Plot PCA on the common markers between the query and the reference, trained on the query and projected on both datasets:
-
-```
-$ python3 MergeGenome.py plot-pca -q query_chr1.vcf -r reference_chr1.vcf -o ./output/
-```
-
-3. Plot PCA on the common markers between the query and the reference, trained and projected on both datasets:
+2. Plot PCA on the common markers between the query and the reference, training the PCA only on the query:
 
 ```
 $ python3 MergeGenome.py plot-pca -q query_chr1.vcf -r reference_chr1.vcf -o ./output/ -t
+```
+
+3. Plot PCA on the common markers between the query and the reference, traing the PCA on both datasets:
+
+```
+$ python3 MergeGenome.py plot-pca -q query_chr1.vcf -r reference_chr1.vcf -o ./output/
 ```

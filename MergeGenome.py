@@ -66,8 +66,8 @@ elif args.command == 'plot-pca':
     plot_dict = define_plot_configuration(args)
     
     # Plot the SNP means for the query and the reference
-    plot_pca(args.query, args.reference, args.train_both, plot_dict, args.output_folder, logger)
-        
+    plot_pca(args.query, args.reference, args.train_query, plot_dict, args.output_folder, logger)
+
 elif args.command == 'remove-snps-different-means':
     # Check the input arguments are correct
     #check_arguments(args.query+args.reference)

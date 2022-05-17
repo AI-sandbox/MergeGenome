@@ -2,7 +2,7 @@
 
 There are multiple statistical challenges of high dimensional data. The fact that not all variants are equally important sometimes leads to select the most relevant features for further analysis and discard the often uninformative features. In case of having a third "subsetted" reference dataset with a pre-selection of important features or SNPs, it is usually beneficiat to subset the high-dimensional data to those relevant SNPs.
 
-MergeGenome subset command finds the common markers (i.e. SNPs with identical CHROM, POS, REF, and ALT fields). between a query and a reference dataset containing data from a particular chromosome and subsets both datasets to only contain those common markers.
+MergeGenome subset command finds the common markers (i.e., SNPs with identical CHROM, POS, REF, and ALT fields). between a query and a reference dataset containing data from a particular chromosome and subsets both datasets to only contain those common markers.
 
 ## Usage
 
