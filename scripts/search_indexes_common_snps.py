@@ -11,6 +11,7 @@ import h5py
 import numpy as np
 
 from utils.io import read_vcf_file
+from utils.misc import check_chromosome
 from utils.vcf_clean import keep_common_markers_several_chr
 
 
@@ -45,8 +46,12 @@ def store_indexes_common_markers(query_path: str, reference_path: str, output_fo
     logger.debug(f'Reading reference file {reference_path}.')
     reference = read_vcf_file(reference_path, logger)
     
+    # Ensure the reference and the query contain data for the same chromosome
+    # and obtain the chromosome in particular
+    chrom = check_chromosome(query, reference)
+    
     # Obtain indexes of the common markers between the query and the referece
-    _, _, idxs_reference, idxs_query = keep_common_markers_several_chr(query, reference, logger)
+    _, _, idxs_reference, idxs_query = keep_common_markers_several_chr(reference, query, logger)
     
     # Ensure the found indexes have the same length in the 
     # query than in the reference

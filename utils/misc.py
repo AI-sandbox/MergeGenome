@@ -353,16 +353,15 @@ def check_chromosome(query: Dict, reference: Dict, single: bool = True):
         
         if single:
             # Ensure the query and the reference contain data for a single chromosome
-            assert len(chroms_query) == 1, 'The query contains data for more than one chromosome.'\
+            assert len(chroms_query) == 1, 'The query contains data for more than one chromosome. '\
             'Use partition command to obtain a separate VCF file per chromosome.'
-            assert len(chroms_reference) == 1, 'The reference contains data for more than one chromosome.'\
+            assert len(chroms_reference) == 1, 'The reference contains data for more than one chromosome. '\
             'Use partition command to obtain a separate VCF file per chromosome.'
 
         # Ensure the chromosomes is/are the same (in the same order)
         for chrom_query, chrom_reference in zip(chroms_query, chroms_reference):
-            assert chrom_query == chrom_reference, f'The query contains data for chromosome {chroms_query[0]}.'\
-            f'while the reference contains data for chromosome {chroms_reference[0]}, when they must be the same.'\
-            'Check the input files.'
+            assert chrom_query == chrom_reference, f'The query contains data for chromosome {chroms_query[0]} '\
+            f'but the reference contains data for chromosome {chroms_reference[0]}. Terminate.'
     
     if len(chroms_query) == 1: return chroms_query[0]
     else: return chroms_query

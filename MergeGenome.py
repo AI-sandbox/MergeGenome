@@ -77,9 +77,6 @@ elif args.command == 'store-common-indexes':
     store_indexes_common_markers(args.query, args.reference, args.output_folder, args.file_format, logger)
     
 elif args.command == 'store-npy':
-    # Check the input arguments are correct
-    #check_arguments([args.query])
-    
     # Store averaged or separated maternal and paternal strands in .npy or .h5
     store_allele_data_in_npy_or_h5(args.query, args.output_folder, args.data_format, args.file_format, logger)
     

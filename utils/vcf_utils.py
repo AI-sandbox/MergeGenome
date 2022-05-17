@@ -229,7 +229,7 @@ def combine_chrom_strands(chrom_data: np.array) -> np.array:
         combined maternal and paternal strands. Shape should be (num_dogs, length).
     
     """
-
+    
     # Determine the dimensions of the chromosone data (SNPs)
     # length corresponds to the length of the chromosone strands (the number of SNPs).
     # num_samples corresponds to the number of dogs available for analysis times 2 because

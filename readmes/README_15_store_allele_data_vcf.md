@@ -1,6 +1,6 @@
 ## Store allele data (from NPY to VCF)
 
-The MergeGenome store-vcf command reads from a provided NPY file with a two-dimensional matrix containing splitted maternal and paternal strands and stores this data in the three-dimensional calldata/GT field of the provided VCF file. Additionaly, `--binary-indexes` flag allows removing all incorrect SNPs with a 0 in the the NPY file with the binary indexes. Therefore, the MergeGenome store-vcf command can be used to integrate the fixed output of DataFix back into the VCF file.
+The MergeGenome store-vcf command reads from a provided NPY file with a two-dimensional matrix containing splitted maternal and paternal strands and stores this data in the three-dimensional calldata/GT field of the provided VCF file. Additionaly, `--binary-indexes` flag allows removing all incorrect SNPs with a 0 in the the NPY file with the binary indexes. Therefore, the MergeGenome store-vcf command can be used to integrate the output of other preprocessing softwares (e.g., [DataFix](https://github.com/AI-sandbox/Datafix)) back into a VCF file.
 
 ## Usage
 
@@ -18,7 +18,7 @@ Input flags include:
 
 **Output**
 
-* A .vcf file with calldata/GT from the provided .npy file and, when desired, without the SNPs in the binary indexes. The new file will receive the same base name as the input .vcf file, but ending with '_from_npy.vcf'.
+* A .vcf file with calldata/GT from the provided .npy file and, optionally, remove undesired SNPs. The new file will receive the same base name as the input .vcf file, but ending with '_from_npy.vcf'.
 * If --debug, a .log or .txt file with information regarding the dimensions of the data (number of samples and number of SNPs).
 
 `Examples`

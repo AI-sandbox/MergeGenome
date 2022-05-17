@@ -415,10 +415,10 @@ def keep_common_markers_several_chr(reference: dict, query: dict, logger: loggin
                 # Save the index of the SNPs that are a common marker in each dataset
                 idxs_reference.append(i)
                 idxs_query.append(j)
-
-                # Increase the reference and query counters
-                i += 1
-                j += 1
+            
+            # Increase the reference and query counters
+            i += 1
+            j += 1
                 
     logger.info(f'--> {len(idxs_reference)} common markers in total.')
     
