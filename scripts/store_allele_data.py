@@ -1,5 +1,5 @@
 ################################################################################
-# Convert VCF file to .npy or .h5
+# Convert VCF file to .npy or .h5.
 ################################################################################
 
 import os
@@ -10,16 +10,17 @@ import numpy as np
 from utils.io import read_vcf_file, read_npy_file, write_vcf_file
 from utils.vcf_utils import combine_chrom_strands
 
-def store_allele_data_in_npy_or_h5(input_path: str, output_folder: str, data_format: str, file_format: str, 
-                                   logger: logging.Logger) -> None:
+
+def store_allele_data_in_npy_or_h5(query_path: str, output_folder: str, data_format: str, 
+                                   file_format: str, logger: logging.Logger) -> None:
     
     """
     Separates or averages the maternal and paternal strands and 
     stores the allel data in calldata/GT in .npy or .h5 format.
     
     Args:
-        input_path (str): path to .vcf file.
-        output_folder (str): folder to save the output.
+        query_path (str): path to query .vcf file.
+        output_folder (str): path to output folder.
         data_format (str): specify the format of the data for the analysis. 
             * 'separted': split maternal and paternal strands into separate samples. 
             * 'averaged': combine maternal and  paternal strands by averaging them.
@@ -35,7 +36,7 @@ def store_allele_data_in_npy_or_h5(input_path: str, output_folder: str, data_for
     
     # Read the .vcf file using scikit-allel
     logger.debug('Reading the provided genomic file.')
-    data = read_vcf_file(input_path, logger)    
+    data = read_vcf_file(query_path, logger)    
     
     # Obtain SNPs data
     snps = data['calldata/GT']
@@ -59,26 +60,30 @@ def store_allele_data_in_npy_or_h5(input_path: str, output_folder: str, data_for
     
     if file_format == '.npy':
         
-        # Define output name to .npy file
-        output_name = f'{os.path.basename(input_path)[:-4]}_{data_format}.npy'
+        # Define output name to .npy file with .npy SNPs data
+        # The .npy file has the same base name as the input file, but 
+        # ending with '_separated.npy' or '_averaged.npy'
+        output_name = f'{os.path.basename(query_path)[:-4]}_{data_format}.npy'
         
         # Define entire output path
         output_path = output_folder + output_name
         
         # Save the snps data in .npy format
-        logger.debug(f'Saving data in .npy format in {output_path}.')
+        logger.debug(f'Writing data in .npy format in {output_path}.')
         np.save(output_path, snps)
 
     elif file_format == '.h5':
 
-        # Define output name to .npy file
-        output_name = f'{os.path.basename(input_path)[:-4]}_{data_format}.h5'
+        # Define output name to .h5 file with .h5 SNPs data
+        # The .h5 file has the same base name as the input file, but 
+        # ending with '_separated.h5' or '_averaged.h5'
+        output_name = f'{os.path.basename(query_path)[:-4]}_{data_format}.h5'
         
         # Define entire output path
         output_path = output_folder + output_name
         
         # Save the snps data in .h5 format
-        logger.debug(f'Saving data in .h5 format in {output_path}.')
+        logger.debug(f'Writing data in .h5 format in {output_path}.')
         h5f = h5py.File(output_path, 'w')
         h5f.create_dataset(name=output_path, data=snps)
         
@@ -89,8 +94,8 @@ def store_allele_data_in_vcf(vcf_path: str, npy_path: str, output_folder: str, b
     """
     Reads .npy with separated maternal and paternal strands and 
     stores the allel data in calldata/GT from a given VCF file.
-    If --binary_indexes, removed SNPs with a 0 at that position. Stores the result
-    in VCF file.
+    If --binary_indexes, removes all SNPs with value zero in the provided
+    numpy array. Stores the result in a VCF file.
     
     Args:
         vcf_path (str): path to .vcf file.
@@ -112,7 +117,7 @@ def store_allele_data_in_vcf(vcf_path: str, npy_path: str, output_folder: str, b
     
     # Obtain SNPs data
     snps = data['calldata/GT']
-        
+    
     # Obtain the dimensions of the data
     num_snps, num_samples, num_strands = snps.shape
     

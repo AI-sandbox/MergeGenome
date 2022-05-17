@@ -125,7 +125,7 @@ def remove_ambiguous_snps(query: dict, logger: logging.Logger) -> dict:
 def correct_flips(query: dict, indexes: List) -> dict:
     """
     Corrects all flips in the dataset by swapping the REF and ALT fields.
-    Consequently, the zeros and ones in the variant/CHROM field in the 
+    Consequently, the zeros and ones in the calldata/GT field in the 
     query are also swapped.
     
     Args:
@@ -385,11 +385,12 @@ def keep_common_markers_several_chr(reference: dict, query: dict, logger: loggin
     j = 0  # query iterator
 
     while i < len(reference['variants/POS']) and j < len(query['variants/POS']):
+        
         # Obtain chromosome number
         if reference['variants/CHROM'][i].isdigit(): chrom_ref = reference['variants/CHROM'][i]
         else: chrom_ref = int(re.search(r'\d+', reference['variants/CHROM'][i]).group())
-        if query['variants/CHROM'][i].isdigit(): chrom_query = query['variants/CHROM'][i]
-        else: chrom_query = int(re.search(r'\d+', query['variants/CHROM'][i]).group())
+        if query['variants/CHROM'][j].isdigit(): chrom_query = query['variants/CHROM'][j]
+        else: chrom_query = int(re.search(r'\d+', query['variants/CHROM'][j]).group())
         
         if chrom_ref < chrom_query:
             i += 1

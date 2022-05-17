@@ -73,9 +73,6 @@ elif args.command == 'remove-snps-different-means':
     remove_snps_with_different_means(args.query, args.reference, args.output_folder, args.threshold, logger)
         
 elif args.command == 'store-common-indexes':
-    # Check the input arguments are correct
-    #check_arguments([args.query]+[args.reference])
-    
     # Store indexes of common markers between the query and the reference in .npy or .h5
     store_indexes_common_markers(args.query, args.reference, args.output_folder, args.file_format, logger)
     

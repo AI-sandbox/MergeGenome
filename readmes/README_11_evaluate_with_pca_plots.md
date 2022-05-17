@@ -24,7 +24,7 @@ Input flags include:
 
 * -q, --query LIST, Paths to query .vcf files with data for a single or multiple chromosomes each (optional).
 * -r, --reference LIST, Paths to reference .vcf files with data for a single or multiple chromosomes each (optional).
-* -o, --output-folder PATH, Path to output folder. (required). Note: make sure a '/' appears at the end of the output folder.
+* -o, --output-folder PATH, Path to output folder (required). Note: make sure a '/' appears at the end of the output folder.
 * -t, --train-query, To train the PCA the PCA only on the query instead of on both datasets (optional). Default=False.
 * -f, --fontsize FLOAT, Fontsize of all text in plot (optional). Default=25.
 * -w, --figure-width FLOAT, Figure width of plot (optional). Default=26.

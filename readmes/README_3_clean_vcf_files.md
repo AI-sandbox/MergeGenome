@@ -14,7 +14,7 @@ A/T, T/A, C/G, and G/C pairs are strand-ambiguous because their components are c
 
 **Correct SNP flips** 
 
-An SNP flip happens when the REF (reference) and ALT (alternate) fields are swapped between SNPs at the same chromosome and position of the query and reference .vcf files. MergeGenome `--correct-snp-flips corrects` SNP flips by swapping the variants/REF and the variants/ALT of detected  SNP flips in the query, taking as true values the reference. Consequently, the zeros and ones in the variant/CHROM field in the query are also swapped. An example of an SNP flip could be an SNP that in the query has variants/REF='A' and variants/ALT='C', but in the reference has variants/REF='C' and variants/ALT='A'. In this case, the nomenclature in the query would be changed to be equal to that of the reference.
+An SNP flip happens when the REF (reference) and ALT (alternate) fields are swapped between SNPs at the same chromosome and position of the query and reference .vcf files. MergeGenome `--correct-snp-flips corrects` SNP flips by swapping the variants/REF and the variants/ALT of detected  SNP flips in the query, taking as true values the reference. Consequently, the zeros and ones in the calldata/GT field in the query are also swapped. An example of an SNP flip could be an SNP that in the query has variants/REF='A' and variants/ALT='C', but in the reference has variants/REF='C' and variants/ALT='A'. In this case, the nomenclature in the query would be changed to be equal to that of the reference.
 
 **Remove SNP mismatches**
 
@@ -22,7 +22,7 @@ There is a mismatch between SNPs at the same chromosome and the position of the 
 
 **Rename missing values**
 
-If missing allele values in the variants/CHROM field are badly encoded (e.g., with a -1), some widely used software packages such as Beagle can give the following error: *"Caused by: java.lang.IllegalArgumentException: ERROR: invalid allele [-1]"*. Changing the missing nomenclature to a dot "." usually solves this issue. MergeGenome `--rename-map-query` and `--rename-map-reference` rename missing values notation through a key-value pair, where the key is the actual missing value nomenclature and new is the new name adopted by any missing value in the variants/CHROM field.
+If missing allele values in the calldata/GT field are badly encoded (e.g., with a -1), some widely used software packages such as Beagle can give the following error: *"Caused by: java.lang.IllegalArgumentException: ERROR: invalid allele [-1]"*. Changing the missing nomenclature to a dot "." usually solves this issue. MergeGenome `--rename-map-query` and `--rename-map-reference` rename missing values notation through a key-value pair, where the key is the actual missing value nomenclature and new is the new name adopted by any missing value in the calldata/GT field.
 
 ## Usage
 

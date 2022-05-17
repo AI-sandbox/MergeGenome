@@ -1,9 +1,9 @@
 ################################################################################
 # Functions to assist with the manipulation of .vcf files:
-# * Obtain chromosomes with available data
-# * Filtering data by chromosome
-# * Rename chromosome nomenclature
-# * Obtaining percentage of SNPs with some missing value (encoded as -1)
+# * Obtain chromosomes with available data.
+# * Filtering data by chromosome.
+# * Rename chromosome nomenclature.
+# * Obtaining percentage of SNPs with some missing value (encoded as -1).
 ################################################################################
 
 import os
@@ -47,7 +47,7 @@ def obtain_renamed_chrom(rename_chr: bool, actual_chrom: str, rename_map: dict) 
         rename_chr (bool): rename (or not) the chromosome nomenclature.
         actual_chrom (str): chromosome notation before renaming.
         rename_map (str): dictionary with mapping from old to new chromosome notation.
-                          The keys are the old notations and the values are the new notations.
+        The keys are the old notations and the values are the new notations.
     
     Returns:
         new_chrom (str): new chromosome notation after renaming.
@@ -125,10 +125,7 @@ def filter_samples(vcf_data: dict, substrings: List[str], logger: logging.Logger
     
     Args:
         vcf_data (dict): allel.read_vcf output.
-        substrings (List[str]): substrings of the samples to be removed. Example: ['wolf', 'fox', 'coyote', 'dhole', 'GDJK_GDJK_24316']. 
-                                In this case, the sample with ID "IrishWolfhound01" would be removed because "wolf" is a substring of 
-                                the sample id. Note that the substrings can be in upper or lowercase since they are standardized prior to
-                                filtering.
+        substrings (List[str]): substrings of the samples to be removed.
         logger (logging.Logger): debug/information tracker.
     
     Returns:
@@ -144,7 +141,8 @@ def filter_samples(vcf_data: dict, substrings: List[str], logger: logging.Logger
     # Define list of booleans with the samples to be kept (True) and to be removed (False).
     binary_samples = []
     
-    # For each sample ID, see if it contains any substring and store results in binary_samples to later filter those samples
+    # For each sample ID, see if it contains any substring and store results in 
+    # binary_samples to later filter those samples
     for sample_name in sample_names:
         
         # True if any substring is contained in sample name, false otherwise
@@ -183,81 +181,68 @@ def search_percentage_SNPs_with_missings(vcf_data: dict, miss_code: [float, str]
     
     """
     
-    ## Obtain npy matrix with all the SNPs
+    # Obtain npy matrix with all the SNPs
     npy = vcf_data['calldata/GT']
     length, num_dogs, num_strands = npy.shape
     npy = npy.reshape(length, num_dogs*2).T
     
-    ## Obtain number of missing values encoded as "-1" in each of the SNPs
+    # Obtain number of missing values encoded as "-1" in each of the SNPs
     num_missings = np.sum(npy == -1, axis=0)
     
-    ## Obtain the % of SNPs with some missing value
+    # Obtain the % of SNPs with some missing value
     perc_missings = sum(num_missings>0)/len(num_missings)*100
     
     return perc_missings
 
 
-def missings_in_each_SNP(vcf_data):
-    '''
-    Objective:
-        - Print the % of SNPs that contain some missing value encoded as "-1". If your missings are encoded differently, 
-          change the -1 in the function for the alternative missings nomenclature.
-    Input:
-        - vcf_data: allel.read_vcf output.
-    '''
+def rename_missings(vcf_data: dict, before: str, after: str) -> dict:
+    """
+    Renames missings in calldata/GT in vcf_data, from {before} to {after}.
     
-    ## Obtain npy matrix with SNPs
-    npy = vcf_data['calldata/GT']
-    length, num_dogs, num_strands = npy.shape
-    npy = npy.reshape(length, num_dogs*2).T
+    Args:
+        vcf_data (dict): allel.read_vcf output.
+        before (str): missing value before renaming. Example: "-1".
+        after (str): missing value after renaming. Example: ".".
     
-    ## Obtain number of samples with some missing value encoded as "-1" for each SNP
-    num_neg = np.sum(npy == -1, axis=0)
-
-    ## Print the % of SNPs that contain some missing value
-    print(sum(num_neg>0)/len(num_neg)*100)
-
-
-def rename_missings(vcf_data, before, after):
-    '''
-    Objective: rename missings in calldata/GT in vcf_data, from {before} to {after}.
-    Input:
-        - vcf_data: allel.read_vcf output.
-        - before: missing value before renaming. Example: "-1".
-        - after: missing value after renaming. Example: ".".
-    Output:
-        - vcf_data: vcf_data with renamed missings in calldata/GT.
-    '''
+    Returns:
+        vcf_data (dict): vcf_data with renamed missings in calldata/GT.
     
-    ## Rename variants/CHROM from {before} to {after}
+    """
+    
+    # Rename calldata/GT from {before} to {after}
     vcf_data['calldata/GT'] = np.where(vcf_data['calldata/GT'] == before, after, vcf_data['calldata/GT']) 
 
     return vcf_data
 
 
-def combine_chrom_strands(chrom_data):
-    '''
-    Input:
-        - chrom_data: matrix of chromosone data (SNPs) in the shape (num_dogs*2, length). The maternal and paternal strands should be split and
-          consecutively placed in the matrix.
-    Output:
-        - chrom_data_combined: numpy matrix of chromosone data (SNPs) with combined maternal and paternal strands. 
-          Shape should be (num_dogs, length).
-    '''
+def combine_chrom_strands(chrom_data: np.array) -> np.array:
+    """
+    Combines maternal and paternal strands.
+    
+    Args:
+        chrom_data (np.array): matrix of chromosone data (SNPs) in the shape 
+        (num_dogs*2, length). The maternal and paternal strands should be split 
+        and consecutively placed in the matrix.
+    
+    Returns:
+        chrom_data_combined (np.array): numpy matrix of chromosone data (SNPs) with 
+        combined maternal and paternal strands. Shape should be (num_dogs, length).
+    
+    """
 
-    ## Determine the dimensions of the chromosone data (SNPs)
+    # Determine the dimensions of the chromosone data (SNPs)
     # length corresponds to the length of the chromosone strands (the number of SNPs).
     # num_samples corresponds to the number of dogs available for analysis times 2 because
     # there are two rows in the matrix for each dog, one for maternal and one for paternal data
     num_samples, length = chrom_data.shape
 
-    ## Combine the information from the maternal and paternal strands by averaging
+    # Combine the information from the maternal and paternal strands by averaging
     chrom_data_combined = (chrom_data[::2] + chrom_data[1::2])/2
 
-    ## Determine dimensions of reshaped data
+    # Determine dimensions of reshaped data
     num_dogs, length_new = chrom_data_combined.shape
 
-    ## Check that the data was reformatted properly
+    # Check that the data was reformatted properly
     assert (length == length_new), "Number of snps per sample changed. Check reshaping function."
     assert (num_samples == num_dogs*2), "Number of samples changed. Check reshaping function."
 

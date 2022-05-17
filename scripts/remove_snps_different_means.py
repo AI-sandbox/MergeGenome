@@ -43,7 +43,6 @@ def remove_snps_with_different_means(query_paths: List[str], reference_paths: Li
         
         # Read the reference .vcf file using scikit-allel
         # with data from a single chromosome
-        # If reference_path = None, reference will also be None
         logger.debug(f'Reading reference file {reference_path}.')
         reference = read_vcf_file(reference_path, logger)
         

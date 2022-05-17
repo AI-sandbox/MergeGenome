@@ -20,7 +20,7 @@ Input flags include:
 
 * -q, --query LIST, Paths to query .vcf files with data for a single or multiple chromosomes each (required).
 * -r, --reference LIST, Paths to reference .vcf files with data for a single or multiple chromosomes each (required).
-* -o, --output-folder PATH, Path to output folder. (required). Note: make sure a '/' appears at the end of the output folder.
+* -o, --output-folder PATH, Path to output folder (required). Note: make sure a '/' appears at the end of the output folder.
 * -x, --x-axis-name STR, Name given to reference dataset (x-axis) (optional). Default=reference.
 * -y, --y-axis-name STR, Name given to query dataset (y-axis) (optional). Default=query.
 * -f, --fontsize FLOAT, Fontsize of all text in plot (optional). Default=25.

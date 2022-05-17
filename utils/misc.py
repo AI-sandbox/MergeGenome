@@ -146,25 +146,26 @@ def define_parser() -> argparse.ArgumentParser:
     partition_parser.add_argument('-t', '--threshold', required=False, type=float, default=0.1, 
                                   help='All common SNPs with a mean absolute difference higher than the threshold will be removed.')
     partition_parser.add_argument('-d', '--debug', required=False, help='Path to .log/.txt file to store info/debug messages.')
+
+    # Define subparser for 'store-common-indexes' command
+    partition_parser = subparsers.add_parser('store-common-indexes', help='Store indexes of common markers.')
+    partition_parser.add_argument('-q', '--query', required=True,
+                                  help='Path to query .vcf file with data for a single or multiple chromosomes.')
+    partition_parser.add_argument('-r', '--reference', required=True,
+                                  help='Paths to reference .vcf file with data for a single or multiple chromosomes.')
+    partition_parser.add_argument('-o', '--output-folder', required=True, help='Path to output folder.')
+    partition_parser.add_argument('-f', '--file-format', required=False, choices=['.npy', '.h5'], default='.npy', 
+                                  help='Format of the output file.')
+    partition_parser.add_argument('-d', '--debug', required=False, help='Path to .log/.txt file to store info/debug messages.')
     
     # Define subparser for 'store-allele' command
     partition_parser = subparsers.add_parser('store-npy', help='To store formatted allele data in .npy or .h5 format.')
-    partition_parser.add_argument('-q', '--query', required=True, help='Path to input .vcf file.')
+    partition_parser.add_argument('-q', '--query', required=True, help='Path to query .vcf file.')
     partition_parser.add_argument('-o', '--output-folder', required=True, help='Path to output folder.')
-    partition_parser.add_argument('-s', '--data-format', required=True, choices=['separated', 'averaged'], 
+    partition_parser.add_argument('-s', '--data-format', required=False, choices=['separated', 'averaged'], default='separated',
                                   help='Separate or average maternal and paternal strands.')
-    partition_parser.add_argument('-f', '--file-format', required=True, choices=['.npy', '.h5'], 
+    partition_parser.add_argument('-f', '--file-format', required=False, choices=['.npy', '.h5'], default='.npy', 
                                   help='Format of the output file.')
-    partition_parser.add_argument('-d', '--debug', required=False, help='Path to .log/.txt file to store info/debug messages.')
-
-    # Define subparser for 'store-indexes-common' command
-    partition_parser = subparsers.add_parser('store-indexes-common', help='Store indexes of common markers.')
-    partition_parser.add_argument('-q', '--query', required=True, nargs="*", 
-                                  help='Paths to query .vcf files with data for each chromosome.')
-    partition_parser.add_argument('-r', '--reference', required=False, nargs="*", 
-                                  help='Paths to reference .vcf files with data for each chromosome.')
-    partition_parser.add_argument('-o', '--output-folder', required=True, help='Path to output folder.')
-    partition_parser.add_argument('-f', '--file-format', required=True, choices=['.npy', '.h5'], help='Format of the output file.')
     partition_parser.add_argument('-d', '--debug', required=False, help='Path to .log/.txt file to store info/debug messages.')
     
     # Define subparser for 'store-vcf' command
@@ -274,7 +275,7 @@ def check_arguments(args: argparse.Namespace) -> None:
         assert len(args.query) == len(args.reference), f'The amount of query and reference paths does not coincide '\
         f'{len(args.query)} != {len(args.reference)}.'
         
-    elif args.command == 'plot-snp-means':
+    elif args.command in 'plot-snp-means':
         # Check all the query and reference paths exist and are a .vcf file
         check_paths(args.query+args.reference)
         
@@ -310,6 +311,18 @@ def check_arguments(args: argparse.Namespace) -> None:
         
             if args.threshold > 1.0 or args.threshold < 0.0:
                 raise argparse.ArgumentTypeError(f'--threshold is out of the [0.0, 1.0] range.')
+    
+    elif args.command == 'store-common-indexes':
+        # Check the query and reference paths exist
+        check_paths([args.query, args.reference])
+        
+    elif args.command == 'store-npy':
+        # Check the query path exists
+        check_paths([args.query])
+    
+    elif args.command == 'store-vcf':
+        # Check all the paths exist
+        check_paths([args.vcf_query, args.npy_query, args.binary_indexes])
     
 
 def check_chromosome(query: Dict, reference: Dict, single: bool = True):
