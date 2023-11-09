@@ -80,12 +80,14 @@ def define_parser() -> argparse.ArgumentParser:
                                   help='To remove (or not) ambiguous SNPs from the reference.')
     partition_parser.add_argument('-f', '--correct-snp-flips', action='store_true', 
                                   help='To correct (or not) SNP flips in the query with respect to the reference.')
-    partition_parser.add_argument('-m', '--remove-mismatching-snps', action='store_true', help='To remove (or not) mismatching SNPs.')
+    partition_parser.add_argument('-m', '--remove-mismatching-snps', action='store_true', 
+                                  help='To remove (or not) mismatching SNPs.')
     partition_parser.add_argument('-v', '--rename-map-query', required=False, 
                                   help='Mapping from old to new missing values notation for the query.')
     partition_parser.add_argument('-w', '--rename-map-reference', required=False, 
                                   help='Mapping from old to new missing values notation for the reference.')
-    partition_parser.add_argument('-d', '--debug', required=False, help='Path to .log/.txt file to store info/debug messages.')
+    partition_parser.add_argument('-d', '--debug', required=False, 
+                                  help='Path to .log/.txt file to store info/debug messages.')
 
     # Define subparser for 'subset' command
     partition_parser = subparsers.add_parser('subset', help='To subset the SNPs to the common markers.')
@@ -93,8 +95,10 @@ def define_parser() -> argparse.ArgumentParser:
                                   help='Paths to query .vcf files with data for a single chromosome each.')
     partition_parser.add_argument('-r', '--reference', required=True, nargs="*", 
                                   help='Paths to reference .vcf files with data for a single chromosome each.')
-    partition_parser.add_argument('-o', '--output-folder', required=True, help='Path to output folder.')
-    partition_parser.add_argument('-d', '--debug', required=False, help='Path to .log/.txt file to store info/debug messages.')
+    partition_parser.add_argument('-o', '--output-folder', required=True, 
+                                  help='Path to output folder.')
+    partition_parser.add_argument('-d', '--debug', required=False, 
+                                  help='Path to .log/.txt file to store info/debug messages.')
     
     # Define subparser for 'plot-snp-means' command
     partition_parser = subparsers.add_parser('plot-snp-means', 
@@ -104,16 +108,26 @@ def define_parser() -> argparse.ArgumentParser:
     partition_parser.add_argument('-r', '--reference', required=True, nargs="*", 
                                   help='Paths to reference .vcf files with data for a single or multiple chromosomes each.')
     partition_parser.add_argument('-o', '--output-folder', required=True, help='Path to output folder.')
+    partition_parser.add_argument('-idx', '--indexes', required=False, help='Path to SNP indexes with different color.')
     partition_parser.add_argument('-x', '--x-axis-name', required=False, default="reference", 
                                   help='Name given to reference dataset (x-axis).')
     partition_parser.add_argument('-y', '--y-axis-name', required=False, default="query", 
                                   help='Name given to query dataset (y-axis).')
-    partition_parser.add_argument('-f', '--fontsize', required=False, type=float, default=25, help='Fontsize of all text in plot.')
-    partition_parser.add_argument('-w', '--figure-width', required=False, type=float, default=26, help='Figure width of plot.')
-    partition_parser.add_argument('-i', '--figure-height', required=False, type=float, default=15, help='Figure height of plot.')
-    partition_parser.add_argument('-s', '--size-points', required=False, type=float, default=0.1, help='Size of points in plot.')
-    partition_parser.add_argument('-c', '--color-points', required=False, default='#306998', help='Color of points in plot.')
+    partition_parser.add_argument('-f', '--fontsize', required=False, type=float, default=35, help='Fontsize of all text in plot.')
+    partition_parser.add_argument('-w', '--figure-width', required=False, type=float, default=20, help='Figure width of plot.')
+    partition_parser.add_argument('-i', '--figure-height', required=False, type=float, default=20, help='Figure height of plot.')
+    partition_parser.add_argument('-s', '--size-points', required=False, type=float, default=0.7, help='Size of points in plot.')
+    partition_parser.add_argument('-a', '--alpha', required=False, default=0.7, type=float, 
+                                  help='Transparency of points in plot.')
+    partition_parser.add_argument('-c', '--color-points', required=False, default='#FA8460', 
+                                  help='Color of all points not in indexes.')
+    partition_parser.add_argument('-ci', '--color-points-indexes', required=False, 
+                                  default='#7793F5', help='Color of all points in indexes.')
     partition_parser.add_argument('-d', '--debug', required=False, help='Path to .log/.txt file to store info/debug messages.')
+    partition_parser.add_argument('-l', '--legend-points', required=False, default="SNPs not in indexes", 
+                                  help='Name given to all points not in indexes.')
+    partition_parser.add_argument('-li', '--legend-points-indexes', required=False, default="SNPs in indexes", 
+                                  help='Name given to all points in indexes.')
     
     # Define subparser for 'plot-pca' command
     partition_parser = subparsers.add_parser('plot-pca', help='To plot the PCA of the provided data.')
@@ -124,16 +138,26 @@ def define_parser() -> argparse.ArgumentParser:
     partition_parser.add_argument('-o', '--output-folder', required=True, help='Path to output folder.')
     partition_parser.add_argument('-t', '--train-query', action='store_true', 
                                   help='To train the PCA the PCA only on the query instead of on both datasets.')
-    partition_parser.add_argument('-f', '--fontsize', required=False, default=25, type=float, help='Fontsize of all text in plot.')
-    partition_parser.add_argument('-w', '--figure-width', required=False, default=26, type=float, help='Figure width of plot.')
-    partition_parser.add_argument('-i', '--figure-height', required=False, default=15, type=float, help='Figure height of plot.')
-    partition_parser.add_argument('-s', '--size-points', required=False, default=15, type=float, help='Size of points in plot.')
-    partition_parser.add_argument('-a', '--alpha', required=False, default=0.7, type=float, help='Transparency of points in plot.')
+    partition_parser.add_argument('-f', '--fontsize', required=False, default=35, type=float, 
+                                  help='Fontsize of all text in plot.')
+    partition_parser.add_argument('-w', '--figure-width', required=False, default=20, type=float, 
+                                  help='Figure width of plot.')
+    partition_parser.add_argument('-i', '--figure-height', required=False, default=20, type=float, 
+                                  help='Figure height of plot.')
+    partition_parser.add_argument('-s', '--size-points', required=False, default=20, type=float, 
+                                  help='Size of points in plot.')
+    partition_parser.add_argument('-a', '--alpha', required=False, default=0.7, type=float, 
+                                  help='Transparency of points in plot.')
     partition_parser.add_argument('-cq', '--color-points-query', required=False, default='#EBD0A1', 
                                   help='Color of query points in plot.')
     partition_parser.add_argument('-cr', '--color-points-reference', required=False, default='#259988', 
                                   help='Color of reference points in plot.')
-    partition_parser.add_argument('-d', '--debug', required=False, help='Path to .log/.txt file to store info/debug messages.')
+    partition_parser.add_argument('-d', '--debug', required=False, 
+                                  help='Path to .log/.txt file to store info/debug messages.')
+    partition_parser.add_argument('-lq', '--legend-query', required=False, default="Query", 
+                                  help='Name given to all points in query.')
+    partition_parser.add_argument('-lr', '--legend-reference', required=False, default="Reference", 
+                              help='Name given to all points not in reference.')
 
     # Define subparser for 'remove-snps-different-means' command
     partition_parser = subparsers.add_parser('remove-snps-different-means', 
@@ -145,7 +169,8 @@ def define_parser() -> argparse.ArgumentParser:
     partition_parser.add_argument('-o', '--output-folder', required=True, help='Path to output folder.')
     partition_parser.add_argument('-t', '--threshold', required=False, type=float, default=0.1, 
                                   help='All common SNPs with a mean absolute difference higher than the threshold will be removed.')
-    partition_parser.add_argument('-d', '--debug', required=False, help='Path to .log/.txt file to store info/debug messages.')
+    partition_parser.add_argument('-d', '--debug', required=False, 
+                                  help='Path to .log/.txt file to store info/debug messages.')
 
     # Define subparser for 'store-common-indexes' command
     partition_parser = subparsers.add_parser('store-common-indexes', help='Store indexes of common markers.')
@@ -156,17 +181,19 @@ def define_parser() -> argparse.ArgumentParser:
     partition_parser.add_argument('-o', '--output-folder', required=True, help='Path to output folder.')
     partition_parser.add_argument('-f', '--file-format', required=False, choices=['.npy', '.h5'], default='.npy', 
                                   help='Format of the output file.')
-    partition_parser.add_argument('-d', '--debug', required=False, help='Path to .log/.txt file to store info/debug messages.')
+    partition_parser.add_argument('-d', '--debug', required=False, 
+                                  help='Path to .log/.txt file to store info/debug messages.')
     
     # Define subparser for 'store-allele' command
     partition_parser = subparsers.add_parser('store-npy', help='To store formatted allele data in .npy or .h5 format.')
     partition_parser.add_argument('-q', '--query', required=True, help='Path to query .vcf file.')
     partition_parser.add_argument('-o', '--output-folder', required=True, help='Path to output folder.')
-    partition_parser.add_argument('-s', '--data-format', required=False, choices=['separated', 'averaged'], default='separated',
-                                  help='Separate or average maternal and paternal strands.')
+    partition_parser.add_argument('-s', '--data-format', required=False, choices=['separated', 'averaged'], 
+                                  default='separated', help='Separate or average maternal and paternal strands.')
     partition_parser.add_argument('-f', '--file-format', required=False, choices=['.npy', '.h5'], default='.npy', 
                                   help='Format of the output file.')
-    partition_parser.add_argument('-d', '--debug', required=False, help='Path to .log/.txt file to store info/debug messages.')
+    partition_parser.add_argument('-d', '--debug', required=False, 
+                                  help='Path to .log/.txt file to store info/debug messages.')
     
     # Define subparser for 'store-vcf' command
     partition_parser = subparsers.add_parser('store-vcf', help='To store separated allele data in .vcf.')
@@ -175,7 +202,8 @@ def define_parser() -> argparse.ArgumentParser:
     partition_parser.add_argument('-o', '--output-folder', required=True, help='Path to output folder.')
     partition_parser.add_argument('-b', '--binary-indexes', required=False, 
                                   help='Path to binary indexes, where 1 means the SNP is correct and 0 that it is to be removed.')
-    partition_parser.add_argument('-d', '--debug', required=False, help='Path to .log/.txt file to store info/debug messages.')
+    partition_parser.add_argument('-d', '--debug', required=False, 
+                                  help='Path to .log/.txt file to store info/debug messages.')
     
     return parser
 
@@ -384,24 +412,29 @@ def define_plot_configuration(args: argparse.Namespace) -> Dict:
     if args.command == 'plot-snp-means':
         # Define plot configurations for
         # 'plot-pca' commanad...
-        plot_dict = {"x_axis_name" : args.x_axis_name, 
+        plot_dict = {"x_axis_name": args.x_axis_name, 
                      "y_axis_name": args.y_axis_name, 
                      "fontsize" : args.fontsize, 
                      "fig_width": args.figure_width,
                      "fig_height": args.figure_height, 
                      "s": args.size_points,
-                     "color": args.color_points}
+                     "alpha" : args.alpha,
+                     "color_points": args.color_points, 
+                     "color_points_indexes": args.color_points_indexes,
+                     "legend_points": args.legend_points, 
+                     "legend_points_indexes": args.legend_points_indexes}
     
     elif args.command == 'plot-pca':
         # Define plot configurations for
         # 'plot-pca' commanad...
-        plot_dict = {"fontsize" : args.fontsize, 
+        plot_dict = {"fontsize": args.fontsize, 
                      "fig_width": args.figure_width,
                      "fig_height": args.figure_height, 
                      "s": args.size_points,
                      "alpha" : args.alpha,
                      "color_query": args.color_points_query,
-                     "color_reference": args.color_points_reference}
+                     "color_reference": args.color_points_reference,
+                     "legend_query": args.legend_query,
+                     "legend_reference": args.legend_reference}
     
-    return plot_dict   
-    
+    return plot_dict

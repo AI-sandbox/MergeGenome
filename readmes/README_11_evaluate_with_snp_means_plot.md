@@ -2,7 +2,7 @@
 
 There are several straightforward techniques to qualitatively evaluate the merged dataset. One of them is to compare the SNP means between samples coming from one source or the other. If the data is homogeneous, the SNP means should be similar. Namely, the SNP means from the query should fall within a small bandwidth from the SNP means from the reference. Under any other circumstances, the data might contain inconsistent SNPs. There are several possible causes of diverging SNPs, such as a bad imputation or a sequencing error.
 
-MergeGenome plot-snp-means command produces a scatter plot showing the SNP means for all the common markers (i.e., SNPs at the same CHROM, POS, REF, and ALT) between the provided query and reference .vcf files. The provided .vcf files can contain data for a single or multiple chromosomes. Either way, the chromosomes need to appear in the same order. In case of observing different SNP means between the query and the reference, it is recommennded to run DataFix `detect_and_fix_mismatch` or MergeGenome `remove-snps-different-means` command. While the computationl cost of the former is much higher, it has the benefit of preserving the features by correcting them through imputation. For a more detailed description of the `detect_and_fix_mismatch` task, read the [documentation](readmes/README_6_detect_and_fix_mismatches.md). Likewise, for a more detailed description of the MergeGenome `remove-snps-different-means` command, read the [documentation](https://github.com/AI-sandbox/merge-vcf-files/blob/main/readmes/README_12_remove_snps_different_means.md).
+MergeGenome plot-snp-means command produces a scatter plot showing the SNP means for all the common markers (i.e., SNPs at the same CHROM, POS, REF, and ALT) between the provided query and reference .vcf files. The provided .vcf files can contain data for a single or multiple chromosomes. Either way, the chromosomes need to appear in the same order. In case of observing different SNP means between the query and the reference, it is recommennded to run DataFix `detect_and_fix_mismatch` or MergeGenome `remove-snps-different-means` command. While the computationl cost of the former is much higher, it has the benefit of preserving the features by correcting them through imputation. For a more detailed description of the `detect_and_fix_mismatch` task, read the [documentation](readmes/README_6_ml_source_classifiers_for_snp_filtering.md). Likewise, for a more detailed description of the MergeGenome `remove-snps-different-means` command, read the [documentation](https://github.com/AI-sandbox/merge-vcf-files/blob/main/readmes/README_13_remove_snps_different_means.md).
 
 Figure 1 shows an output example of MergeGenome plot-snp-means command. We can observe numerous diverging SNPs close to 0.0 and 1.0 in the vertical axis. There are also a few diverging SNPs on the top-right. Probably, the former come from a bad imputation since the most frequent allele is overrepresented, while the latter come from a sequencing error.
 
@@ -21,14 +21,19 @@ Input flags include:
 * -q, --query LIST, Paths to query .vcf files with data for a single or multiple chromosomes each (required).
 * -r, --reference LIST, Paths to reference .vcf files with data for a single or multiple chromosomes each (required).
 * -o, --output-folder PATH, Path to output folder (required). Note: make sure a '/' appears at the end of the output folder.
-* -x, --x-axis-name STR, Name given to reference dataset (x-axis) (optional). Default=reference.
-* -y, --y-axis-name STR, Name given to query dataset (y-axis) (optional). Default=query.
-* -f, --fontsize FLOAT, Fontsize of all text in plot (optional). Default=25.
-* -w, --figure-width FLOAT, Figure width of plot (optional). Default=26.
-* -i, --figure-height FLOAT, Figure height of plot (optional). Default=15.
-* -s, --size-points FLOAT, Size of points in plot (optional). Default=0.1.
-* -c, --color-points STR, Color of points in plot (optional). Default=#306998.
+* -idx, --indexes PATH, Path to SNP indexes with different color.
+* -x, --x-axis-name STR, Name given to reference dataset (x-axis) (optional). Default="reference".
+* -y, --y-axis-name STR, Name given to query dataset (y-axis) (optional). Default="query".
+* -f, --fontsize FLOAT, Fontsize of all text in plot (optional). Default=35.
+* -w, --figure-width FLOAT, Figure width of plot (optional). Default=20.
+* -i, --figure-height FLOAT, Figure height of plot (optional). Default=20.
+* -s, --size-points FLOAT, Size of points in plot (optional). Default=0.7.
+* -a, --alpha FLOAT, Transparency of points in plot. Default=0.7.
+* -c, --color-points STR, Color of all points not in indexes (optional). Default="#FA8460".
+* -ci, --color-points-indexes STR, Color of all points in indexes (optional). Default="#7793F5".
 * -d, --debug PATH, Path to .log/.txt file to store info/debug messages (optional).
+* -l, --legend-points STR, Name given to all points not in indexes (optional). Default="SNPs not in indexes".
+* -li, --legend-points-indexes STR, Name given to all points in indexes (optional). Default="SNPs in indexes".
 
 **Output**
 

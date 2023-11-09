@@ -26,14 +26,16 @@ Input flags include:
 * -r, --reference LIST, Paths to reference .vcf files with data for a single or multiple chromosomes each (optional).
 * -o, --output-folder PATH, Path to output folder (required). Note: make sure a '/' appears at the end of the output folder.
 * -t, --train-query, To train the PCA the PCA only on the query instead of on both datasets (optional). Default=False.
-* -f, --fontsize FLOAT, Fontsize of all text in plot (optional). Default=25.
-* -w, --figure-width FLOAT, Figure width of plot (optional). Default=26.
-* -i, --figure-height FLOAT, Figure height of plot (optional). Default=15.
-* -s, --size-points FLOAT, Size of points in plot (optional). Default=15.
+* -f, --fontsize FLOAT, Fontsize of all text in plot (optional). Default=35.
+* -w, --figure-width FLOAT, Figure width of plot (optional). Default=20.
+* -i, --figure-height FLOAT, Figure height of plot (optional). Default=20.
+* -s, --size-points FLOAT, Size of points in plot (optional). Default=20.
 * -a, --alpha, FLOAT, Transparency of points in plot (optional). Default=0.7.
-* -cq, --color-points-query STR, Color of query points in the plot (optional). Default=#EBD0A1.
-* -cr, --color-points-reference STR, Color of reference points in the plot (optional). Default=#259988.
+* -cq, --color-points-query STR, Color of query points in the plot (optional). Default="#EBD0A1".
+* -cr, --color-points-reference STR, Color of reference points in the plot (optional). Default="#259988".
 * -d, --debug PATH, Path to .log/.txt file to store info/debug messages (optional).
+* -lq, --legend-query STR, Name given to all points in query (optional). Default="Query".
+* -lr, --legend-reference STR, Name given to all points not in reference (optional). Default="Reference".
 
 **Output**
 

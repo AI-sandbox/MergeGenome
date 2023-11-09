@@ -46,12 +46,11 @@ def store_indexes_common_markers(query_path: str, reference_path: str, output_fo
     logger.debug(f'Reading reference file {reference_path}.')
     reference = read_vcf_file(reference_path, logger)
     
-    # Ensure the reference and the query contain data for the same chromosome
-    # and obtain the chromosome in particular
-    chrom = check_chromosome(query, reference)
-    
     # Obtain indexes of the common markers between the query and the referece
     _, _, idxs_reference, idxs_query = keep_common_markers_several_chr(reference, query, logger)
+    
+    print(len(idxs_reference), max(idxs_reference))
+    print(len(idxs_query), max(idxs_query))
     
     # Ensure the found indexes have the same length in the 
     # query than in the reference

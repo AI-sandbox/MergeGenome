@@ -61,7 +61,7 @@ def remove_snps(query: dict, indexes: List) -> dict:
 
 def remove_ambiguous_snps(query: dict, logger: logging.Logger) -> dict:
     """
-    Searches and removes non-ambiguous SNPs from vcf data.
+    Searches and removes ambiguous SNPs from vcf data.
     
     Args:
         query (dict): allel.read_vcf output. Might contain ambiguous SNPs to be removed.
@@ -195,6 +195,21 @@ def correct_flips_by_pos(reference: dict, query: dict, logger: logging.Logger) -
     j = 0  # query iterator
     
     while i < len(reference['variants/POS']) and j < len(query['variants/POS']):
+        # Obtain chromosome number
+        if reference['variants/CHROM'][i].isdigit(): 
+            chrom_ref = int(reference['variants/CHROM'][i])
+        else: 
+            chrom_ref = int(re.search(r'\d+', reference['variants/CHROM'][i]).group())
+        if query['variants/CHROM'][j].isdigit(): 
+            chrom_query = int(query['variants/CHROM'][j])
+        else: 
+            chrom_query = int(re.search(r'\d+', query['variants/CHROM'][j]).group())
+        
+        if chrom_ref < chrom_query:
+            i += 1
+        elif chrom_ref > chrom_query:
+            j += 1
+            
         if reference['variants/POS'][i] < query['variants/POS'][j]:
             # If the position of the SNP in reference is smaller than the position of the SNP in query...
             # Increase the iterator of reference
@@ -375,7 +390,6 @@ def keep_common_markers_several_chr(reference: dict, query: dict, logger: loggin
         query (dict): query for the common markers.
         idxs_reference (List): indexes of the SNPs in the .vcf file 1 that are common markers with the .vcf file 2.
         idxs_query (List): indexes of the SNPs in the .vcf file 2 that are common markers with the .vcf file 1.
-    
     """
     
     idxs_reference = []  # empty list to store indexes of the common markers in the reference
@@ -387,9 +401,9 @@ def keep_common_markers_several_chr(reference: dict, query: dict, logger: loggin
     while i < len(reference['variants/POS']) and j < len(query['variants/POS']):
         
         # Obtain chromosome number
-        if reference['variants/CHROM'][i].isdigit(): chrom_ref = reference['variants/CHROM'][i]
+        if reference['variants/CHROM'][i].isdigit(): chrom_ref = int(reference['variants/CHROM'][i])
         else: chrom_ref = int(re.search(r'\d+', reference['variants/CHROM'][i]).group())
-        if query['variants/CHROM'][j].isdigit(): chrom_query = query['variants/CHROM'][j]
+        if query['variants/CHROM'][j].isdigit(): chrom_query = int(query['variants/CHROM'][j])
         else: chrom_query = int(re.search(r'\d+', query['variants/CHROM'][j]).group())
         
         if chrom_ref < chrom_query:

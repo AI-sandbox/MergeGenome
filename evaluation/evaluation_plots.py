@@ -19,12 +19,15 @@ from utils.io import read_vcf_file
 from utils.vcf_utils import combine_chrom_strands
 from utils.vcf_clean import keep_common_markers_several_chr
 from utils.misc import check_chromosome
-from utils.plot_utils import (snp_means_plot, PCA_trained_and_projected_on_query, 
-                              PCA_trained_on_query_projected_on_both, PCA_trained_and_projected_on_both)
+from utils.plot_utils import (
+    snp_means_plot, 
+    PCA_trained_and_projected_on_query, 
+    PCA_trained_on_query_projected_on_both, 
+    PCA_trained_and_projected_on_both
+)
 
-
-def plot_snp_means(query_paths: List[str], reference_paths: List[str], plot_dict: Dict, 
-                   output_folder: str, logger: logging.Logger) -> None:
+def plot_snp_means(query_paths: List[str], reference_paths: List[str], indexes_path: str, 
+                   plot_dict: Dict, output_folder: str, logger: logging.Logger) -> None:
     """
     Plots the SNP means of all the common markers between the query and the reference 
     datasets. If data for more than one .vcf file is provided, the data for all 
@@ -32,13 +35,15 @@ def plot_snp_means(query_paths: List[str], reference_paths: List[str], plot_dict
     markers (i.e., SNPs at the same CHROM, POS, REF, and ALT) are found and the rest 
     of the SNPs are discarded. Then, the maternal and paternal strands are averaged. 
     Afterward, the mean of each SPN is computed for both datasets and, finally, 
-    the SNP means are plotted.
+    the SNP means are plotted. If indexes_path is not None, then the SNPs at the
+    specified indexes will be plotted in a different color.
     
     Args:
         query_paths (List[str]): paths to reference .vcf files with data for a 
         single or multiple chromosomes each.
         reference_paths (List[str]): paths to query .vcf files with data for a 
         single or multiple chromosomes each.
+        indexes_path (str): path to indexes to be plotted in a different color.
         plot_dict[Dict]: configuration parameters of the plot.
         output_folder (str): path to output folder.
         logger (logging.Logger): debug/information tracker.
@@ -106,8 +111,11 @@ def plot_snp_means(query_paths: List[str], reference_paths: List[str], plot_dict
     logger.info(f'{all_query_snps.shape[1]} common SNPs in total between the query and the '\
                 'reference datasets.')
     
+    # Read indexes of SNPs that will be plotted in a different color
+    indexes = np.load(indexes_path)
+    
     # Plot the SNP means for the common markers between the query and the reference
-    snp_means_plot(all_query_snps, all_reference_snps, plot_dict, output_folder, logger)
+    snp_means_plot(all_query_snps, all_reference_snps, indexes, plot_dict, output_folder, logger)
 
 
 def plot_pca(query_paths: List[str], reference_paths: List[str], train_query: bool, 
@@ -206,7 +214,11 @@ def plot_pca(query_paths: List[str], reference_paths: List[str], train_query: bo
         PCA_trained_and_projected_on_query(all_query_snps, PCA_plot_dict, output_folder, logger)
     elif train_query:
         # Train PCA on the query and project on both the query and the reference
-        PCA_trained_on_query_projected_on_both(all_query_snps, all_reference_snps, PCA_plot_dict, output_folder, logger)
+        PCA_trained_on_query_projected_on_both(
+            all_query_snps, all_reference_snps, PCA_plot_dict, output_folder, logger
+        )
     else:
         # Train and project PCA on both the query and the reference
-        PCA_trained_and_projected_on_both(all_query_snps, all_reference_snps, PCA_plot_dict, output_folder, logger)
+        PCA_trained_and_projected_on_both(
+            all_query_snps, all_reference_snps, PCA_plot_dict, output_folder, logger
+        )

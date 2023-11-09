@@ -73,4 +73,4 @@ def rename_chromosome(query_path: str, output_folder: str, rename_map: dict,
         # Write query data with renamed variants/CHROM field in .vcf file
         # with name output_name inside folder output_folder
         logger.debug(f'Writing .vcf data with renamed variants/CHROM field in {output_folder}{output_name}.')
-        # write_vcf_file(query, output_folder, output_name)
+        write_vcf_file(query, output_folder, output_name)

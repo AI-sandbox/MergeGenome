@@ -182,6 +182,9 @@ log/
 # configs
 configs/
 
+# logs
+logs/
+
 .nfs0000000304201e42000024ca
 
 .gitignore.swp

@@ -59,7 +59,7 @@ elif args.command == 'plot-snp-means':
     plot_dict = define_plot_configuration(args)
     
     # Plot the SNP means for the query and the reference
-    plot_snp_means(args.query, args.reference, plot_dict, args.output_folder, logger)
+    plot_snp_means(args.query, args.reference, args.indexes, plot_dict, args.output_folder, logger)
     
 elif args.command == 'plot-pca':
     # Define plot configuration for this command

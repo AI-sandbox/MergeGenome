@@ -1,5 +1,5 @@
 ################################################################################
-# Partitions the input file in a separate file per chromosome.
+# Partitions the input .vcf file in a separate .vcf file per chromosome.
 # Optionally, changes the chromosome notation. By default, it renames the 
 # chromosome notation from '<chr_number>' to 'chr<chr_number>' or from
 # 'chr<chr_number>' to '<chr_number>'.

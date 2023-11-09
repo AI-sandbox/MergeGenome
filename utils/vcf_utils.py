@@ -34,6 +34,7 @@ def obtain_chromosomes(vcf_data: dict) -> List:
     return list(chroms)
 
 
+
 def obtain_renamed_chrom(rename_chr: bool, actual_chrom: str, rename_map: dict) -> str:
     """
     Obtains the new notation for a specific chromosome. If rename_chr=True and 
@@ -75,6 +76,26 @@ def obtain_renamed_chrom(rename_chr: bool, actual_chrom: str, rename_map: dict) 
     return new_chrom
 
 
+def rename_chrom_field(vcf_data: dict, actual_chrom: str, new_chrom: str) -> dict:
+    """
+    Renames variants/CHROM in vcf_data.
+    
+    Args:
+        vcf_data (dict): allel.read_vcf output.
+        actual_chrom (str): chromosome notation before renaming.
+        new_chrom (str): new chromosome notation after renaming.
+
+    Returns:
+        vcf_data (dict): vcf_data with renamed variants/CHROM notation.
+    
+    """
+
+    # Rename variants/CHROM notation
+    vcf_data['variants/CHROM'] = np.where(vcf_data['variants/CHROM'] == actual_chrom, new_chrom, vcf_data['variants/CHROM'])
+    
+    return vcf_data
+
+
 def filter_by_chromosome(vcf_data: dict, chrom: str) -> dict:
     """
     Filters data to keep the info of a specified chromosome.
@@ -96,26 +117,6 @@ def filter_by_chromosome(vcf_data: dict, chrom: str) -> dict:
         if key != 'samples':
             vcf_data[key] = vcf_data[key][indexes_chr]
                 
-    return vcf_data
-
-
-def rename_chrom_field(vcf_data: dict, actual_chrom: str, new_chrom: str) -> dict:
-    """
-    Renames variants/CHROM in vcf_data.
-    
-    Args:
-        vcf_data (dict): allel.read_vcf output.
-        actual_chrom (str): chromosome notation before renaming.
-        new_chrom (str): new chromosome notation after renaming.
-
-    Returns:
-        vcf_data (dict): vcf_data with renamed variants/CHROM notation.
-    
-    """
-
-    # Rename variants/CHROM notation
-    vcf_data['variants/CHROM'] = np.where(vcf_data['variants/CHROM'] == actual_chrom, new_chrom, vcf_data['variants/CHROM'])
-    
     return vcf_data
 
 

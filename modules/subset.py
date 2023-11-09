@@ -67,8 +67,8 @@ def subset_common_markers(query_paths: List[str], reference_paths: List[str],
         output_name_reference = f'{os.path.basename(reference_path)[:-4]}_subsetted.vcf'
         
         logger.debug(f'Writing .vcf data for the query in {output_folder}{output_name_query}.')
-        # write_vcf_file(query, output_folder, output_name_query)
+        write_vcf_file(query, output_folder, output_name_query)
         
         # Write cleaned reference and query in output .vcf files
         logger.debug(f'Writing .vcf data for the reference in {output_folder}{output_name_reference}.')
-        # write_vcf_file(reference, output_folder, output_name_reference)
+        write_vcf_file(reference, output_folder, output_name_reference)
