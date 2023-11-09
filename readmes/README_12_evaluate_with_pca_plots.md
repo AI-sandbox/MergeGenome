@@ -10,7 +10,7 @@ Figure 2.a) shows an output example of MergeGenome plot-pca command, in which th
 
 a) No preprocessing           |  b) MergeGenome Preprocessing
 :-------------------------:|:-------------------------:
-![](https://github.com/AI-sandbox/merge-vcf-files/blob/main/figures/trained_both_projected_both.png)  |  ![](https://github.com/AI-sandbox/merge-vcf-files/blob/main/figures/trained_both_projected_both_after_preprocessing.png)
+![](https://github.com/AI-sandbox/MergeGenome/blob/main/figures/trained_both_projected_both.png)  |  ![](https://github.com/AI-sandbox/MergeGenome/blob/main/figures/trained_both_projected_both_after_preprocessing.png)
 
 *Figure 2*. Effect of MergeGenome preprocessing on PCA applied to both the query and the reference datasets.
 

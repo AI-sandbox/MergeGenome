@@ -1,6 +1,6 @@
 # MergeGenome - Toolkit for Merging VCF files
 
-![MergeGenome Diagram](https://github.com/AI-sandbox/merge-vcf-files/blob/main/figures/MergeGenome.png)
+![MergeGenome Diagram](https://github.com/AI-sandbox/MergeGenome/blob/main/figures/MergeGenome.png)
 
 This repository includes a Python implementation of the MergeGenome toolkit, which underlies the importance of cleaning genomic sequences prior to analysis. The MergeGenome toolkit is designed to integrate DNA sequences from a query and a reference datasets in variant call format (VCF) while targeting data quality. MergeGenome is a robust pipeline of comprehensive steps to merge both datasets, including chromosome nomenclature standardization, SNP ambiguities removal, SNP flips detection, SNP mismatches elimination, and query/reference mismatches detection and/or fixing. MergeGenome works with any organism’s DNA sequences, which brings a broad solution to having access to more than one source of data but only being able to exploit one for statistical analysis.
 

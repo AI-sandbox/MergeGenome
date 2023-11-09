@@ -77,6 +77,7 @@ target/
 
 # Jupyter Notebook
 .ipynb_checkpoints
+.ipynb_checkpoints/
 
 # IPython
 profile_default/
@@ -184,6 +185,9 @@ configs/
 
 # logs
 logs/
+
+__pycache__
+__pycache__/
 
 .nfs0000000304201e42000024ca
 
