@@ -43,3 +43,7 @@ This repository also includes the implementation of other common tasks related t
 15. **[Store allele data (from VCF to NPY or H5)](readmes/README_15_store_allele_data_npy_h5.md)**
 
 16. **[Store allele data (from NPY to VCF)](readmes/README_16_store_allele_data_vcf.md)**
+
+# License
+
+This project is under the CC BY-NC 4.0 license. See [LICENSE](LICENSE) for details.
