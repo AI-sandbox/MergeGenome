@@ -10,6 +10,7 @@ import os
 import numpy as np
 import pandas as pd
 import random
+import re
 from typing import List
 import logging
 
@@ -216,6 +217,7 @@ def rename_missings(vcf_data: dict, before: str, after: str) -> dict:
     return vcf_data
 
 
+
 def combine_chrom_strands(chrom_data: np.array) -> np.array:
     """
     Combines maternal and paternal strands.
@@ -248,3 +250,32 @@ def combine_chrom_strands(chrom_data: np.array) -> np.array:
     assert (num_samples == num_dogs*2), "Number of samples changed. Check reshaping function."
 
     return chrom_data_combined
+
+
+def get_chromosome_number(chrom_string):
+    """
+    Extracts the chromosome number from the given chromosome string.
+    
+    Args:
+        chrom_string (str): The chromosome identifier.
+    
+    Returns: 
+        (int or str): If a valid chromosome number is found, returns the integer representation.
+        If the chromosome string is 'X' or 'chrX', returns 10001.
+        If the chromosome string is 'Y' or 'chrY', returns 10002.
+        If the chromosome string is not standard, logs a warning and returns the original string.
+
+    """
+    if chrom_string.isdigit():
+        return int(chrom_string)
+    else:
+        chrom_num = re.search(r'\d+', chrom_string)
+        if chrom_num:
+            return int(chrom_num.group())
+        elif chrom_string.lower() in ['x', 'chrx']:
+            return 10001
+        elif chrom_string.lower() in ['y', 'chry']:
+            return 10002
+        else:
+            log.warning(f"Chromosome nomenclature not standard. Chromosome: {chrom_string}")
+            return chrom_string

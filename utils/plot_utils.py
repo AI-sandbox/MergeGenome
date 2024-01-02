@@ -45,7 +45,7 @@ def snp_means_plot(query_snps: np.array, reference_snps: np.array, indexes: np.a
     snp_idxs = list(range(len(mean_query)))
     
     # Define vector with all SNP indexes that are not in indexes
-    not_indexes = list(set(snp_idxs) - set(indexes)
+    not_indexes = list(set(snp_idxs) - set(indexes))
     
     # Define plot figure
     plt.figure(figsize=(plot_dict['fig_width'], plot_dict['fig_height']))

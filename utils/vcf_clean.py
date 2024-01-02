@@ -10,7 +10,7 @@ import numpy as np
 import logging
 from typing import List
 import re
-from utils.vcf_utils import combine_chrom_strands
+from utils.vcf_utils import combine_chrom_strands, get_chromosome_number
 
 
 def select_snps(query: dict, indexes: List) -> dict:
@@ -195,44 +195,40 @@ def correct_flips_by_pos(reference: dict, query: dict, logger: logging.Logger) -
     j = 0  # query iterator
     
     while i < len(reference['variants/POS']) and j < len(query['variants/POS']):
-        # Obtain chromosome number
-        if reference['variants/CHROM'][i].isdigit(): 
-            chrom_ref = int(reference['variants/CHROM'][i])
-        else: 
-            chrom_ref = int(re.search(r'\d+', reference['variants/CHROM'][i]).group())
-        if query['variants/CHROM'][j].isdigit(): 
-            chrom_query = int(query['variants/CHROM'][j])
-        else: 
-            chrom_query = int(re.search(r'\d+', query['variants/CHROM'][j]).group())
-        
+        # Obtain the chromosome number for the i-th SNP in the reference
+        chrom_ref = get_chromosome_number(reference['variants/CHROM'][i])
+
+        # Obtain the chromosome number for the j-th SNP in the query
+        chrom_query = get_chromosome_number(query['variants/CHROM'][j])
+
         if chrom_ref < chrom_query:
             i += 1
         elif chrom_ref > chrom_query:
             j += 1
-            
-        if reference['variants/POS'][i] < query['variants/POS'][j]:
-            # If the position of the SNP in reference is smaller than the position of the SNP in query...
-            # Increase the iterator of reference
-            i += 1
-        elif reference['variants/POS'][i] > query['variants/POS'][j]:
-            # If the position of the SNP in query is smaller than the position of the SNP in reference...
-            # Increase the iterator of query
-            j += 1
-        else:   
-            # Found a SNP at the same position...
-            # Search if there is a SNP flip at this position
-            if (reference['variants/REF'][i] == query['variants/ALT'][j,0] and 
-            reference['variants/ALT'][i,0] == query['variants/REF'][j]):
-                #The REF in the reference dataset is the ALT in the query dataset
-                # and the ALT in the reference dataset is the REF in query dataset...
-                # Found a SNP flip...
-                # Append the index position of the SNP with a flip in query to flip_idx_query
-                flip_idx_query.append(j)
-            
-            # Increase the counter of coincidences and the iterator of datasets 1 and 2
-            n_coincidences += 1
-            i += 1
-            j += 1
+        else:
+            if reference['variants/POS'][i] < query['variants/POS'][j]:
+                # If the position of the SNP in reference is smaller than the position of the SNP in query...
+                # Increase the iterator of reference
+                i += 1
+            elif reference['variants/POS'][i] > query['variants/POS'][j]:
+                # If the position of the SNP in query is smaller than the position of the SNP in reference...
+                # Increase the iterator of query
+                j += 1
+            else:   
+                # Found a SNP at the same position...
+                # Search if there is a SNP flip at this position
+                if (reference['variants/REF'][i] == query['variants/ALT'][j,0] and 
+                reference['variants/ALT'][i,0] == query['variants/REF'][j]):
+                    #The REF in the reference dataset is the ALT in the query dataset
+                    # and the ALT in the reference dataset is the REF in query dataset...
+                    # Found a SNP flip...
+                    # Append the index position of the SNP with a flip in query to flip_idx_query
+                    flip_idx_query.append(j)
+
+                # Increase the counter of coincidences and the iterator of datasets 1 and 2
+                n_coincidences += 1
+                i += 1
+                j += 1
     
     logger.info(f'--> {n_coincidences} SNPs found at the same position in the two datasets')
     logger.info(f'--> {len(flip_idx_query)} flips found in total')
@@ -273,30 +269,42 @@ def remove_mismatches_by_pos(reference: dict, query: dict, logger: logging.Logge
     j = 0  # query iterator
     
     while i < len(reference['variants/POS']) and j < len(query['variants/POS']):
-        if reference['variants/POS'][i] < query['variants/POS'][j]:
-            # If the position of the SNP in reference is smaller than the position of the SNP in query...
-            # Increase the iterator of reference
+        # Obtain the chromosome number for the i-th SNP in the reference
+        chrom_ref = get_chromosome_number(reference['variants/CHROM'][i])
+
+        # Obtain the chromosome number for the j-th SNP in the query
+        chrom_query = get_chromosome_number(query['variants/CHROM'][j])
+
+        if chrom_ref < chrom_query:
             i += 1
-        elif reference['variants/POS'][i] > query['variants/POS'][j]:
-            # If the position of the SNP in query is smaller than the position of the SNP in reference...
-            # Increase the iterator of query
+        elif chrom_ref > chrom_query:
             j += 1
         else:
-            # Found a SNP at the same position...
-            # Search if there is a mismatch
-            if (reference['variants/REF'][i] != query['variants/REF'][j] or 
-                reference['variants/ALT'][i,0] != query['variants/ALT'][j,0]):
-                # If the reference or the alternate between datasets 1 and 2 do not match...
-                # Save the index positions of the SNPs that present a mismatch in each dataset
-                mismatch_idx_reference.append(i)
-                mismatch_idx_query.append(j)
-            
-            # Increase number of matches
-            n_coincidences += 1
-            
-            # Increase the reference and query counters
-            i += 1
-            j += 1
+        
+            if reference['variants/POS'][i] < query['variants/POS'][j]:
+                # If the position of the SNP in reference is smaller than the position of the SNP in query...
+                # Increase the iterator of reference
+                i += 1
+            elif reference['variants/POS'][i] > query['variants/POS'][j]:
+                # If the position of the SNP in query is smaller than the position of the SNP in reference...
+                # Increase the iterator of query
+                j += 1
+            else:
+                # Found a SNP at the same position...
+                # Search if there is a mismatch
+                if (reference['variants/REF'][i] != query['variants/REF'][j] or 
+                    reference['variants/ALT'][i,0] != query['variants/ALT'][j,0]):
+                    # If the reference or the alternate between datasets 1 and 2 do not match...
+                    # Save the index positions of the SNPs that present a mismatch in each dataset
+                    mismatch_idx_reference.append(i)
+                    mismatch_idx_query.append(j)
+
+                # Increase number of matches
+                n_coincidences += 1
+
+                # Increase the reference and query counters
+                i += 1
+                j += 1
     
     logger.info(f'--> {n_coincidences} SNPs found at the same position in the two datasets')
     logger.info(f'--> {len(mismatch_idx_reference)} mismatches found in total')
@@ -400,12 +408,12 @@ def keep_common_markers_several_chr(reference: dict, query: dict, logger: loggin
 
     while i < len(reference['variants/POS']) and j < len(query['variants/POS']):
         
-        # Obtain chromosome number
-        if reference['variants/CHROM'][i].isdigit(): chrom_ref = int(reference['variants/CHROM'][i])
-        else: chrom_ref = int(re.search(r'\d+', reference['variants/CHROM'][i]).group())
-        if query['variants/CHROM'][j].isdigit(): chrom_query = int(query['variants/CHROM'][j])
-        else: chrom_query = int(re.search(r'\d+', query['variants/CHROM'][j]).group())
-        
+        # Obtain the chromosome number for the i-th SNP in the reference
+        chrom_ref = get_chromosome_number(reference['variants/CHROM'][i])
+
+        # Obtain the chromosome number for the j-th SNP in the query
+        chrom_query = get_chromosome_number(query['variants/CHROM'][j])
+
         if chrom_ref < chrom_query:
             i += 1
         elif chrom_ref > chrom_query:
